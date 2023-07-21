@@ -463,16 +463,16 @@ class Resampler:
                 timeseries from the resampler before calling this method
                 again).
         """
-        async for _ in Timer.periodic(
+        # We use a tolerance of 10% of the resampling period
+        tolerance = timedelta(
+            seconds=self._config.resampling_period.total_seconds() / 10.0
+        )
+        async for drift in Timer.periodic(
             timedelta(seconds=self._config.resampling_period.total_seconds())
         ):
             now = datetime.now(tz=timezone.utc)
-            timer_error = now - self._window_end
-            # We use a tolerance of 10% of the resampling period
-            tolerance = timedelta(
-                seconds=self._config.resampling_period.total_seconds() / 10.0
-            )
-            if timer_error > tolerance:
+
+            if drift > tolerance:
                 _logger.warning(
                     "The resampling task woke up too late. Resampling should have "
                     "started at %s, but it started at %s (tolerance: %s, "
@@ -480,7 +480,7 @@ class Resampler:
                     self._window_end,
                     now,
                     tolerance,
-                    timer_error,
+                    drift,
                     self._config.resampling_period,
                 )
 
