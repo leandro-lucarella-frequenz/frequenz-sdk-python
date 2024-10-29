@@ -54,9 +54,12 @@ class ComponentMetricRequest:
         Returns:
             A string representing the channel name.
         """
+        start = f",start={self.start_time}" if self.start_time else ""
         return (
-            f"component_metric_request<namespace={self.namespace},"
+            "component_metric_request<"
+            f"namespace={self.namespace},"
             f"component_id={self.component_id},"
-            f"metric_id={self.metric_id.name},"
-            f"start={self.start_time}>"
+            f"metric_id={self.metric_id.name}"
+            f"{start}"
+            ">"
         )
