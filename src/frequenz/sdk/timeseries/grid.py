@@ -198,7 +198,8 @@ def initialize(
         case 0:
             fuse = Fuse(max_current=Current.zero())
             _logger.info(
-                "No grid connection found for this microgrid. This is normal for an islanded microgrid."
+                "No grid connection found for this microgrid. "
+                "This is normal for an islanded microgrid."
             )
         case 1:
             metadata = grid_connections[0].metadata
