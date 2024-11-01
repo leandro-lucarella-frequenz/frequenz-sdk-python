@@ -201,17 +201,16 @@ def initialize(
                 "No grid connection found for this microgrid. This is normal for an islanded microgrid."
             )
         case 1:
-            if grid_connections[0].metadata is None:
-                raise RuntimeError("Grid metadata is None")
+            metadata = grid_connections[0].metadata
+            if metadata is not None and metadata.fuse is not None:
+                fuse = Fuse(max_current=Current.from_amperes(metadata.fuse.max_current))
 
-            if grid_connections[0].metadata.fuse is not None:
-                fuse = Fuse(
-                    max_current=Current.from_amperes(
-                        grid_connections[0].metadata.fuse.max_current
-                    )
+            if metadata is None:
+                _logger.warning(
+                    "Unable to get grid metadata, the grid connection point is "
+                    "considered to have no fuse"
                 )
-
-            if fuse is None:
+            elif fuse is None:
                 _logger.warning("The grid connection point does not have a fuse")
         case _:
             raise RuntimeError(
