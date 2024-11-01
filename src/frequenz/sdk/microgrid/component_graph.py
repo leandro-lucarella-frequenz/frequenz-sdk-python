@@ -22,11 +22,9 @@ flow of power.
 """
 
 import asyncio
-import dataclasses
 import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Iterable
-from dataclasses import asdict
 
 import networkx as nx
 from frequenz.client.microgrid import (
@@ -40,6 +38,10 @@ from frequenz.client.microgrid import (
 _logger = logging.getLogger(__name__)
 
 # pylint: disable=too-many-lines
+
+
+# Constant to store the actual obejcts as data attached to the graph nodes and edges
+_DATA_KEY = "data"
 
 
 class InvalidGraphError(Exception):
@@ -398,18 +400,17 @@ class _MicrogridComponentGraph(
             Set of the components currently connected to the microgrid, filtered by
                 the provided `component_ids` and `component_categories` values.
         """
-        if component_ids is None:
-            # If any node has not node[1], then it will not pass validations step.
-            selection: Iterable[Component] = map(
-                lambda node: Component(**(node[1])), self._graph.nodes(data=True)
-            )
-        else:
-            valid_ids = filter(self._graph.has_node, component_ids)
-            selection = map(lambda idx: Component(**self._graph.nodes[idx]), valid_ids)
+        selection_ids = (
+            self._graph.nodes
+            if component_ids is None
+            else component_ids & self._graph.nodes
+        )
+        selection: Iterable[Component] = (
+            self._graph.nodes[i][_DATA_KEY] for i in selection_ids
+        )
 
         if component_categories is not None:
-            types: set[ComponentCategory] = component_categories
-            selection = filter(lambda c: c.category in types, selection)
+            selection = filter(lambda c: c.category in component_categories, selection)
 
         return set(selection)
 
@@ -430,19 +431,19 @@ class _MicrogridComponentGraph(
             Set of the connections between components in the microgrid, filtered by
                 the provided `start`/`end` choices.
         """
-        if start is None:
-            if end is None:
-                selection = self._graph.edges
-            else:
-                selection = self._graph.in_edges(end)
+        match (start, end):
+            case (None, None):
+                selection_ids = self._graph.edges
+            case (None, _):
+                selection_ids = self._graph.in_edges(end)
+            case (_, None):
+                selection_ids = self._graph.out_edges(start)
+            case (_, _):
+                start_edges = self._graph.out_edges(start)
+                end_edges = self._graph.in_edges(end)
+                selection_ids = set(start_edges).intersection(end_edges)
 
-        else:
-            selection = self._graph.out_edges(start)
-            if end is not None:
-                end_ids: set[int] = end
-                selection = filter(lambda c: c[1] in end_ids, selection)
-
-        return set(map(lambda c: Connection(c[0], c[1]), selection))
+        return set(self._graph.edges[i][_DATA_KEY] for i in selection_ids)
 
     def predecessors(self, component_id: int) -> set[Component]:
         """Fetch the graph predecessors of the specified component.
@@ -466,9 +467,7 @@ class _MicrogridComponentGraph(
 
         predecessors_ids = self._graph.predecessors(component_id)
 
-        return set(
-            map(lambda idx: Component(**self._graph.nodes[idx]), predecessors_ids)
-        )
+        return set(map(lambda idx: self._graph.nodes[idx][_DATA_KEY], predecessors_ids))
 
     def successors(self, component_id: int) -> set[Component]:
         """Fetch the graph successors of the specified component.
@@ -492,7 +491,7 @@ class _MicrogridComponentGraph(
 
         successors_ids = self._graph.successors(component_id)
 
-        return set(map(lambda idx: Component(**self._graph.nodes[idx]), successors_ids))
+        return set(map(lambda idx: self._graph.nodes[idx][_DATA_KEY], successors_ids))
 
     def refresh_from(
         self,
@@ -526,9 +525,14 @@ class _MicrogridComponentGraph(
 
         new_graph = nx.DiGraph()
         for component in components:
-            new_graph.add_node(component.component_id, **asdict(component))
+            new_graph.add_node(component.component_id, **{_DATA_KEY: component})
 
-        new_graph.add_edges_from(dataclasses.astuple(c) for c in connections)
+        # Store the original connection object in the edge data (third item in the
+        # tuple) so that we can retrieve it later.
+        for connection in connections:
+            new_graph.add_edge(
+                connection.start, connection.end, **{_DATA_KEY: connection}
+            )
 
         # check if we can construct a valid ComponentGraph
         # from the new NetworkX graph data
@@ -908,8 +912,9 @@ class _MicrogridComponentGraph(
         if not nx.is_directed_acyclic_graph(self._graph):
             raise InvalidGraphError("Component graph is not a tree!")
 
-        # node[0] is required by the graph definition
-        # If any node has not node[1], then it will not pass validations step.
+        # This check doesn't seem to have much sense, it only search for nodes without
+        # data associated with them. We leave it here for now, but we should consider
+        # removing it in the future.
         undefined: list[int] = [
             node[0] for node in self._graph.nodes(data=True) if len(node[1]) == 0
         ]

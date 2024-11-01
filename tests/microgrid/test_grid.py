@@ -55,7 +55,7 @@ async def test_grid_2(mocker: MockerFixture) -> None:
             1,
             client.ComponentCategory.GRID,
             None,
-            client.GridMetadata(client.Fuse(123.0)),
+            client.ComponentMetadata(fuse=client.Fuse(max_current=123.0)),
         ),
         client.Component(2, client.ComponentCategory.METER),
     }

@@ -207,17 +207,12 @@ def initialize(
         if grid_connections[0].metadata is None:
             raise RuntimeError("Grid metadata is None")
 
-        # The current implementation of the Component Graph fails to
-        # effectively convert components from a dictionary representation to
-        # the expected Component object.
-        # Specifically for the component metadata, it hands back a dictionary
-        # instead of the expected ComponentMetadata type.
-        metadata = grid_connections[0].metadata
-        if isinstance(metadata, dict):
-            if fuse_dict := metadata.get("fuse", None):
-                fuse = Fuse(
-                    max_current=Current.from_amperes(fuse_dict.get("max_current", 0.0))
+        if grid_connections[0].metadata.fuse is not None:
+            fuse = Fuse(
+                max_current=Current.from_amperes(
+                    grid_connections[0].metadata.fuse.max_current
                 )
+            )
 
         if fuse is None:
             _logger.warning("The grid connection point does not have a fuse")
