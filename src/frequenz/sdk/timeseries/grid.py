@@ -194,28 +194,29 @@ def initialize(
 
     fuse: Fuse | None = None
 
-    if grid_connections_count == 0:
-        fuse = Fuse(max_current=Current.zero())
-        _logger.info(
-            "No grid connection found for this microgrid. This is normal for an islanded microgrid."
-        )
-    elif grid_connections_count > 1:
-        raise RuntimeError(
-            f"Expected at most one grid connection, got {grid_connections_count}"
-        )
-    else:
-        if grid_connections[0].metadata is None:
-            raise RuntimeError("Grid metadata is None")
-
-        if grid_connections[0].metadata.fuse is not None:
-            fuse = Fuse(
-                max_current=Current.from_amperes(
-                    grid_connections[0].metadata.fuse.max_current
-                )
+    match grid_connections_count:
+        case 0:
+            fuse = Fuse(max_current=Current.zero())
+            _logger.info(
+                "No grid connection found for this microgrid. This is normal for an islanded microgrid."
             )
+        case 1:
+            if grid_connections[0].metadata is None:
+                raise RuntimeError("Grid metadata is None")
 
-        if fuse is None:
-            _logger.warning("The grid connection point does not have a fuse")
+            if grid_connections[0].metadata.fuse is not None:
+                fuse = Fuse(
+                    max_current=Current.from_amperes(
+                        grid_connections[0].metadata.fuse.max_current
+                    )
+                )
+
+            if fuse is None:
+                _logger.warning("The grid connection point does not have a fuse")
+        case _:
+            raise RuntimeError(
+                f"Expected at most one grid connection, got {grid_connections_count}"
+            )
 
     namespace = f"grid-{uuid.uuid4()}"
     formula_pool = FormulaEnginePool(
