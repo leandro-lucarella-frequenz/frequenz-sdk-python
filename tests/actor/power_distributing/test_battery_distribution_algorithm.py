@@ -189,7 +189,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 650, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=650,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 500})
@@ -210,7 +214,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 600, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=600,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 400, 3: 200})
@@ -231,7 +239,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 600, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=600,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 200, 3: 400})
@@ -254,7 +266,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 600, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=600,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 500})
@@ -276,7 +292,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 600, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=600,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 250, 3: 330})
@@ -300,7 +320,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 1000, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=1000,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 400, 3: 400, 5: 200})
@@ -324,7 +348,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 1000, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=1000,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 400, 3: 300, 5: 300})
@@ -348,7 +376,11 @@ class TestDistributionAlgorithm:  # pylint: disable=too-many-public-methods
 
         algorithm = BatteryDistributionAlgorithm(distributor_exponent=1)
         result = algorithm._distribute_power(  # pylint: disable=protected-access
-            components, 1000, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=1000,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         assert result.distribution == approx({1: 0, 3: 300, 5: 0})

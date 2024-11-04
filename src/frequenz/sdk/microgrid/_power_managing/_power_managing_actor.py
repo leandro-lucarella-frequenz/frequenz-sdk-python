@@ -32,12 +32,12 @@ class PowerManagingActor(Actor):  # pylint: disable=too-many-instance-attributes
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         proposals_receiver: Receiver[Proposal],
         bounds_subscription_receiver: Receiver[ReportRequest],
         power_distributing_requests_sender: Sender[_power_distributing.Request],
         power_distributing_results_receiver: Receiver[_power_distributing.Result],
         channel_registry: ChannelRegistry,
-        *,
         component_category: ComponentCategory,
         component_type: ComponentType | None = None,
         # arguments to actors need to serializable, so we pass an enum for the algorithm

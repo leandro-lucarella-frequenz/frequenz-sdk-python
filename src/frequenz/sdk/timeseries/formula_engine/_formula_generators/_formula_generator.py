@@ -91,12 +91,12 @@ class FormulaGenerator(ABC, Generic[QuantityT]):
         create_method: Callable[[float], QuantityT],
     ) -> ResampledFormulaBuilder[QuantityT]:
         builder = ResampledFormulaBuilder(
-            self._namespace,
-            name,
-            self._channel_registry,
-            self._resampler_subscription_sender,
-            component_metric_id,
-            create_method,
+            namespace=self._namespace,
+            formula_name=name,
+            channel_registry=self._channel_registry,
+            resampler_subscription_sender=self._resampler_subscription_sender,
+            metric_id=component_metric_id,
+            create_method=create_method,
         )
         return builder
 

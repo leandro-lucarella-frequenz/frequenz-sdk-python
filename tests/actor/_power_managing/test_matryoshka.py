@@ -28,7 +28,7 @@ class StatefulTester:
         self._system_bounds = system_bounds
         self.algorithm = Matryoshka(max_proposal_age=timedelta(seconds=60.0))
 
-    def tgt_power(  # pylint: disable=too-many-arguments
+    def tgt_power(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         priority: int,
         power: float | None,

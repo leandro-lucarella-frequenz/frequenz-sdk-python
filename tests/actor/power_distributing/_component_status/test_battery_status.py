@@ -41,7 +41,7 @@ from ....utils.component_data_wrapper import BatteryDataWrapper, InverterDataWra
 from ....utils.receive_timeout import Timeout, receive_timeout
 
 
-def battery_data(  # pylint: disable=too-many-arguments
+def battery_data(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     component_id: int,
     timestamp: datetime | None = None,
     relay_state: BatteryRelayState = BatteryRelayState.CLOSED,
@@ -149,7 +149,7 @@ class TestBatteryStatus:
         async with (
             mock_microgrid,
             BatteryStatusTracker(
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=5),
                 max_blocking_duration=timedelta(seconds=30),
                 status_sender=status_channel.new_sender(),
@@ -322,7 +322,7 @@ class TestBatteryStatus:
             BatteryStatusTracker(
                 # increase max_data_age_sec for blocking tests.
                 # Otherwise it will block blocking.
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=500),
                 max_blocking_duration=timedelta(seconds=30),
                 status_sender=status_channel.new_sender(),
@@ -461,7 +461,7 @@ class TestBatteryStatus:
         async with (
             mock_microgrid,
             BatteryStatusTracker(
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=5),
                 max_blocking_duration=timedelta(seconds=30),
                 status_sender=status_channel.new_sender(),
@@ -512,7 +512,7 @@ class TestBatteryStatus:
         async with (
             mock_microgrid,
             BatteryStatusTracker(
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=5),
                 max_blocking_duration=timedelta(seconds=30),
                 status_sender=status_channel.new_sender(),
@@ -576,7 +576,7 @@ class TestBatteryStatus:
         async with (
             mock_microgrid,
             BatteryStatusTracker(
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=5),
                 max_blocking_duration=timedelta(seconds=30),
                 status_sender=status_channel.new_sender(),
@@ -645,7 +645,7 @@ class TestBatteryStatus:
         async with (
             mock_microgrid,
             BatteryStatusTracker(
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=5),
                 max_blocking_duration=timedelta(seconds=30),
                 status_sender=status_channel.new_sender(),
@@ -733,7 +733,7 @@ class TestBatteryStatusRecovery:
         async with (
             mock_microgrid,
             BatteryStatusTracker(
-                BATTERY_ID,
+                component_id=BATTERY_ID,
                 max_data_age=timedelta(seconds=0.2),
                 max_blocking_duration=timedelta(seconds=1),
                 status_sender=status_channel.new_sender(),

@@ -449,6 +449,7 @@ class BatteryDistributionAlgorithm:
 
     def _distribute_power(  # pylint: disable=too-many-arguments
         self,
+        *,
         components: list[InvBatPair],
         power_w: float,
         available_soc: dict[int, float],
@@ -730,7 +731,11 @@ class BatteryDistributionAlgorithm:
         )
 
         return self._distribute_power(
-            components, power_w, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=power_w,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
     def _distribute_supply_power(
@@ -761,7 +766,11 @@ class BatteryDistributionAlgorithm:
         )
 
         result: DistributionResult = self._distribute_power(
-            components, -1 * power_w, available_soc, incl_bounds, excl_bounds
+            components=components,
+            power_w=-1 * power_w,
+            available_soc=available_soc,
+            incl_bounds=incl_bounds,
+            excl_bounds=excl_bounds,
         )
 
         for inverter_id in result.distribution.keys():
