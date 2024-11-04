@@ -60,7 +60,9 @@ async def init_feature_extractor_no_data(
     # We only need the moving window to initialize the PeriodicFeatureExtractor class.
     lm_chan = Broadcast[Sample[Quantity]](name="lm_net_power")
     moving_window = MovingWindow(
-        timedelta(seconds=1), lm_chan.new_receiver(), timedelta(seconds=1)
+        size=timedelta(seconds=1),
+        resampled_data_recv=lm_chan.new_receiver(),
+        input_sampling_period=timedelta(seconds=1),
     )
     async with moving_window:
         await lm_chan.new_sender().send(

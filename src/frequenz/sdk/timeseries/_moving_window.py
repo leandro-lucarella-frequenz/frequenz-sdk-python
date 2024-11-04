@@ -130,12 +130,12 @@ class MovingWindow(BackgroundService):
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         size: timedelta,
         resampled_data_recv: Receiver[Sample[Quantity]],
         input_sampling_period: timedelta,
         resampler_config: ResamplerConfig | None = None,
         align_to: datetime = UNIX_EPOCH,
-        *,
         name: str | None = None,
     ) -> None:
         """
