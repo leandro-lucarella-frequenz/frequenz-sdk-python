@@ -203,16 +203,15 @@ def initialize(
             )
         case 1:
             metadata = grid_connections[0].metadata
-            if metadata is not None and metadata.fuse is not None:
-                fuse = Fuse(max_current=Current.from_amperes(metadata.fuse.max_current))
-
             if metadata is None:
                 _logger.warning(
                     "Unable to get grid metadata, the grid connection point is "
                     "considered to have no fuse"
                 )
-            elif fuse is None:
+            elif metadata.fuse is None:
                 _logger.warning("The grid connection point does not have a fuse")
+            else:
+                fuse = Fuse(max_current=Current.from_amperes(metadata.fuse.max_current))
         case _:
             raise RuntimeError(
                 f"Expected at most one grid connection, got {grid_connections_count}"
