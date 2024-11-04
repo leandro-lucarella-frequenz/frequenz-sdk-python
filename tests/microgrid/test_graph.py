@@ -7,7 +7,6 @@
 # pylint: disable=invalid-name,missing-function-docstring,too-many-statements
 # pylint: disable=too-many-lines,protected-access
 
-from dataclasses import asdict
 from unittest import mock
 
 import pytest
@@ -18,11 +17,34 @@ from frequenz.client.microgrid import (
     ComponentMetadata,
     Connection,
     Fuse,
-    GridMetadata,
     InverterType,
 )
 
 import frequenz.sdk.microgrid.component_graph as gr
+
+
+def _add_components(graph: gr._MicrogridComponentGraph, *components: Component) -> None:
+    """Add components to the test graph.
+
+    Args:
+        graph: The graph to add the components to.
+        *components: The components to add.
+    """
+    graph._graph.add_nodes_from((c.component_id, {gr._DATA_KEY: c}) for c in components)
+
+
+def _add_connections(
+    graph: gr._MicrogridComponentGraph, *connections: Connection
+) -> None:
+    """Add connections to the test graph.
+
+    Args:
+        graph: The graph to add the connections to.
+        *connections: The connections to add.
+    """
+    graph._graph.add_edges_from(
+        (c.start, c.end, {gr._DATA_KEY: c}) for c in connections
+    )
 
 
 def _check_predecessors_and_successors(graph: gr.ComponentGraph) -> None:
@@ -934,7 +956,7 @@ class Test_MicrogridComponentGraph:
                 101,
                 ComponentCategory.GRID,
                 None,
-                asdict(GridMetadata(fuse=Fuse(max_current=0.0))),  # type: ignore
+                ComponentMetadata(fuse=Fuse(max_current=0.0)),
             ),
             Component(111, ComponentCategory.METER),
             Component(131, ComponentCategory.EV_CHARGER),
@@ -973,7 +995,7 @@ class Test_MicrogridComponentGraph:
                 707,
                 ComponentCategory.GRID,
                 None,
-                asdict(GridMetadata(fuse=Fuse(max_current=0.0))),  # type: ignore
+                ComponentMetadata(fuse=Fuse(max_current=0.0)),
             ),
             Component(717, ComponentCategory.METER),
             Component(727, ComponentCategory.INVERTER, InverterType.NONE),
@@ -1018,27 +1040,25 @@ class Test_MicrogridComponentGraph:
 
         # graph root is not valid: multiple potential root nodes
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.NONE))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.NONE),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 3), (2, 3)])
+        _add_connections(graph, Connection(1, 3), Connection(2, 3))
         with pytest.raises(gr.InvalidGraphError, match="Multiple potential root nodes"):
             graph.validate()
 
         # grid endpoint is not set up correctly: multiple grid endpoints
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.GRID))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.GRID),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3))
         with pytest.raises(
             gr.InvalidGraphError, match="Multiple grid endpoints in component graph"
         ):
@@ -1047,14 +1067,13 @@ class Test_MicrogridComponentGraph:
         # leaf components are not set up correctly: a battery has
         # a successor in the graph
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.BATTERY))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.BATTERY),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3))
         with pytest.raises(
             gr.InvalidGraphError, match="Leaf components with graph successors"
         ):
@@ -1075,7 +1094,7 @@ class Test_MicrogridComponentGraph:
 
         # graph has no connections
         graph._graph.clear()
-        graph._graph.add_node(1, category=ComponentCategory.GRID)
+        _add_components(graph, Component(1, ComponentCategory.GRID))
         with pytest.raises(
             gr.InvalidGraphError, match="No connections in component graph!"
         ):
@@ -1083,14 +1102,13 @@ class Test_MicrogridComponentGraph:
 
         # graph is not a tree
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.INVERTER))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.INVERTER),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3), (3, 2)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3), Connection(3, 2))
         with pytest.raises(
             gr.InvalidGraphError, match="Component graph is not a tree!"
         ):
@@ -1098,14 +1116,13 @@ class Test_MicrogridComponentGraph:
 
         # at least one node is completely unconnected
         # (this violates the tree property):
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-                (3, asdict(Component(3, ComponentCategory.NONE))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
+            Component(3, ComponentCategory.NONE),
         )
-        graph._graph.add_edges_from([(1, 2)])
+        _add_connections(graph, Connection(1, 2))
         with pytest.raises(
             gr.InvalidGraphError, match="Component graph is not a tree!"
         ):
@@ -1124,14 +1141,13 @@ class Test_MicrogridComponentGraph:
         # get caught by `_validate_graph` but let's confirm
         # that `_validate_graph_root` also catches it)
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.METER))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.METER),
+            Component(2, ComponentCategory.METER),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3), (3, 1)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3), Connection(3, 1))
         with pytest.raises(
             gr.InvalidGraphError, match="No valid root nodes of component graph!"
         ):
@@ -1140,14 +1156,13 @@ class Test_MicrogridComponentGraph:
         # there are nodes without predecessors, but not of
         # the valid type(s) NONE, GRID, or JUNCTION
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.METER))),
-                (2, asdict(Component(2, ComponentCategory.INVERTER))),
-                (3, asdict(Component(3, ComponentCategory.BATTERY))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.METER),
+            Component(2, ComponentCategory.INVERTER),
+            Component(3, ComponentCategory.BATTERY),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3))
         with pytest.raises(
             gr.InvalidGraphError, match="No valid root nodes of component graph!"
         ):
@@ -1156,48 +1171,44 @@ class Test_MicrogridComponentGraph:
         # there are multiple different potentially valid
         # root notes
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.NONE))),
-                (2, asdict(Component(2, ComponentCategory.GRID))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.NONE),
+            Component(2, ComponentCategory.GRID),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 3), (2, 3)])
+        _add_connections(graph, Connection(1, 3), Connection(2, 3))
         with pytest.raises(gr.InvalidGraphError, match="Multiple potential root nodes"):
             graph._validate_graph_root()
 
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.GRID))),
-                (3, asdict(Component(3, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.GRID),
+            Component(3, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 3), (2, 3)])
+        _add_connections(graph, Connection(1, 3), Connection(2, 3))
         with pytest.raises(gr.InvalidGraphError, match="Multiple potential root nodes"):
             graph._validate_graph_root()
 
         # there is just one potential root node but it has no successors
         graph._graph.clear()
-
-        graph._graph.add_nodes_from([(1, asdict(Component(1, ComponentCategory.NONE)))])
+        _add_components(graph, Component(1, ComponentCategory.NONE))
         with pytest.raises(
             gr.InvalidGraphError, match="Graph root .*id=1.* has no successors!"
         ):
             graph._validate_graph_root()
 
         graph._graph.clear()
-        graph._graph.add_nodes_from([(2, asdict(Component(2, ComponentCategory.GRID)))])
+        _add_components(graph, Component(2, ComponentCategory.GRID))
         with pytest.raises(
             gr.InvalidGraphError, match="Graph root .*id=2.* has no successors!"
         ):
             graph._validate_graph_root()
 
         graph._graph.clear()
-
-        graph._graph.add_nodes_from([(3, asdict(Component(3, ComponentCategory.GRID)))])
+        _add_components(graph, Component(3, ComponentCategory.GRID))
         with pytest.raises(
             gr.InvalidGraphError, match="Graph root .*id=3.* has no successors!"
         ):
@@ -1205,33 +1216,30 @@ class Test_MicrogridComponentGraph:
 
         # there is exactly one potential root node and it has successors
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.NONE))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.NONE),
+            Component(2, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2)])
+        _add_connections(graph, Connection(1, 2))
         graph._validate_graph_root()
 
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2)])
+        _add_connections(graph, Connection(1, 2))
         graph._validate_graph_root()
 
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
         )
-        graph._graph.add_edges_from([(1, 2)])
+        _add_connections(graph, Connection(1, 2))
         graph._validate_graph_root()
 
     def test__validate_grid_endpoint(self) -> None:
@@ -1246,20 +1254,18 @@ class Test_MicrogridComponentGraph:
         # missing grid endpoint is OK as the graph might have
         # another kind of root
         graph._graph.clear()
-        graph._graph.add_node(2, **asdict(Component(2, ComponentCategory.METER)))
-
+        _add_components(graph, Component(2, ComponentCategory.METER))
         graph._validate_grid_endpoint()
 
         # multiple grid endpoints
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-                (3, asdict(Component(3, ComponentCategory.GRID))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
+            Component(3, ComponentCategory.GRID),
         )
-        graph._graph.add_edges_from([(1, 2), (3, 2)])
+        _add_connections(graph, Connection(1, 2), Connection(3, 2))
         with pytest.raises(
             gr.InvalidGraphError,
             match="Multiple grid endpoints in component graph",
@@ -1268,13 +1274,12 @@ class Test_MicrogridComponentGraph:
 
         # grid endpoint has predecessors
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (99, asdict(Component(99, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(99, ComponentCategory.METER),
         )
-        graph._graph.add_edge(99, 1)
+        _add_connections(graph, Connection(99, 1))
         with pytest.raises(
             gr.InvalidGraphError,
             match=r"Grid endpoint 1 has graph predecessors: \[Component"
@@ -1285,8 +1290,7 @@ class Test_MicrogridComponentGraph:
 
         # grid endpoint has no successors
         graph._graph.clear()
-
-        graph._graph.add_node(101, **asdict(Component(101, ComponentCategory.GRID)))
+        _add_components(graph, Component(101, ComponentCategory.GRID))
         with pytest.raises(
             gr.InvalidGraphError,
             match="Grid endpoint 101 has no graph successors!",
@@ -1295,13 +1299,12 @@ class Test_MicrogridComponentGraph:
 
         # valid grid endpoint with at least one successor
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
         )
-        graph._graph.add_edge(1, 2)
+        _add_connections(graph, Connection(1, 2))
         graph._validate_grid_endpoint()
 
     def test__validate_intermediary_components(self) -> None:
@@ -1315,7 +1318,7 @@ class Test_MicrogridComponentGraph:
 
         # missing predecessor for at least one intermediary node
         graph._graph.clear()
-        graph._graph.add_node(3, **asdict(Component(3, ComponentCategory.INVERTER)))
+        _add_components(graph, Component(3, ComponentCategory.INVERTER))
         with pytest.raises(
             gr.InvalidGraphError,
             match="Intermediary components without graph predecessors",
@@ -1323,39 +1326,35 @@ class Test_MicrogridComponentGraph:
             graph._validate_intermediary_components()
 
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (3, asdict(Component(3, ComponentCategory.INVERTER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(3, ComponentCategory.INVERTER),
         )
-        graph._graph.add_edges_from([(1, 3)])
+        _add_connections(graph, Connection(1, 3))
         graph._validate_intermediary_components()
 
         graph._graph.clear()
-
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-                (3, asdict(Component(3, ComponentCategory.INVERTER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
+            Component(3, ComponentCategory.INVERTER),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3))
         graph._validate_intermediary_components()
 
         # all intermediary nodes have at least one predecessor
         # and at least one successor
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-                (3, asdict(Component(3, ComponentCategory.INVERTER))),
-                (4, asdict(Component(4, ComponentCategory.BATTERY))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
+            Component(3, ComponentCategory.INVERTER),
+            Component(4, ComponentCategory.BATTERY),
         )
-        graph._graph.add_edges_from([(1, 2), (2, 3), (3, 4)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3), Connection(3, 4))
         graph._validate_intermediary_components()
 
     def test__validate_leaf_components(self) -> None:
@@ -1369,14 +1368,14 @@ class Test_MicrogridComponentGraph:
 
         # missing predecessor for at least one leaf node
         graph._graph.clear()
-        graph._graph.add_node(3, **asdict(Component(3, ComponentCategory.BATTERY)))
+        _add_components(graph, Component(3, ComponentCategory.BATTERY))
         with pytest.raises(
             gr.InvalidGraphError, match="Leaf components without graph predecessors"
         ):
             graph._validate_leaf_components()
 
         graph._graph.clear()
-        graph._graph.add_node(4, **asdict(Component(4, ComponentCategory.EV_CHARGER)))
+        _add_components(graph, Component(4, ComponentCategory.EV_CHARGER))
         with pytest.raises(
             gr.InvalidGraphError, match="Leaf components without graph predecessors"
         ):
@@ -1384,29 +1383,27 @@ class Test_MicrogridComponentGraph:
 
         # successors present for at least one leaf node
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.EV_CHARGER))),
-                (3, asdict(Component(3, ComponentCategory.BATTERY))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.EV_CHARGER),
+            Component(3, ComponentCategory.BATTERY),
         )
 
-        graph._graph.add_edges_from([(1, 2), (2, 3)])
+        _add_connections(graph, Connection(1, 2), Connection(2, 3))
         with pytest.raises(
             gr.InvalidGraphError, match="Leaf components with graph successors"
         ):
             graph._validate_leaf_components()
 
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (3, asdict(Component(3, ComponentCategory.BATTERY))),
-                (4, asdict(Component(4, ComponentCategory.EV_CHARGER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(3, ComponentCategory.BATTERY),
+            Component(4, ComponentCategory.EV_CHARGER),
         )
-        graph._graph.add_edges_from([(1, 3), (3, 4)])
+        _add_connections(graph, Connection(1, 3), Connection(3, 4))
         with pytest.raises(
             gr.InvalidGraphError, match="Leaf components with graph successors"
         ):
@@ -1415,15 +1412,14 @@ class Test_MicrogridComponentGraph:
         # all leaf nodes have at least one predecessor
         # and no successors
         graph._graph.clear()
-        graph._graph.add_nodes_from(
-            [
-                (1, asdict(Component(1, ComponentCategory.GRID))),
-                (2, asdict(Component(2, ComponentCategory.METER))),
-                (3, asdict(Component(3, ComponentCategory.BATTERY))),
-                (4, asdict(Component(4, ComponentCategory.EV_CHARGER))),
-            ]
+        _add_components(
+            graph,
+            Component(1, ComponentCategory.GRID),
+            Component(2, ComponentCategory.METER),
+            Component(3, ComponentCategory.BATTERY),
+            Component(4, ComponentCategory.EV_CHARGER),
         )
-        graph._graph.add_edges_from([(1, 2), (1, 3), (1, 4)])
+        _add_connections(graph, Connection(1, 2), Connection(1, 3), Connection(1, 4))
         graph._validate_leaf_components()
 
 
