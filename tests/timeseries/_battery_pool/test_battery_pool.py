@@ -263,7 +263,7 @@ async def run_scenarios(
 
     Raises:
         TimeoutError: If metric update was not received.
-        AssertError: If received metric is not as expected.
+        AssertionError: If received metric is not as expected.
     """
     for idx, scenario in enumerate(scenarios):
         # Update data stream
@@ -278,9 +278,9 @@ async def run_scenarios(
         # Wait for result and check if received expected message
         try:
             msg = await asyncio.wait_for(receiver.receive(), timeout=waiting_time_sec)
-        except TimeoutError as err:
+        except TimeoutError:
             _logger.error("Test scenario %d failed with timeout error.", idx)
-            raise err
+            raise
 
         if scenario.expected_result is None:
             assert msg is None
@@ -288,9 +288,9 @@ async def run_scenarios(
 
         try:
             compare_messages(msg, scenario.expected_result)
-        except AssertionError as err:
+        except AssertionError:
             _logger.error("Test scenario: %d failed.", idx)
-            raise err
+            raise
 
 
 async def test_all_batteries_capacity(
@@ -404,7 +404,8 @@ def compare_messages(msg: Any, expected_msg: Any) -> None:
     assert msg_dict == expected_dict
 
 
-async def run_test_battery_status_channel(  # pylint: disable=too-many-arguments
+# pylint: disable-next=too-many-arguments,too-many-positional-arguments
+async def run_test_battery_status_channel(
     battery_status_sender: Sender[ComponentPoolStatus],
     battery_pool_metric_receiver: Receiver[T],
     all_batteries: set[int],

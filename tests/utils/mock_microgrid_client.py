@@ -126,7 +126,8 @@ class MockMicrogridClient:
         """
         return self._component_graph
 
-    async def send(self, data: ComponentData) -> None:
+    # We need the noqa because the `SenderError` is raised indirectly by `send()`.
+    async def send(self, data: ComponentData) -> None:  # noqa: DOC503
         """Send component data using channel.
 
         This simulates component sending data. Right now only battery and inverter
@@ -136,6 +137,7 @@ class MockMicrogridClient:
             data: Data to be send
 
         Raises:
+            RuntimeError: if the type of data is not supported.
             SenderError: if the underlying channel was closed.
                 A [ChannelClosedError][frequenz.channels.ChannelClosedError] is
                 set as the cause.

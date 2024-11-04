@@ -153,7 +153,7 @@ class ChannelRegistry:
 
         entry = self._channels[key]
         if entry.message_type is not message_type:
-            exception = ValueError(
+            error_message = (
                 f"Type mismatch, a channel for key {key!r} exists and the requested "
                 f"message type {message_type} is not the same as the existing "
                 f"message type {entry.message_type}."
@@ -161,12 +161,12 @@ class ChannelRegistry:
             if _logger.isEnabledFor(logging.DEBUG):
                 _logger.debug(
                     "%s at:\n%s",
-                    str(exception),
+                    error_message,
                     # We skip the last frame because it's this method, and limit the
                     # stack to 9 frames to avoid adding too much noise.
                     "".join(traceback.format_stack(limit=10)[:9]),
                 )
-            raise exception
+            raise ValueError(error_message)
 
         return typing.cast(Broadcast[T], entry.channel)
 

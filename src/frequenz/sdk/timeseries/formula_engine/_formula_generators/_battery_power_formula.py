@@ -44,9 +44,8 @@ class BatteryPowerFormula(FormulaGenerator[Power]):
             ComponentNotFound: if there are no batteries in the component graph, or if
                 they don't have an inverter as a predecessor.
             FormulaGenerationError: If a battery has a non-inverter predecessor
-                in the component graph.
-            FormulaGenerationError: If not all batteries behind a set of inverters
-                have been requested.
+                in the component graph, or if not all batteries behind a set of
+                inverters have been requested.
         """
         builder = self._get_builder(
             "battery-power", ComponentMetricId.ACTIVE_POWER, Power.from_watts

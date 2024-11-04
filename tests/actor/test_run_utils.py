@@ -35,7 +35,7 @@ class FaultyActor(Actor):
         """Run the faulty actor.
 
         Raises:
-            CancelledError: the exception causes the actor to be cancelled
+            asyncio.CancelledError: the exception causes the actor to be cancelled
         """
         self.is_cancelled = True
         raise asyncio.CancelledError(f"Faulty Actor {self.name} failed")

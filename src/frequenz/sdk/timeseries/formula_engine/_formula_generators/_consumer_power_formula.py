@@ -49,7 +49,8 @@ class ConsumerPowerFormula(FormulaGenerator[Power]):
             for successor in grid_successors
         )
 
-    def generate(self) -> FormulaEngine[Power]:
+    # We need the noqa here because `RuntimeError` is raised indirectly
+    def generate(self) -> FormulaEngine[Power]:  # noqa: DOC503
         """Generate formula for calculating consumer power from the component graph.
 
         Returns:
