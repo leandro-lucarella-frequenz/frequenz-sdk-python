@@ -16,6 +16,7 @@
    ```
 
 * The `MovingWindow` now take all arguments as keyword-only to avoid mistakes.
+* The `frequenz-quantities` dependency was bumped to `1.0.0rc3`.
 
 ## New Features
 
