@@ -15,6 +15,8 @@
    actor = ConfigManagingActor(config_files=["config.toml"])
    ```
 
+* The `MovingWindow` now take all arguments as keyword-only to avoid mistakes.
+
 ## New Features
 
 - The `ConfigManagingActor` can now take multiple configuration files as input, allowing to override default configurations with custom configurations.

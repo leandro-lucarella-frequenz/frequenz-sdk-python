@@ -801,7 +801,9 @@ class _StreamingHelper:
             if sample.value is not None and not sample.value.isnan():
                 self._helper.add_sample(sample)
 
-    async def resample(self, timestamp: datetime) -> None:
+    # We need the noqa because pydoclint can't figure out that `recv_exception` is an
+    # `Exception` instance.
+    async def resample(self, timestamp: datetime) -> None:  # noqa: DOC503
         """Calculate a new sample for the passed `timestamp` and send it.
 
         The helper is used to calculate the new sample and the sender is used

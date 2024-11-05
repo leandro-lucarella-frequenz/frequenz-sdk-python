@@ -80,12 +80,12 @@ class FormulaEnginePool:
             return self._string_engines[channel_key]
 
         builder = ResampledFormulaBuilder(
-            self._namespace,
-            formula,
-            self._channel_registry,
-            self._resampler_subscription_sender,
-            component_metric_id,
-            Quantity,
+            namespace=self._namespace,
+            formula_name=formula,
+            channel_registry=self._channel_registry,
+            resampler_subscription_sender=self._resampler_subscription_sender,
+            metric_id=component_metric_id,
+            create_method=Quantity,
         )
         formula_engine = builder.from_string(formula, nones_are_zeros=nones_are_zeros)
         self._string_engines[channel_key] = formula_engine

@@ -59,7 +59,11 @@ def init_moving_window(
     """
     lm_chan = Broadcast[Sample[Quantity]](name="lm_net_power")
     lm_tx = lm_chan.new_sender()
-    window = MovingWindow(size, lm_chan.new_receiver(), timedelta(seconds=1))
+    window = MovingWindow(
+        size=size,
+        resampled_data_recv=lm_chan.new_receiver(),
+        input_sampling_period=timedelta(seconds=1),
+    )
     return window, lm_tx
 
 

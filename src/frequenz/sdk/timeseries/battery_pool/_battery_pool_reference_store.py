@@ -39,6 +39,7 @@ class BatteryPoolReferenceStore:  # pylint: disable=too-many-instance-attributes
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         channel_registry: ChannelRegistry,
         resampler_subscription_sender: Sender[ComponentMetricRequest],
         batteries_status_receiver: Receiver[ComponentPoolStatus],

@@ -129,7 +129,9 @@ class BackgroundService(abc.ABC):
         for task in self._tasks:
             task.cancel(msg)
 
-    async def stop(self, msg: str | None = None) -> None:
+    # We need the noqa because pydoclint can't figure out `rest` is
+    # a `BaseExceptionGroup` instance.
+    async def stop(self, msg: str | None = None) -> None:  # noqa: DOC503
         """Stop this background service.
 
         This method cancels all running tasks spawned by this service and waits for them

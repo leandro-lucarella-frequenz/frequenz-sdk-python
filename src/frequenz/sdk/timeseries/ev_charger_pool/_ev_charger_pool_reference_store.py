@@ -35,6 +35,7 @@ class EVChargerPoolReferenceStore:
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         channel_registry: ChannelRegistry,
         resampler_subscription_sender: Sender[ComponentMetricRequest],
         status_receiver: Receiver[ComponentPoolStatus],

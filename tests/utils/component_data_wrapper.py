@@ -30,11 +30,14 @@ from frequenz.client.microgrid import (
     MeterData,
 )
 
+# Disable these checks for the file as we need to pass a lot of data
+# pylint: disable=too-many-arguments,too-many-positional-arguments
+
 
 class BatteryDataWrapper(BatteryData):
     """Wrapper for the BatteryData with default arguments."""
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(
         self,
         component_id: int,
         timestamp: datetime,
@@ -92,7 +95,7 @@ class BatteryDataWrapper(BatteryData):
 class InverterDataWrapper(InverterData):
     """Wrapper for the InverterData with default arguments."""
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-locals
+    def __init__(  # pylint: disable=too-many-locals
         self,
         component_id: int,
         timestamp: datetime,
@@ -160,7 +163,7 @@ class InverterDataWrapper(InverterData):
 class EvChargerDataWrapper(EVChargerData):
     """Wrapper for the EvChargerData with default arguments."""
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-locals
+    def __init__(  # pylint: disable=too-many-locals
         self,
         component_id: int,
         timestamp: datetime,
@@ -228,7 +231,7 @@ class EvChargerDataWrapper(EVChargerData):
 class MeterDataWrapper(MeterData):
     """Wrapper for the MeterData with default arguments."""
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(
         self,
         component_id: int,
         timestamp: datetime,

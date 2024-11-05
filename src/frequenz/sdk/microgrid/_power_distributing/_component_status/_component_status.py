@@ -85,6 +85,7 @@ class ComponentStatusTracker(BackgroundService, ABC):
     @abstractmethod
     def __init__(  # pylint: disable=too-many-arguments,super-init-not-called
         self,
+        *,
         component_id: int,
         max_data_age: timedelta,
         max_blocking_duration: timedelta,

@@ -24,6 +24,7 @@ class ResampledFormulaBuilder(FormulaBuilder[QuantityT]):
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         namespace: str,
         formula_name: str,
         channel_registry: ChannelRegistry,

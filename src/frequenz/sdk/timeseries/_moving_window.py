@@ -9,7 +9,7 @@ import logging
 import math
 from collections.abc import Sequence
 from datetime import datetime, timedelta
-from typing import SupportsIndex, overload
+from typing import SupportsIndex, assert_never, overload
 
 import numpy as np
 from frequenz.channels import Broadcast, Receiver, Sender
@@ -130,12 +130,12 @@ class MovingWindow(BackgroundService):
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         size: timedelta,
         resampled_data_recv: Receiver[Sample[Quantity]],
         input_sampling_period: timedelta,
         resampler_config: ResamplerConfig | None = None,
         align_to: datetime = UNIX_EPOCH,
-        *,
         name: str | None = None,
     ) -> None:
         """
@@ -282,7 +282,7 @@ class MovingWindow(BackgroundService):
             assert timestamp is not None
             return self._buffer[self._buffer.to_internal_index(timestamp)]
 
-        raise TypeError("Key has to be either a timestamp or an integer.")
+        assert_never(key)
 
     def window(
         self,
@@ -385,7 +385,10 @@ class MovingWindow(BackgroundService):
     def __getitem__(self, key: slice) -> ArrayLike:
         """See the main __getitem__ method."""
 
-    def __getitem__(self, key: SupportsIndex | datetime | slice) -> float | ArrayLike:
+    # We need the noqa because `IndexError` is raised indirectly by `at()` and `window()`
+    def __getitem__(  # noqa: DOC503
+        self, key: SupportsIndex | datetime | slice
+    ) -> float | ArrayLike:
         """
         Return a sub window of the `MovingWindow`.
 
@@ -400,12 +403,15 @@ class MovingWindow(BackgroundService):
           where the bounds correspond to the slice bounds.
           Note that a half open interval, which is open at the end, is returned.
 
+        Note:
+            Slicing with a step other than 1 is not supported.
+
         Args:
             key: Either an integer or a timestamp or a slice of timestamps or integers.
 
         Raises:
             IndexError: when requesting an out of range timestamp or index
-            TypeError: when the key is not a datetime or slice object.
+            ValueError: when requesting a slice with a step other than 1
 
         Returns:
             A float if the key is a number or a timestamp.
@@ -422,10 +428,7 @@ class MovingWindow(BackgroundService):
         if isinstance(key, SupportsIndex):
             return self.at(key.__index__())
 
-        raise TypeError(
-            "Key has to be either a timestamp or an integer "
-            "or a slice of timestamps or integers"
-        )
+        assert_never(key)
 
 
 # We need to register the class as a subclass of Sequence like this because

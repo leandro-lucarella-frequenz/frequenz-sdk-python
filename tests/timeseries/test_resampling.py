@@ -64,7 +64,8 @@ async def _advance_time(fake_time: time_machine.Coordinates, seconds: float) -> 
     fake_time.shift(seconds)
 
 
-async def _assert_no_more_samples(  # pylint: disable=too-many-arguments
+# pylint: disable-next=too-many-arguments,too-many-positional-arguments
+async def _assert_no_more_samples(
     resampler: Resampler,
     initial_time: datetime,
     sink_mock: AsyncMock,

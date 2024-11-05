@@ -54,7 +54,7 @@ class MockMicrogrid:  # pylint: disable=too-many-instance-attributes
     mock_client: MockMicrogridClient
     mock_resampler: MockResampler
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         grid_meter: bool | None = None,
         api_client_streaming: bool = False,

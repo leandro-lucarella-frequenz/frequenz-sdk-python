@@ -99,6 +99,7 @@ class BatteryStatusTracker(ComponentStatusTracker, BackgroundService):
     @override
     def __init__(  # pylint: disable=too-many-arguments
         self,
+        *,
         component_id: int,
         max_data_age: timedelta,
         max_blocking_duration: timedelta,

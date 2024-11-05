@@ -27,7 +27,7 @@ from frequenz.sdk.timeseries.formula_engine._formula_generators._formula_generat
 class MockResampler:
     """Mock resampler."""
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         mocker: MockerFixture,
         resampler_config: ResamplerConfig,

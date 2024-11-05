@@ -29,12 +29,12 @@ def get_resampled_stream(
 
     # pylint: disable=protected-access
     builder = ResampledFormulaBuilder(
-        namespace,
-        "",
-        _data_pipeline._get()._channel_registry,
-        _data_pipeline._get()._resampling_request_sender(),
-        metric_id,
-        create_method,
+        namespace=namespace,
+        formula_name="",
+        channel_registry=_data_pipeline._get()._channel_registry,
+        resampler_subscription_sender=_data_pipeline._get()._resampling_request_sender(),
+        metric_id=metric_id,
+        create_method=create_method,
     )
     # Resampled data is always `Quantity` type, so we need to convert it to the desired
     # output type.
