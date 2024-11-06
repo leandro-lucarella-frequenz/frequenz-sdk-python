@@ -21,9 +21,10 @@
 ## New Features
 
 - The `ConfigManagingActor` can now take multiple configuration files as input, allowing to override default configurations with custom configurations.
+* A new `frequenz.sdk.config.load_config()` function is available to load configurations using `marshmallow_dataclass`es with correct type hints.
 - Implement and standardize logging configuration with the following changes:
-   * Add LoggerConfig and LoggingConfig to standardize logging configuration.
-   * Create LoggingConfigUpdater to handle runtime config updates.
+   * Add `LoggerConfig` and `LoggingConfig` to standardize logging configuration.
+   * Create `LoggingConfigUpdater` to handle runtime config updates.
    * Support individual log level settings for each module.
 
 ## Bug Fixes

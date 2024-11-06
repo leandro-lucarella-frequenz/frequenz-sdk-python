@@ -119,6 +119,8 @@ plugins:
             - https://docs.python.org/3/objects.inv
             - https://frequenz-floss.github.io/frequenz-channels-python/v1.1/objects.inv
             - https://frequenz-floss.github.io/frequenz-client-microgrid-python/v0.5/objects.inv
+            - https://lovasoa.github.io/marshmallow_dataclass/html/objects.inv
+            - https://marshmallow.readthedocs.io/en/stable/objects.inv
             - https://networkx.org/documentation/stable/objects.inv
             - https://numpy.org/doc/stable/objects.inv
             - https://typing-extensions.readthedocs.io/en/stable/objects.inv

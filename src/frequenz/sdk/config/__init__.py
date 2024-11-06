@@ -5,10 +5,12 @@
 
 from ._config_managing import ConfigManagingActor
 from ._logging_config_updater import LoggerConfig, LoggingConfig, LoggingConfigUpdater
+from ._util import load_config
 
 __all__ = [
     "ConfigManagingActor",
     "LoggingConfig",
     "LoggerConfig",
     "LoggingConfigUpdater",
+    "load_config",
 ]
