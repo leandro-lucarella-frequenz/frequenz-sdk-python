@@ -13,18 +13,28 @@ __all__ = ["ComponentMetricRequest", "ComponentMetricId"]
 
 @dataclass
 class ComponentMetricRequest:
-    """A request object to start streaming a metric for a component."""
+    """A request to start streaming a component's metric.
+
+    Requesters use this class to specify which component's metric they want to subscribe
+    to, including the component ID, metric ID, and an optional start time. The
+    `namespace` is defined by the requester and influences the construction of the
+    channel name via the `get_channel_name()` method.
+
+    The `namespace` allows differentiation of data streams for the same component and
+    metric. For example, requesters can use different `namespace` values to subscribe to
+    raw or resampled data streams separately. This ensures that each requester receives
+    the appropriate type of data without interference. Requests with the same
+    `namespace`, `component_id`, and `metric_id` will use the same channel, preventing
+    unnecessary duplication of data streams.
+
+    The requester and provider must use the same channel name so that they can
+    independently retrieve the same channel from the `ChannelRegistry`.  This is
+    achieved by using the `get_channel_name` method to generate the name on both sides
+    based on parameters set by the requesters.
+    """
 
     namespace: str
-    """The namespace that this request belongs to.
-
-    Metric requests with a shared namespace enable the reuse of channels within
-    that namespace.
-
-    If for example, an actor making a multiple requests, uses the name of the
-    actor as the namespace, then requests from the actor will get reused when
-    possible.
-    """
+    """A client-defined identifier influencing the channel name."""
 
     component_id: int
     """The ID of the requested component."""
@@ -35,21 +45,21 @@ class ComponentMetricRequest:
     start_time: datetime | None
     """The start time from which data is required.
 
-    When None, we will stream only live data.
+    If None, only live data is streamed.
     """
 
     def get_channel_name(self) -> str:
-        """Return a channel name constructed from Self.
-
-        This channel name can be used by the sending side and receiving sides to
-        identify the right channel from the ChannelRegistry.
+        """Construct the channel name based on the request parameters.
 
         Returns:
-            A string denoting a channel name.
+            A string representing the channel name.
         """
+        start = f",start={self.start_time}" if self.start_time else ""
         return (
-            f"component_metric_request<namespace={self.namespace},"
+            "component_metric_request<"
+            f"namespace={self.namespace},"
             f"component_id={self.component_id},"
-            f"metric_id={self.metric_id.name},"
-            f"start={self.start_time}>"
+            f"metric_id={self.metric_id.name}"
+            f"{start}"
+            ">"
         )

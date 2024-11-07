@@ -17,6 +17,7 @@
 
 * The `MovingWindow` now take all arguments as keyword-only to avoid mistakes.
 * The `frequenz-quantities` dependency was bumped to `1.0.0rc3`.
+* The `ComponentMetricsRequest` now produces a channel name without the `start_date` if the `start_date` is `None`. If you are somehow relying on the old behavior, please update your code.
 
 ## New Features
 
