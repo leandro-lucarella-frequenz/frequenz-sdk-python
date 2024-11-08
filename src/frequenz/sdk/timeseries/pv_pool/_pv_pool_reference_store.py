@@ -94,7 +94,8 @@ class PVPoolReferenceStore:
             self.resampler_subscription_sender,
         )
         self.bounds_channel: Broadcast[SystemBounds] = Broadcast(
-            name=f"System Bounds for PV inverters: {component_ids}"
+            name=f"System Bounds for PV inverters: {component_ids}",
+            resend_latest=True,
         )
         self.bounds_tracker: PVSystemBoundsTracker = PVSystemBoundsTracker(
             self.component_ids,
