@@ -16,11 +16,11 @@
         <link rel="prev" href="../config/">
       
       
-        <link rel="next" href="client/">
+        <link rel="next" href="component_graph/">
       
       
       <link rel="icon" href="../../../../_img/logo.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.43">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
@@ -56,7 +56,7 @@
     
       <link rel="stylesheet" href="../../../../_css/mkdocstrings.css">
     
-    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -119,7 +119,7 @@
     </a>
     <label class="md-header__button md-icon" for="__drawer">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -147,7 +147,7 @@
     <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
       </label>
     
   
@@ -157,7 +157,7 @@
     <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
       </label>
     
   
@@ -165,13 +165,13 @@
       
     
     
-      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
       <label class="md-header__button md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -180,21 +180,21 @@
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -211,7 +211,7 @@
         <a href="https://github.com/frequenz-floss/frequenz-sdk-python" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
   </div>
   <div class="md-source__repository">
     frequenz-sdk-python
@@ -385,7 +385,7 @@
       <a href="https://github.com/frequenz-floss/frequenz-sdk-python" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
   </div>
   <div class="md-source__repository">
     frequenz-sdk-python
@@ -438,14 +438,12 @@
       
     
     
-    
-    
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
@@ -464,7 +462,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -583,20 +581,18 @@
       
     
     
-    
-    
       
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -657,14 +653,15 @@
       
     
     
-    
-    
+      
+        
+        
       
       
+    
     
     <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
@@ -703,11 +700,12 @@
       
     
     
+      
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" checked>
@@ -747,6 +745,8 @@
         
       
         
+          
+        
       
         
           
@@ -758,11 +758,12 @@
       
     
     
+      
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_1" checked>
@@ -802,188 +803,16 @@
   
   
   
-    
-    
-      
+    <li class="md-nav__item">
+      <a href="../actor/" class="md-nav__link">
         
-          
-        
-      
-        
-      
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_1_2" >
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../actor/" class="md-nav__link ">
-              
   
   <span class="md-ellipsis">
     actor
   </span>
   
 
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_4_1_1_2" id="__nav_4_1_1_2_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_4_1_1_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_1_1_2">
-            <span class="md-nav__icon md-icon"></span>
-            actor
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_1_2_2" >
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../actor/power_distributing/" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    power_distributing
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_4_1_1_2_2" id="__nav_4_1_1_2_2_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_4_1_1_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_1_1_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            power_distributing
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../actor/power_distributing/power_distributing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    power_distributing
-  </span>
-  
-
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../actor/power_distributing/request/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    request
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../actor/power_distributing/result/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    result
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1026,26 +855,17 @@
         
       
         
-          
-        
-      
-        
-          
-        
-      
-        
-      
-        
       
         
       
     
     
+      
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_1_4" checked>
@@ -1077,48 +897,6 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="client/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    client
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="component/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    component
-  </span>
-  
-
-      </a>
-    </li>
-  
-
               
             
               
@@ -1163,27 +941,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="metadata/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    metadata
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -1206,8 +963,6 @@
         
       
         
-          
-        
       
         
       
@@ -1225,15 +980,20 @@
           
         
       
+        
+      
+        
+          
         
       
     
     
+      
+      
     
     
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_1_5" >
@@ -1273,16 +1033,80 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../timeseries/battery_pool/" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_1_5_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../timeseries/battery_pool/" class="md-nav__link ">
+              
   
   <span class="md-ellipsis">
     battery_pool
   </span>
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1_1_5_2" id="__nav_4_1_1_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_4_1_1_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1_1_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            battery_pool
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../timeseries/battery_pool/messages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    messages
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1414,6 +1238,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../timeseries/pv_pool/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pv_pool
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1492,11 +1337,11 @@
         <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid" class="md-nav__link">
     <span class="md-ellipsis">
-      microgrid
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;microgrid
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="microgrid">
+    <nav class="md-nav" aria-label=" microgrid">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1536,6 +1381,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid--pv-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      PV Arrays
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid--batteries" class="md-nav__link">
     <span class="md-ellipsis">
       Batteries
@@ -1550,6 +1404,63 @@
       EV Chargers
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid--component-pools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Component pools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Component pools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid--streaming-component-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streaming component data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid--setting-power" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting power
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting power">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid--resolving-conflicting-power-proposals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resolving conflicting power proposals
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid--shifting-the-target-power-by-an-operating-point-power" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shifting the target power by an Operating Point power
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1573,27 +1484,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#frequenz.sdk.microgrid.battery_pool" class="md-nav__link">
-    <span class="md-ellipsis">
-      battery_pool
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid.consumer" class="md-nav__link">
     <span class="md-ellipsis">
-      consumer
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#frequenz.sdk.microgrid.ev_charger_pool" class="md-nav__link">
-    <span class="md-ellipsis">
-      ev_charger_pool
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;consumer
     </span>
   </a>
   
@@ -1602,7 +1495,7 @@
           <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid.frequency" class="md-nav__link">
     <span class="md-ellipsis">
-      frequency
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;frequency
     </span>
   </a>
   
@@ -1611,7 +1504,7 @@
           <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid.grid" class="md-nav__link">
     <span class="md-ellipsis">
-      grid
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;grid
     </span>
   </a>
   
@@ -1620,7 +1513,7 @@
           <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid.initialize" class="md-nav__link">
     <span class="md-ellipsis">
-      initialize
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;initialize
     </span>
   </a>
   
@@ -1629,7 +1522,34 @@
           <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid.logical_meter" class="md-nav__link">
     <span class="md-ellipsis">
-      logical_meter
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;logical_meter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid.new_battery_pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;new_battery_pool
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid.new_ev_charger_pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;new_ev_charger_pool
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequenz.sdk.microgrid.new_pv_pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;new_pv_pool
     </span>
   </a>
   
@@ -1638,16 +1558,16 @@
           <li class="md-nav__item">
   <a href="#frequenz.sdk.microgrid.producer" class="md-nav__link">
     <span class="md-ellipsis">
-      producer
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;producer
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#frequenz.sdk.microgrid.voltage" class="md-nav__link">
+  <a href="#frequenz.sdk.microgrid.voltage_per_phase" class="md-nav__link">
     <span class="md-ellipsis">
-      voltage
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;voltage_per_phase
     </span>
   </a>
   
@@ -1688,14 +1608,14 @@
 
 
 <h2 id="frequenz.sdk.microgrid" class="doc doc-heading">
-          <span class="doc doc-object-name doc-module-name">frequenz.sdk.microgrid</span>
+            <span class="doc doc-object-name doc-module-name">frequenz.sdk.microgrid</span>
 
 
 <a href="#frequenz.sdk.microgrid" class="headerlink" title="Permanent link">¤</a></h2>
 
-  <div class="doc doc-contents first">
-  
-      <p>A <a href="../../../../user-guide/glossary/#microgrid">microgrid</a> is a local electrical grid that connects a set of
+    <div class="doc doc-contents first">
+
+        <p>A <a href="../../../../user-guide/glossary/#microgrid">microgrid</a> is a local electrical grid that connects a set of
 electrical components together.  They are often built around a passive power consumer,
 to supplement the electricity consumed from the <a href="../../../../user-guide/glossary/#grid">public grid</a> with
 on-site power generation or storage systems.</p>
@@ -1754,17 +1674,27 @@ values.</p>
 is available through <a class="autorefs autorefs-internal" href="../timeseries/consumer/#frequenz.sdk.timeseries.consumer.Consumer.power"><code>consumer_power</code></a></p>
 <p>In locations without a consumer, this method streams zero values.</p>
 <h4 id="frequenz.sdk.microgrid--producers-pv-arrays-chp">Producers: PV Arrays, CHP<a class="headerlink" href="#frequenz.sdk.microgrid--producers-pv-arrays-chp" title="Permanent link">¤</a></h4>
-<p>The total <a href="../../../../user-guide/glossary/#pv">PV</a> power production in a microgrid can be streamed
-through <a class="autorefs autorefs-internal" href="../timeseries/logical_meter/#frequenz.sdk.timeseries.logical_meter.LogicalMeter.pv_power"><code>pv_power</code></a> , and
-similarly the total CHP production in a site can be streamed through
-<a class="autorefs autorefs-internal" href="../timeseries/logical_meter/#frequenz.sdk.timeseries.logical_meter.LogicalMeter.chp_power"><code>chp_power</code></a>.  And total
-producer power is available through
-<a class="autorefs autorefs-internal" href="../timeseries/producer/#frequenz.sdk.timeseries.producer.Producer.power"><code>producer_power</code></a>.</p>
+<p>The total CHP production in a site can be streamed through
+<a class="autorefs autorefs-internal" href="../timeseries/logical_meter/#frequenz.sdk.timeseries.logical_meter.LogicalMeter.chp_power"><code>chp_power</code></a>.  PV Power
+is available through the PV pool described below.  And total producer power is available
+through <a class="autorefs autorefs-internal" href="../timeseries/producer/#frequenz.sdk.timeseries.producer.Producer.power"><code>microgrid.producer().power</code></a>.</p>
 <p>As is the case with the other methods, if PV Arrays or CHPs are not available in a
 microgrid, the corresponding methods stream zero values.</p>
+<h4 id="frequenz.sdk.microgrid--pv-arrays">PV Arrays<a class="headerlink" href="#frequenz.sdk.microgrid--pv-arrays" title="Permanent link">¤</a></h4>
+<p>The total PV power production is available through
+<a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.new_pv_pool"><code>pv_pool</code></a>'s
+<a class="autorefs autorefs-internal" href="../timeseries/pv_pool/#frequenz.sdk.timeseries.pv_pool.PVPool.power"><code>power</code></a>.  The PV pool by default uses
+all PV inverters available at a location, but PV pool instances can be created for
+subsets of PV inverters if necessary, by specifying the inverter ids.</p>
+<p>The <code>pv_pool</code> also provides available power bounds through the
+<a class="autorefs autorefs-internal" href="../timeseries/pv_pool/#frequenz.sdk.timeseries.pv_pool.PVPool.power_status"><code>power_status</code></a> method.</p>
+<p>The <code>pv_pool</code> also provides a control method
+<a class="autorefs autorefs-internal" href="../timeseries/pv_pool/#frequenz.sdk.timeseries.pv_pool.PVPool.propose_power"><code>propose_power</code></a>, which accepts
+values in the <a href="../../../../user-guide/glossary/#psc">Passive Sign Convention</a> and supports only
+production.</p>
 <h4 id="frequenz.sdk.microgrid--batteries">Batteries<a class="headerlink" href="#frequenz.sdk.microgrid--batteries" title="Permanent link">¤</a></h4>
-<p>The total Battery power is available through
-<a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.battery_pool"><code>battery_pool</code></a>'s
+<p>The total Battery power is available through the
+<a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.new_battery_pool"><code>battery_pool</code></a>'s
 <a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.power"><code>power</code></a>.  The battery pool by
 default uses all batteries available at a location, but battery pool instances can be
 created for subsets of batteries if necessary, by specifying the battery ids.</p>
@@ -1781,18 +1711,146 @@ charging and discharging), or through
 <a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.propose_charge"><code>propose_charge</code></a>, or
 <a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.propose_discharge"><code>propose_discharge</code></a>.</p>
 <h4 id="frequenz.sdk.microgrid--ev-chargers">EV Chargers<a class="headerlink" href="#frequenz.sdk.microgrid--ev-chargers" title="Permanent link">¤</a></h4>
-<p>The <a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.ev_charger_pool"><code>ev_charger_pool</code></a> offers a
+<p>The <a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.new_ev_charger_pool"><code>ev_charger_pool</code></a> offers a
 <a class="autorefs autorefs-internal" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool.power"><code>power</code></a> method that
 streams the total power measured for all the <a href="../../../../user-guide/glossary/#ev-charger">EV Chargers</a>
 at a site.</p>
-<p>It also offers a
-<a class="autorefs autorefs-internal" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool.component_data"><code>component_data</code></a>
-method for fetching the status of individual EV Chargers, including state changes like
-when an EV is connected or disconnected, and a
-<a class="autorefs autorefs-internal" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool.set_bounds"><code>set_bounds</code></a> method
-to limit the charge power of individual EV Chargers.</p>
+<p>The <code>ev_charger_pool</code> also provides available power bounds through the
+<a class="autorefs autorefs-internal" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool.power_status"><code>power_status</code></a>
+method.</p>
+<p>The <code>ev_charger_pool</code> also provides a control method
+<a class="autorefs autorefs-internal" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool.propose_power"><code>propose_power</code></a>,
+which accepts values in the <a href="../../../../user-guide/glossary/#psc">Passive Sign Convention</a> and supports
+only charging.</p>
+<h3 id="frequenz.sdk.microgrid--component-pools">Component pools<a class="headerlink" href="#frequenz.sdk.microgrid--component-pools" title="Permanent link">¤</a></h3>
+<p>The SDK provides a unified interface for interacting with sets of Batteries, EV
+chargers and PV arrays, through their corresponding <code>Pool</code>s.</p>
+<ul>
+<li><a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.new_battery_pool">Battery pool</a></li>
+<li><a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.new_ev_charger_pool">EV charger pool</a></li>
+<li><a class="autorefs autorefs-internal" href="#frequenz.sdk.microgrid.new_pv_pool">PV pool</a></li>
+</ul>
+<p>All of them provide support for streaming aggregated data and for setting the
+power values of the components.</p>
+<h4 id="frequenz.sdk.microgrid--streaming-component-data">Streaming component data<a class="headerlink" href="#frequenz.sdk.microgrid--streaming-component-data" title="Permanent link">¤</a></h4>
+<p>All pools have a <code>power</code> property, which is a
+<a class="autorefs autorefs-internal" href="../timeseries/formula_engine/#frequenz.sdk.timeseries.formula_engine.FormulaEngine"><code>FormulaEngine</code></a> that can</p>
+<ul>
+<li>
+<p>provide a stream of resampled power values, which correspond to the sum of the
+power measured from all the components in the pool together.</p>
+</li>
+<li>
+<p>be composed with other power streams to for composite formulas.</p>
+</li>
+</ul>
+<p>In addition, the battery pool has some additional properties that can be used as
+streams for metrics specific to batteries:
+<a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.soc"><code>soc</code></a>,
+<a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.capacity"><code>capacity</code></a> and
+<a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.temperature"><code>temperature</code></a>.</p>
+<h4 id="frequenz.sdk.microgrid--setting-power">Setting power<a class="headerlink" href="#frequenz.sdk.microgrid--setting-power" title="Permanent link">¤</a></h4>
+<p>All pools provide a <code>propose_power</code> method for setting power for the pool.  This
+would then be distributed to the individual components in the pool, using an
+algorithm that's suitable for the category of the components.  For example, when
+controlling batteries, power could be distributed based on the <code>SoC</code> of the
+individual batteries, to keep the batteries in balance.</p>
+<h5 id="frequenz.sdk.microgrid--resolving-conflicting-power-proposals">Resolving conflicting power proposals<a class="headerlink" href="#frequenz.sdk.microgrid--resolving-conflicting-power-proposals" title="Permanent link">¤</a></h5>
+<p>When there are multiple actors trying to control the same set of batteries, a
+target power is calculated based on the priorities of the actors making the
+requests.  Actors need to specify their priorities as parameters when creating
+the <code>*Pool</code> instances using the constructors mentioned above.</p>
+<p>The algorithm used for resolving power conflicts based on actor priority can be
+found in the documentation for any of the
+<a class="autorefs autorefs-internal" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool.propose_power"><code>propose_power</code></a>
+methods.</p>
+<h5 id="frequenz.sdk.microgrid--shifting-the-target-power-by-an-operating-point-power">Shifting the target power by an Operating Point power<a class="headerlink" href="#frequenz.sdk.microgrid--shifting-the-target-power-by-an-operating-point-power" title="Permanent link">¤</a></h5>
+<p>There are cases where the target power needs to be shifted by an operating point.  This
+can be done by designating some actors to be able to set only the operating point power.</p>
+<p>When creating a <code>*Pool</code> instance using the above-mentioned constructors, an optional
+<code>set_operating_point</code> parameter can be passed to specify that this actor is special, and
+the target power of the regular actors will be shifted by the target power of all actors
+with <code>set_operating_point</code> together.</p>
+<p>In a location with 2 regular actors and 1 <code>set_operating_point</code> actor, here's how things
+would play out:</p>
+<ol>
+<li>When only regular actors have made proposals, the power bounds available from the
+   batteries are available to them exactly.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>actor priority</th>
+<th>in op group?</th>
+<th>proposed power/bounds</th>
+<th>available bounds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>No</td>
+<td>1000, -4000..2500</td>
+<td>-3000..3000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>No</td>
+<td>2500</td>
+<td>-3000..2500</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Yes</td>
+<td>None</td>
+<td>-3000..3000</td>
+</tr>
+</tbody>
+</table>
+<p>Power actually distributed to the batteries: 2500W</p>
+<ol>
+<li>When the <code>set_operating_point</code> actor has made proposals, the bounds available to the
+   regular actors gets shifted, and the final power that actually gets distributed to
+   the batteries is also shifted.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>actor priority</th>
+<th>in op group?</th>
+<th>proposed power/bounds</th>
+<th>available bounds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>No</td>
+<td>1000, -4000..2500</td>
+<td>-2000..4000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>No</td>
+<td>2500</td>
+<td>-2000..2500</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Yes</td>
+<td>-1000</td>
+<td>-3000..3000</td>
+</tr>
+</tbody>
+</table>
+<p>Power actually distributed to the batteries: 1500W</p>
 
-  
+
+
+
+
+
+
 
   <div class="doc doc-children">
 
@@ -1804,583 +1862,1054 @@ to limit the charge power of individual EV Chargers.</p>
 <h3 id="frequenz.sdk.microgrid-classes">Classes<a href="#frequenz.sdk.microgrid-classes" class="headerlink" title="Permanent link">¤</a></h3>
 <h3 id="frequenz.sdk.microgrid-functions">Functions<a href="#frequenz.sdk.microgrid-functions" class="headerlink" title="Permanent link">¤</a></h3>
 
-
 <div class="doc doc-object doc-function">
-
-
-
-<h4 id="frequenz.sdk.microgrid.battery_pool" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.battery_pool</span>
-
-
-<a href="#frequenz.sdk.microgrid.battery_pool" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">battery_pool</span><span class="p">(</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">battery_ids</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">priority</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="o">-</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.battery_pool.BatteryPool" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool">BatteryPool</a></span>
-</span></code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Return a new <code>BatteryPool</code> instance for the given parameters.</p>
-<p>The priority value is used to resolve conflicts when multiple actors are trying to
-propose different power values for the same set of batteries.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When specifying priority, bigger values indicate higher priority. The default
-priority is the lowest possible value.</p>
-</div>
-
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>battery_ids</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Optional set of IDs of batteries to be managed by the <code>BatteryPool</code>.
-If not specified, all batteries available in the component graph are used.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>] | None</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>None</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td><code>name</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>An optional name used to identify this instance of the pool or a
-corresponding actor in the logs.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | None</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>None</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td><code>priority</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>The priority of the actor making the call.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>-<a class="autorefs autorefs-external" title="sys.maxsize" href="https://docs.python.org/3/library/sys.html#sys.maxsize">maxsize</a> - 1</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><b>RETURNS</b></th>
-        <th><b>DESCRIPTION</b></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.battery_pool.BatteryPool" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool">BatteryPool</a></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>A <code>BatteryPool</code> instance.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-469">469</a></span>
-<span class="normal"><a href="#__codelineno-0-470">470</a></span>
-<span class="normal"><a href="#__codelineno-0-471">471</a></span>
-<span class="normal"><a href="#__codelineno-0-472">472</a></span>
-<span class="normal"><a href="#__codelineno-0-473">473</a></span>
-<span class="normal"><a href="#__codelineno-0-474">474</a></span>
-<span class="normal"><a href="#__codelineno-0-475">475</a></span>
-<span class="normal"><a href="#__codelineno-0-476">476</a></span>
-<span class="normal"><a href="#__codelineno-0-477">477</a></span>
-<span class="normal"><a href="#__codelineno-0-478">478</a></span>
-<span class="normal"><a href="#__codelineno-0-479">479</a></span>
-<span class="normal"><a href="#__codelineno-0-480">480</a></span>
-<span class="normal"><a href="#__codelineno-0-481">481</a></span>
-<span class="normal"><a href="#__codelineno-0-482">482</a></span>
-<span class="normal"><a href="#__codelineno-0-483">483</a></span>
-<span class="normal"><a href="#__codelineno-0-484">484</a></span>
-<span class="normal"><a href="#__codelineno-0-485">485</a></span>
-<span class="normal"><a href="#__codelineno-0-486">486</a></span>
-<span class="normal"><a href="#__codelineno-0-487">487</a></span>
-<span class="normal"><a href="#__codelineno-0-488">488</a></span>
-<span class="normal"><a href="#__codelineno-0-489">489</a></span>
-<span class="normal"><a href="#__codelineno-0-490">490</a></span>
-<span class="normal"><a href="#__codelineno-0-491">491</a></span>
-<span class="normal"><a href="#__codelineno-0-492">492</a></span>
-<span class="normal"><a href="#__codelineno-0-493">493</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-469"><a id="__codelineno-0-469" name="__codelineno-0-469"></a><span class="k">def</span> <span class="nf">battery_pool</span><span class="p">(</span>
-</span><span id="__span-0-470"><a id="__codelineno-0-470" name="__codelineno-0-470"></a>    <span class="n">battery_ids</span><span class="p">:</span> <span class="n">abc</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-471"><a id="__codelineno-0-471" name="__codelineno-0-471"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-472"><a id="__codelineno-0-472" name="__codelineno-0-472"></a>    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-0-473"><a id="__codelineno-0-473" name="__codelineno-0-473"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BatteryPool</span><span class="p">:</span>
-</span><span id="__span-0-474"><a id="__codelineno-0-474" name="__codelineno-0-474"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new `BatteryPool` instance for the given parameters.</span>
-</span><span id="__span-0-475"><a id="__codelineno-0-475" name="__codelineno-0-475"></a>
-</span><span id="__span-0-476"><a id="__codelineno-0-476" name="__codelineno-0-476"></a><span class="sd">    The priority value is used to resolve conflicts when multiple actors are trying to</span>
-</span><span id="__span-0-477"><a id="__codelineno-0-477" name="__codelineno-0-477"></a><span class="sd">    propose different power values for the same set of batteries.</span>
-</span><span id="__span-0-478"><a id="__codelineno-0-478" name="__codelineno-0-478"></a>
-</span><span id="__span-0-479"><a id="__codelineno-0-479" name="__codelineno-0-479"></a><span class="sd">    !!! note</span>
-</span><span id="__span-0-480"><a id="__codelineno-0-480" name="__codelineno-0-480"></a><span class="sd">        When specifying priority, bigger values indicate higher priority. The default</span>
-</span><span id="__span-0-481"><a id="__codelineno-0-481" name="__codelineno-0-481"></a><span class="sd">        priority is the lowest possible value.</span>
-</span><span id="__span-0-482"><a id="__codelineno-0-482" name="__codelineno-0-482"></a>
-</span><span id="__span-0-483"><a id="__codelineno-0-483" name="__codelineno-0-483"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-484"><a id="__codelineno-0-484" name="__codelineno-0-484"></a><span class="sd">        battery_ids: Optional set of IDs of batteries to be managed by the `BatteryPool`.</span>
-</span><span id="__span-0-485"><a id="__codelineno-0-485" name="__codelineno-0-485"></a><span class="sd">            If not specified, all batteries available in the component graph are used.</span>
-</span><span id="__span-0-486"><a id="__codelineno-0-486" name="__codelineno-0-486"></a><span class="sd">        name: An optional name used to identify this instance of the pool or a</span>
-</span><span id="__span-0-487"><a id="__codelineno-0-487" name="__codelineno-0-487"></a><span class="sd">            corresponding actor in the logs.</span>
-</span><span id="__span-0-488"><a id="__codelineno-0-488" name="__codelineno-0-488"></a><span class="sd">        priority: The priority of the actor making the call.</span>
-</span><span id="__span-0-489"><a id="__codelineno-0-489" name="__codelineno-0-489"></a>
-</span><span id="__span-0-490"><a id="__codelineno-0-490" name="__codelineno-0-490"></a><span class="sd">    Returns:</span>
-</span><span id="__span-0-491"><a id="__codelineno-0-491" name="__codelineno-0-491"></a><span class="sd">        A `BatteryPool` instance.</span>
-</span><span id="__span-0-492"><a id="__codelineno-0-492" name="__codelineno-0-492"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-493"><a id="__codelineno-0-493" name="__codelineno-0-493"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">battery_pool</span><span class="p">(</span><span class="n">battery_ids</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
-
-</div>
-
-
-<div class="doc doc-object doc-function">
-
 
 
 <h4 id="frequenz.sdk.microgrid.consumer" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.consumer</span>
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.consumer</span>
 
 
 <a href="#frequenz.sdk.microgrid.consumer" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">consumer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.consumer.Consumer" href="../timeseries/consumer/#frequenz.sdk.timeseries.consumer.Consumer">Consumer</a></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">consumer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.consumer.Consumer" href="../timeseries/consumer/#frequenz.sdk.timeseries.consumer.Consumer">Consumer</a></span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the <a class="autorefs autorefs-internal" href="../timeseries/consumer/#frequenz.sdk.timeseries.consumer.Consumer"><code>Consumption</code></a> measuring point.</p>
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-442">442</a></span>
-<span class="normal"><a href="#__codelineno-0-443">443</a></span>
-<span class="normal"><a href="#__codelineno-0-444">444</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-442"><a id="__codelineno-0-442" name="__codelineno-0-442"></a><span class="k">def</span> <span class="nf">consumer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Consumer</span><span class="p">:</span>
-</span><span id="__span-0-443"><a id="__codelineno-0-443" name="__codelineno-0-443"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the [`Consumption`][frequenz.sdk.timeseries.consumer.Consumer] measuring point.&quot;&quot;&quot;</span>
-</span><span id="__span-0-444"><a id="__codelineno-0-444" name="__codelineno-0-444"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">consumer</span><span class="p">()</span>
+        <p>Return the <a class="autorefs autorefs-internal" href="../timeseries/consumer/#frequenz.sdk.timeseries.consumer.Consumer"><code>Consumption</code></a> measuring point.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-542">542</a></span>
+<span class="normal"><a href="#__codelineno-0-543">543</a></span>
+<span class="normal"><a href="#__codelineno-0-544">544</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-542"><a id="__codelineno-0-542" name="__codelineno-0-542"></a><span class="k">def</span> <span class="nf">consumer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Consumer</span><span class="p">:</span>
+</span><span id="__span-0-543"><a id="__codelineno-0-543" name="__codelineno-0-543"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the [`Consumption`][frequenz.sdk.timeseries.consumer.Consumer] measuring point.&quot;&quot;&quot;</span>
+</span><span id="__span-0-544"><a id="__codelineno-0-544" name="__codelineno-0-544"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">consumer</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
-
 <div class="doc doc-object doc-function">
-
-
-
-<h4 id="frequenz.sdk.microgrid.ev_charger_pool" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.ev_charger_pool</span>
-
-
-<a href="#frequenz.sdk.microgrid.ev_charger_pool" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">ev_charger_pool</span><span class="p">(</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">ev_charger_ids</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#set">set</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool">EVChargerPool</a></span>
-</span></code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Return the corresponding EVChargerPool instance for the given ids.</p>
-<p>If an EVChargerPool instance for the given ids doesn't exist, a new one is
-created and returned.</p>
-
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>ev_charger_ids</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Optional set of IDs of EV Chargers to be managed by the
-EVChargerPool.  If not specified, all EV Chargers available in the
-component graph are used.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#set">set</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>] | None</code>
-                </span>
-                <span class="doc-param-default">
-                  <b>DEFAULT:</b> 
-                    <code>None</code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <table>
-    <thead>
-      <tr>
-        <th><b>RETURNS</b></th>
-        <th><b>DESCRIPTION</b></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-              <span class="doc-returns-annotation">
-                  <code><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool">EVChargerPool</a></code>
-              </span>
-          </td>
-          <td class="doc-returns-details">
-            <div class="doc-md-description">
-              <p>An EVChargerPool instance.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-452">452</a></span>
-<span class="normal"><a href="#__codelineno-0-453">453</a></span>
-<span class="normal"><a href="#__codelineno-0-454">454</a></span>
-<span class="normal"><a href="#__codelineno-0-455">455</a></span>
-<span class="normal"><a href="#__codelineno-0-456">456</a></span>
-<span class="normal"><a href="#__codelineno-0-457">457</a></span>
-<span class="normal"><a href="#__codelineno-0-458">458</a></span>
-<span class="normal"><a href="#__codelineno-0-459">459</a></span>
-<span class="normal"><a href="#__codelineno-0-460">460</a></span>
-<span class="normal"><a href="#__codelineno-0-461">461</a></span>
-<span class="normal"><a href="#__codelineno-0-462">462</a></span>
-<span class="normal"><a href="#__codelineno-0-463">463</a></span>
-<span class="normal"><a href="#__codelineno-0-464">464</a></span>
-<span class="normal"><a href="#__codelineno-0-465">465</a></span>
-<span class="normal"><a href="#__codelineno-0-466">466</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-452"><a id="__codelineno-0-452" name="__codelineno-0-452"></a><span class="k">def</span> <span class="nf">ev_charger_pool</span><span class="p">(</span><span class="n">ev_charger_ids</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EVChargerPool</span><span class="p">:</span>
-</span><span id="__span-0-453"><a id="__codelineno-0-453" name="__codelineno-0-453"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the corresponding EVChargerPool instance for the given ids.</span>
-</span><span id="__span-0-454"><a id="__codelineno-0-454" name="__codelineno-0-454"></a>
-</span><span id="__span-0-455"><a id="__codelineno-0-455" name="__codelineno-0-455"></a><span class="sd">    If an EVChargerPool instance for the given ids doesn&#39;t exist, a new one is</span>
-</span><span id="__span-0-456"><a id="__codelineno-0-456" name="__codelineno-0-456"></a><span class="sd">    created and returned.</span>
-</span><span id="__span-0-457"><a id="__codelineno-0-457" name="__codelineno-0-457"></a>
-</span><span id="__span-0-458"><a id="__codelineno-0-458" name="__codelineno-0-458"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-459"><a id="__codelineno-0-459" name="__codelineno-0-459"></a><span class="sd">        ev_charger_ids: Optional set of IDs of EV Chargers to be managed by the</span>
-</span><span id="__span-0-460"><a id="__codelineno-0-460" name="__codelineno-0-460"></a><span class="sd">            EVChargerPool.  If not specified, all EV Chargers available in the</span>
-</span><span id="__span-0-461"><a id="__codelineno-0-461" name="__codelineno-0-461"></a><span class="sd">            component graph are used.</span>
-</span><span id="__span-0-462"><a id="__codelineno-0-462" name="__codelineno-0-462"></a>
-</span><span id="__span-0-463"><a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">    Returns:</span>
-</span><span id="__span-0-464"><a id="__codelineno-0-464" name="__codelineno-0-464"></a><span class="sd">        An EVChargerPool instance.</span>
-</span><span id="__span-0-465"><a id="__codelineno-0-465" name="__codelineno-0-465"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-466"><a id="__codelineno-0-466" name="__codelineno-0-466"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">ev_charger_pool</span><span class="p">(</span><span class="n">ev_charger_ids</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
-
-</div>
-
-
-<div class="doc doc-object doc-function">
-
 
 
 <h4 id="frequenz.sdk.microgrid.frequency" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.frequency</span>
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.frequency</span>
 
 
 <a href="#frequenz.sdk.microgrid.frequency" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">frequency</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="frequenz.sdk.timeseries._grid_frequency.GridFrequency">GridFrequency</span></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">frequency</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="frequenz.sdk.timeseries._grid_frequency.GridFrequency">GridFrequency</span></span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the grid frequency measuring point.</p>
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-427">427</a></span>
-<span class="normal"><a href="#__codelineno-0-428">428</a></span>
-<span class="normal"><a href="#__codelineno-0-429">429</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-427"><a id="__codelineno-0-427" name="__codelineno-0-427"></a><span class="k">def</span> <span class="nf">frequency</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GridFrequency</span><span class="p">:</span>
-</span><span id="__span-0-428"><a id="__codelineno-0-428" name="__codelineno-0-428"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the grid frequency measuring point.&quot;&quot;&quot;</span>
-</span><span id="__span-0-429"><a id="__codelineno-0-429" name="__codelineno-0-429"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">frequency</span><span class="p">()</span>
+        <p>Return the grid frequency measuring point.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-527">527</a></span>
+<span class="normal"><a href="#__codelineno-0-528">528</a></span>
+<span class="normal"><a href="#__codelineno-0-529">529</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-527"><a id="__codelineno-0-527" name="__codelineno-0-527"></a><span class="k">def</span> <span class="nf">frequency</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GridFrequency</span><span class="p">:</span>
+</span><span id="__span-0-528"><a id="__codelineno-0-528" name="__codelineno-0-528"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the grid frequency measuring point.&quot;&quot;&quot;</span>
+</span><span id="__span-0-529"><a id="__codelineno-0-529" name="__codelineno-0-529"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">frequency</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
-
 <div class="doc doc-object doc-function">
-
 
 
 <h4 id="frequenz.sdk.microgrid.grid" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.grid</span>
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.grid</span>
 
 
 <a href="#frequenz.sdk.microgrid.grid" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">grid</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.grid.Grid" href="../timeseries/grid/#frequenz.sdk.timeseries.grid.Grid">Grid</a></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">grid</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.grid.Grid" href="../timeseries/grid/#frequenz.sdk.timeseries.grid.Grid">Grid</a></span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the grid measuring point.</p>
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-496">496</a></span>
-<span class="normal"><a href="#__codelineno-0-497">497</a></span>
-<span class="normal"><a href="#__codelineno-0-498">498</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-496"><a id="__codelineno-0-496" name="__codelineno-0-496"></a><span class="k">def</span> <span class="nf">grid</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Grid</span><span class="p">:</span>
-</span><span id="__span-0-497"><a id="__codelineno-0-497" name="__codelineno-0-497"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the grid measuring point.&quot;&quot;&quot;</span>
-</span><span id="__span-0-498"><a id="__codelineno-0-498" name="__codelineno-0-498"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <p>Return the grid measuring point.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-687">687</a></span>
+<span class="normal"><a href="#__codelineno-0-688">688</a></span>
+<span class="normal"><a href="#__codelineno-0-689">689</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-687"><a id="__codelineno-0-687" name="__codelineno-0-687"></a><span class="k">def</span> <span class="nf">grid</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Grid</span><span class="p">:</span>
+</span><span id="__span-0-688"><a id="__codelineno-0-688" name="__codelineno-0-688"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the grid measuring point.&quot;&quot;&quot;</span>
+</span><span id="__span-0-689"><a id="__codelineno-0-689" name="__codelineno-0-689"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h4 id="frequenz.sdk.microgrid.initialize" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.initialize</span>
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.initialize</span>
 
-  
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-async"><code>async</code></small>
   </span>
 
 <a href="#frequenz.sdk.microgrid.initialize" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">initialize</span><span class="p">(</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">host</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span> <span class="n">resampler_config</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.actor.ResamplerConfig" href="../actor/#frequenz.sdk.actor.ResamplerConfig">ResamplerConfig</a></span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">initialize</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">server_url</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">resampler_config</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.actor.ResamplerConfig" href="../actor/#frequenz.sdk.actor.ResamplerConfig">ResamplerConfig</a></span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">api_power_request_timeout</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></span><span class="p">(</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="n"><span title="datetime.timedelta(seconds)">seconds</span></span><span class="o">=</span><span class="mf">5.0</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Initialize the microgrid connection manager and the data pipeline.</p>
+    <div class="doc doc-contents ">
+
+        <p>Initialize the microgrid connection manager and the data pipeline.</p>
 
 
-
-  <table>
-    <thead>
-      <tr>
-        <th><b>PARAMETER</b></th>
-        <th><b> DESCRIPTION</b></th>
-      </tr>
-    </thead>
-    <tbody>
+<table>
+      <thead>
         <tr>
-          <td><code>host</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Host to connect to, to reach the microgrid API.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-                </span>
-            </p>
-          </td>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
         </tr>
-        <tr>
-          <td><code>port</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>port to connect to.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td><code>resampler_config</code></td>
-          <td class="doc-param-details">
-            <div class="doc-md-description">
-              <p>Configuration for the resampling actor.</p>
-            </div>
-            <p>
-                <span class="doc-param-annotation">
-                  <b>TYPE:</b>
-                    <code><a class="autorefs autorefs-internal" title="frequenz.sdk.actor.ResamplerConfig" href="../actor/#frequenz.sdk.actor.ResamplerConfig">ResamplerConfig</a></code>
-                </span>
-            </p>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>server_url</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>The location of the microgrid API server in the form of a URL.
+The following format is expected: <code>grpc://hostname{:port}{?ssl=ssl}</code>,
+where the port should be an int between <code>0</code> and <code>65535</code> (defaulting to
+<code>9090</code>) and ssl should be a boolean (defaulting to false). For example:
+<code>grpc://localhost:1090?ssl=true</code>.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>resampler_config</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Configuration for the resampling actor.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-internal" title="frequenz.sdk.actor.ResamplerConfig" href="../actor/#frequenz.sdk.actor.ResamplerConfig">ResamplerConfig</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>api_power_request_timeout</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Timeout to use when making power requests to
+the microgrid API.  When requests to components timeout, they will
+be marked as blocked for a short duration, during which time they
+will be unavailable from the corresponding component pools.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a>(<span title="datetime.timedelta(seconds)">seconds</span>=5.0)</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/__init__.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-138">138</a></span>
-<span class="normal"><a href="#__codelineno-0-139">139</a></span>
-<span class="normal"><a href="#__codelineno-0-140">140</a></span>
-<span class="normal"><a href="#__codelineno-0-141">141</a></span>
-<span class="normal"><a href="#__codelineno-0-142">142</a></span>
-<span class="normal"><a href="#__codelineno-0-143">143</a></span>
-<span class="normal"><a href="#__codelineno-0-144">144</a></span>
-<span class="normal"><a href="#__codelineno-0-145">145</a></span>
-<span class="normal"><a href="#__codelineno-0-146">146</a></span>
-<span class="normal"><a href="#__codelineno-0-147">147</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">resampler_config</span><span class="p">:</span> <span class="n">ResamplerConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-139"><a id="__codelineno-0-139" name="__codelineno-0-139"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the microgrid connection manager and the data pipeline.</span>
-</span><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140"></a>
-</span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a><span class="sd">        host: Host to connect to, to reach the microgrid API.</span>
-</span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143"></a><span class="sd">        port: port to connect to.</span>
-</span><span id="__span-0-144"><a id="__codelineno-0-144" name="__codelineno-0-144"></a><span class="sd">        resampler_config: Configuration for the resampling actor.</span>
-</span><span id="__span-0-145"><a id="__codelineno-0-145" name="__codelineno-0-145"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-146"><a id="__codelineno-0-146" name="__codelineno-0-146"></a>    <span class="k">await</span> <span class="n">connection_manager</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-</span><span id="__span-0-147"><a id="__codelineno-0-147" name="__codelineno-0-147"></a>    <span class="k">await</span> <span class="n">_data_pipeline</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">resampler_config</span><span class="p">)</span>
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/__init__.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-243">243</a></span>
+<span class="normal"><a href="#__codelineno-0-244">244</a></span>
+<span class="normal"><a href="#__codelineno-0-245">245</a></span>
+<span class="normal"><a href="#__codelineno-0-246">246</a></span>
+<span class="normal"><a href="#__codelineno-0-247">247</a></span>
+<span class="normal"><a href="#__codelineno-0-248">248</a></span>
+<span class="normal"><a href="#__codelineno-0-249">249</a></span>
+<span class="normal"><a href="#__codelineno-0-250">250</a></span>
+<span class="normal"><a href="#__codelineno-0-251">251</a></span>
+<span class="normal"><a href="#__codelineno-0-252">252</a></span>
+<span class="normal"><a href="#__codelineno-0-253">253</a></span>
+<span class="normal"><a href="#__codelineno-0-254">254</a></span>
+<span class="normal"><a href="#__codelineno-0-255">255</a></span>
+<span class="normal"><a href="#__codelineno-0-256">256</a></span>
+<span class="normal"><a href="#__codelineno-0-257">257</a></span>
+<span class="normal"><a href="#__codelineno-0-258">258</a></span>
+<span class="normal"><a href="#__codelineno-0-259">259</a></span>
+<span class="normal"><a href="#__codelineno-0-260">260</a></span>
+<span class="normal"><a href="#__codelineno-0-261">261</a></span>
+<span class="normal"><a href="#__codelineno-0-262">262</a></span>
+<span class="normal"><a href="#__codelineno-0-263">263</a></span>
+<span class="normal"><a href="#__codelineno-0-264">264</a></span>
+<span class="normal"><a href="#__codelineno-0-265">265</a></span>
+<span class="normal"><a href="#__codelineno-0-266">266</a></span>
+<span class="normal"><a href="#__codelineno-0-267">267</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-243"><a id="__codelineno-0-243" name="__codelineno-0-243"></a><span class="k">async</span> <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span>
+</span><span id="__span-0-244"><a id="__codelineno-0-244" name="__codelineno-0-244"></a>    <span class="n">server_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-245"><a id="__codelineno-0-245" name="__codelineno-0-245"></a>    <span class="n">resampler_config</span><span class="p">:</span> <span class="n">ResamplerConfig</span><span class="p">,</span>
+</span><span id="__span-0-246"><a id="__codelineno-0-246" name="__codelineno-0-246"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-247"><a id="__codelineno-0-247" name="__codelineno-0-247"></a>    <span class="n">api_power_request_timeout</span><span class="p">:</span> <span class="n">timedelta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">),</span>
+</span><span id="__span-0-248"><a id="__codelineno-0-248" name="__codelineno-0-248"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-249"><a id="__codelineno-0-249" name="__codelineno-0-249"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the microgrid connection manager and the data pipeline.</span>
+</span><span id="__span-0-250"><a id="__codelineno-0-250" name="__codelineno-0-250"></a>
+</span><span id="__span-0-251"><a id="__codelineno-0-251" name="__codelineno-0-251"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-252"><a id="__codelineno-0-252" name="__codelineno-0-252"></a><span class="sd">        server_url: The location of the microgrid API server in the form of a URL.</span>
+</span><span id="__span-0-253"><a id="__codelineno-0-253" name="__codelineno-0-253"></a><span class="sd">            The following format is expected: `grpc://hostname{:port}{?ssl=ssl}`,</span>
+</span><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="sd">            where the port should be an int between `0` and `65535` (defaulting to</span>
+</span><span id="__span-0-255"><a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="sd">            `9090`) and ssl should be a boolean (defaulting to false). For example:</span>
+</span><span id="__span-0-256"><a id="__codelineno-0-256" name="__codelineno-0-256"></a><span class="sd">            `grpc://localhost:1090?ssl=true`.</span>
+</span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a><span class="sd">        resampler_config: Configuration for the resampling actor.</span>
+</span><span id="__span-0-258"><a id="__codelineno-0-258" name="__codelineno-0-258"></a><span class="sd">        api_power_request_timeout: Timeout to use when making power requests to</span>
+</span><span id="__span-0-259"><a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="sd">            the microgrid API.  When requests to components timeout, they will</span>
+</span><span id="__span-0-260"><a id="__codelineno-0-260" name="__codelineno-0-260"></a><span class="sd">            be marked as blocked for a short duration, during which time they</span>
+</span><span id="__span-0-261"><a id="__codelineno-0-261" name="__codelineno-0-261"></a><span class="sd">            will be unavailable from the corresponding component pools.</span>
+</span><span id="__span-0-262"><a id="__codelineno-0-262" name="__codelineno-0-262"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-263"><a id="__codelineno-0-263" name="__codelineno-0-263"></a>    <span class="k">await</span> <span class="n">connection_manager</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">server_url</span><span class="p">)</span>
+</span><span id="__span-0-264"><a id="__codelineno-0-264" name="__codelineno-0-264"></a>    <span class="k">await</span> <span class="n">_data_pipeline</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span>
+</span><span id="__span-0-265"><a id="__codelineno-0-265" name="__codelineno-0-265"></a>        <span class="n">resampler_config</span><span class="p">,</span>
+</span><span id="__span-0-266"><a id="__codelineno-0-266" name="__codelineno-0-266"></a>        <span class="n">api_power_request_timeout</span><span class="o">=</span><span class="n">api_power_request_timeout</span><span class="p">,</span>
+</span><span id="__span-0-267"><a id="__codelineno-0-267" name="__codelineno-0-267"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
-
 <div class="doc doc-object doc-function">
-
 
 
 <h4 id="frequenz.sdk.microgrid.logical_meter" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.logical_meter</span>
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.logical_meter</span>
 
 
 <a href="#frequenz.sdk.microgrid.logical_meter" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">logical_meter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.logical_meter.LogicalMeter" href="../timeseries/logical_meter/#frequenz.sdk.timeseries.logical_meter.LogicalMeter">LogicalMeter</a></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">logical_meter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.logical_meter.LogicalMeter" href="../timeseries/logical_meter/#frequenz.sdk.timeseries.logical_meter.LogicalMeter">LogicalMeter</a></span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the logical meter of the microgrid.</p>
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-437">437</a></span>
-<span class="normal"><a href="#__codelineno-0-438">438</a></span>
-<span class="normal"><a href="#__codelineno-0-439">439</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-437"><a id="__codelineno-0-437" name="__codelineno-0-437"></a><span class="k">def</span> <span class="nf">logical_meter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">LogicalMeter</span><span class="p">:</span>
-</span><span id="__span-0-438"><a id="__codelineno-0-438" name="__codelineno-0-438"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the logical meter of the microgrid.&quot;&quot;&quot;</span>
-</span><span id="__span-0-439"><a id="__codelineno-0-439" name="__codelineno-0-439"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">logical_meter</span><span class="p">()</span>
+        <p>Return the logical meter of the microgrid.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-537">537</a></span>
+<span class="normal"><a href="#__codelineno-0-538">538</a></span>
+<span class="normal"><a href="#__codelineno-0-539">539</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-537"><a id="__codelineno-0-537" name="__codelineno-0-537"></a><span class="k">def</span> <span class="nf">logical_meter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">LogicalMeter</span><span class="p">:</span>
+</span><span id="__span-0-538"><a id="__codelineno-0-538" name="__codelineno-0-538"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the logical meter of the microgrid.&quot;&quot;&quot;</span>
+</span><span id="__span-0-539"><a id="__codelineno-0-539" name="__codelineno-0-539"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">logical_meter</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
+<div class="doc doc-object doc-function">
+
+
+<h4 id="frequenz.sdk.microgrid.new_battery_pool" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.new_battery_pool</span>
+
+
+<a href="#frequenz.sdk.microgrid.new_battery_pool" class="headerlink" title="Permanent link">¤</a></h4>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">new_battery_pool</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">priority</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">component_ids</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">set_operating_point</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.battery_pool.BatteryPool" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool">BatteryPool</a></span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return a new <code>BatteryPool</code> instance for the given parameters.</p>
+<p>The priority value is used to resolve conflicts when multiple actors are trying to
+propose different power values for the same set of batteries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When specifying priority, bigger values indicate higher priority.</p>
+<p>It is recommended to reuse the same instance of the <code>BatteryPool</code> within the
+same actor, unless they are managing different sets of batteries.</p>
+<p>In deployments with multiple actors managing the same set of batteries, it is
+recommended to use different priorities to distinguish between them.  If not,
+a random prioritization will be imposed on them to resolve conflicts, which may
+lead to unexpected behavior like longer duration to converge on the desired
+power.</p>
+</div>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>priority</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>The priority of the actor making the call.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>component_ids</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Optional set of IDs of batteries to be managed by the
+<code>BatteryPool</code>.  If not specified, all batteries available in the component
+graph are used.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>] | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An optional name used to identify this instance of the pool or a
+corresponding actor in the logs.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>set_operating_point</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether this instance sets the operating point power or the
+normal power for the components.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>False</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.battery_pool.BatteryPool" href="../timeseries/battery_pool/#frequenz.sdk.timeseries.battery_pool.BatteryPool">BatteryPool</a></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>A <code>BatteryPool</code> instance.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-597">597</a></span>
+<span class="normal"><a href="#__codelineno-0-598">598</a></span>
+<span class="normal"><a href="#__codelineno-0-599">599</a></span>
+<span class="normal"><a href="#__codelineno-0-600">600</a></span>
+<span class="normal"><a href="#__codelineno-0-601">601</a></span>
+<span class="normal"><a href="#__codelineno-0-602">602</a></span>
+<span class="normal"><a href="#__codelineno-0-603">603</a></span>
+<span class="normal"><a href="#__codelineno-0-604">604</a></span>
+<span class="normal"><a href="#__codelineno-0-605">605</a></span>
+<span class="normal"><a href="#__codelineno-0-606">606</a></span>
+<span class="normal"><a href="#__codelineno-0-607">607</a></span>
+<span class="normal"><a href="#__codelineno-0-608">608</a></span>
+<span class="normal"><a href="#__codelineno-0-609">609</a></span>
+<span class="normal"><a href="#__codelineno-0-610">610</a></span>
+<span class="normal"><a href="#__codelineno-0-611">611</a></span>
+<span class="normal"><a href="#__codelineno-0-612">612</a></span>
+<span class="normal"><a href="#__codelineno-0-613">613</a></span>
+<span class="normal"><a href="#__codelineno-0-614">614</a></span>
+<span class="normal"><a href="#__codelineno-0-615">615</a></span>
+<span class="normal"><a href="#__codelineno-0-616">616</a></span>
+<span class="normal"><a href="#__codelineno-0-617">617</a></span>
+<span class="normal"><a href="#__codelineno-0-618">618</a></span>
+<span class="normal"><a href="#__codelineno-0-619">619</a></span>
+<span class="normal"><a href="#__codelineno-0-620">620</a></span>
+<span class="normal"><a href="#__codelineno-0-621">621</a></span>
+<span class="normal"><a href="#__codelineno-0-622">622</a></span>
+<span class="normal"><a href="#__codelineno-0-623">623</a></span>
+<span class="normal"><a href="#__codelineno-0-624">624</a></span>
+<span class="normal"><a href="#__codelineno-0-625">625</a></span>
+<span class="normal"><a href="#__codelineno-0-626">626</a></span>
+<span class="normal"><a href="#__codelineno-0-627">627</a></span>
+<span class="normal"><a href="#__codelineno-0-628">628</a></span>
+<span class="normal"><a href="#__codelineno-0-629">629</a></span>
+<span class="normal"><a href="#__codelineno-0-630">630</a></span>
+<span class="normal"><a href="#__codelineno-0-631">631</a></span>
+<span class="normal"><a href="#__codelineno-0-632">632</a></span>
+<span class="normal"><a href="#__codelineno-0-633">633</a></span>
+<span class="normal"><a href="#__codelineno-0-634">634</a></span>
+<span class="normal"><a href="#__codelineno-0-635">635</a></span>
+<span class="normal"><a href="#__codelineno-0-636">636</a></span>
+<span class="normal"><a href="#__codelineno-0-637">637</a></span>
+<span class="normal"><a href="#__codelineno-0-638">638</a></span>
+<span class="normal"><a href="#__codelineno-0-639">639</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-597"><a id="__codelineno-0-597" name="__codelineno-0-597"></a><span class="k">def</span> <span class="nf">new_battery_pool</span><span class="p">(</span>
+</span><span id="__span-0-598"><a id="__codelineno-0-598" name="__codelineno-0-598"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-599"><a id="__codelineno-0-599" name="__codelineno-0-599"></a>    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-600"><a id="__codelineno-0-600" name="__codelineno-0-600"></a>    <span class="n">component_ids</span><span class="p">:</span> <span class="n">abc</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-601"><a id="__codelineno-0-601" name="__codelineno-0-601"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-602"><a id="__codelineno-0-602" name="__codelineno-0-602"></a>    <span class="n">set_operating_point</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-603"><a id="__codelineno-0-603" name="__codelineno-0-603"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BatteryPool</span><span class="p">:</span>
+</span><span id="__span-0-604"><a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new `BatteryPool` instance for the given parameters.</span>
+</span><span id="__span-0-605"><a id="__codelineno-0-605" name="__codelineno-0-605"></a>
+</span><span id="__span-0-606"><a id="__codelineno-0-606" name="__codelineno-0-606"></a><span class="sd">    The priority value is used to resolve conflicts when multiple actors are trying to</span>
+</span><span id="__span-0-607"><a id="__codelineno-0-607" name="__codelineno-0-607"></a><span class="sd">    propose different power values for the same set of batteries.</span>
+</span><span id="__span-0-608"><a id="__codelineno-0-608" name="__codelineno-0-608"></a>
+</span><span id="__span-0-609"><a id="__codelineno-0-609" name="__codelineno-0-609"></a><span class="sd">    !!! note</span>
+</span><span id="__span-0-610"><a id="__codelineno-0-610" name="__codelineno-0-610"></a><span class="sd">        When specifying priority, bigger values indicate higher priority.</span>
+</span><span id="__span-0-611"><a id="__codelineno-0-611" name="__codelineno-0-611"></a>
+</span><span id="__span-0-612"><a id="__codelineno-0-612" name="__codelineno-0-612"></a><span class="sd">        It is recommended to reuse the same instance of the `BatteryPool` within the</span>
+</span><span id="__span-0-613"><a id="__codelineno-0-613" name="__codelineno-0-613"></a><span class="sd">        same actor, unless they are managing different sets of batteries.</span>
+</span><span id="__span-0-614"><a id="__codelineno-0-614" name="__codelineno-0-614"></a>
+</span><span id="__span-0-615"><a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="sd">        In deployments with multiple actors managing the same set of batteries, it is</span>
+</span><span id="__span-0-616"><a id="__codelineno-0-616" name="__codelineno-0-616"></a><span class="sd">        recommended to use different priorities to distinguish between them.  If not,</span>
+</span><span id="__span-0-617"><a id="__codelineno-0-617" name="__codelineno-0-617"></a><span class="sd">        a random prioritization will be imposed on them to resolve conflicts, which may</span>
+</span><span id="__span-0-618"><a id="__codelineno-0-618" name="__codelineno-0-618"></a><span class="sd">        lead to unexpected behavior like longer duration to converge on the desired</span>
+</span><span id="__span-0-619"><a id="__codelineno-0-619" name="__codelineno-0-619"></a><span class="sd">        power.</span>
+</span><span id="__span-0-620"><a id="__codelineno-0-620" name="__codelineno-0-620"></a>
+</span><span id="__span-0-621"><a id="__codelineno-0-621" name="__codelineno-0-621"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-622"><a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="sd">        priority: The priority of the actor making the call.</span>
+</span><span id="__span-0-623"><a id="__codelineno-0-623" name="__codelineno-0-623"></a><span class="sd">        component_ids: Optional set of IDs of batteries to be managed by the</span>
+</span><span id="__span-0-624"><a id="__codelineno-0-624" name="__codelineno-0-624"></a><span class="sd">            `BatteryPool`.  If not specified, all batteries available in the component</span>
+</span><span id="__span-0-625"><a id="__codelineno-0-625" name="__codelineno-0-625"></a><span class="sd">            graph are used.</span>
+</span><span id="__span-0-626"><a id="__codelineno-0-626" name="__codelineno-0-626"></a><span class="sd">        name: An optional name used to identify this instance of the pool or a</span>
+</span><span id="__span-0-627"><a id="__codelineno-0-627" name="__codelineno-0-627"></a><span class="sd">            corresponding actor in the logs.</span>
+</span><span id="__span-0-628"><a id="__codelineno-0-628" name="__codelineno-0-628"></a><span class="sd">        set_operating_point: Whether this instance sets the operating point power or the</span>
+</span><span id="__span-0-629"><a id="__codelineno-0-629" name="__codelineno-0-629"></a><span class="sd">            normal power for the components.</span>
+</span><span id="__span-0-630"><a id="__codelineno-0-630" name="__codelineno-0-630"></a>
+</span><span id="__span-0-631"><a id="__codelineno-0-631" name="__codelineno-0-631"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-632"><a id="__codelineno-0-632" name="__codelineno-0-632"></a><span class="sd">        A `BatteryPool` instance.</span>
+</span><span id="__span-0-633"><a id="__codelineno-0-633" name="__codelineno-0-633"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-634"><a id="__codelineno-0-634" name="__codelineno-0-634"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">new_battery_pool</span><span class="p">(</span>
+</span><span id="__span-0-635"><a id="__codelineno-0-635" name="__codelineno-0-635"></a>        <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
+</span><span id="__span-0-636"><a id="__codelineno-0-636" name="__codelineno-0-636"></a>        <span class="n">component_ids</span><span class="o">=</span><span class="n">component_ids</span><span class="p">,</span>
+</span><span id="__span-0-637"><a id="__codelineno-0-637" name="__codelineno-0-637"></a>        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span><span id="__span-0-638"><a id="__codelineno-0-638" name="__codelineno-0-638"></a>        <span class="n">set_operating_point</span><span class="o">=</span><span class="n">set_operating_point</span><span class="p">,</span>
+</span><span id="__span-0-639"><a id="__codelineno-0-639" name="__codelineno-0-639"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
 
 <div class="doc doc-object doc-function">
 
+
+<h4 id="frequenz.sdk.microgrid.new_ev_charger_pool" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.new_ev_charger_pool</span>
+
+
+<a href="#frequenz.sdk.microgrid.new_ev_charger_pool" class="headerlink" title="Permanent link">¤</a></h4>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">new_ev_charger_pool</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">priority</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">component_ids</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">set_operating_point</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool">EVChargerPool</a></span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return a new <code>EVChargerPool</code> instance for the given parameters.</p>
+<p>The priority value is used to resolve conflicts when multiple actors are trying to
+propose different power values for the same set of EV chargers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When specifying priority, bigger values indicate higher priority.</p>
+<p>It is recommended to reuse the same instance of the <code>EVChargerPool</code> within the
+same actor, unless they are managing different sets of EV chargers.</p>
+<p>In deployments with multiple actors managing the same set of EV chargers, it is
+recommended to use different priorities to distinguish between them.  If not,
+a random prioritization will be imposed on them to resolve conflicts, which may
+lead to unexpected behavior like longer duration to converge on the desired
+power.</p>
+</div>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>priority</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>The priority of the actor making the call.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>component_ids</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Optional set of IDs of EV Chargers to be managed by the
+EVChargerPool.  If not specified, all EV Chargers available in the
+component graph are used.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>] | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An optional name used to identify this instance of the pool or a
+corresponding actor in the logs.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>set_operating_point</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether this instance sets the operating point power or the
+normal power for the components.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>False</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool" href="../timeseries/ev_charger_pool/#frequenz.sdk.timeseries.ev_charger_pool.EVChargerPool">EVChargerPool</a></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>An <code>EVChargerPool</code> instance.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-552">552</a></span>
+<span class="normal"><a href="#__codelineno-0-553">553</a></span>
+<span class="normal"><a href="#__codelineno-0-554">554</a></span>
+<span class="normal"><a href="#__codelineno-0-555">555</a></span>
+<span class="normal"><a href="#__codelineno-0-556">556</a></span>
+<span class="normal"><a href="#__codelineno-0-557">557</a></span>
+<span class="normal"><a href="#__codelineno-0-558">558</a></span>
+<span class="normal"><a href="#__codelineno-0-559">559</a></span>
+<span class="normal"><a href="#__codelineno-0-560">560</a></span>
+<span class="normal"><a href="#__codelineno-0-561">561</a></span>
+<span class="normal"><a href="#__codelineno-0-562">562</a></span>
+<span class="normal"><a href="#__codelineno-0-563">563</a></span>
+<span class="normal"><a href="#__codelineno-0-564">564</a></span>
+<span class="normal"><a href="#__codelineno-0-565">565</a></span>
+<span class="normal"><a href="#__codelineno-0-566">566</a></span>
+<span class="normal"><a href="#__codelineno-0-567">567</a></span>
+<span class="normal"><a href="#__codelineno-0-568">568</a></span>
+<span class="normal"><a href="#__codelineno-0-569">569</a></span>
+<span class="normal"><a href="#__codelineno-0-570">570</a></span>
+<span class="normal"><a href="#__codelineno-0-571">571</a></span>
+<span class="normal"><a href="#__codelineno-0-572">572</a></span>
+<span class="normal"><a href="#__codelineno-0-573">573</a></span>
+<span class="normal"><a href="#__codelineno-0-574">574</a></span>
+<span class="normal"><a href="#__codelineno-0-575">575</a></span>
+<span class="normal"><a href="#__codelineno-0-576">576</a></span>
+<span class="normal"><a href="#__codelineno-0-577">577</a></span>
+<span class="normal"><a href="#__codelineno-0-578">578</a></span>
+<span class="normal"><a href="#__codelineno-0-579">579</a></span>
+<span class="normal"><a href="#__codelineno-0-580">580</a></span>
+<span class="normal"><a href="#__codelineno-0-581">581</a></span>
+<span class="normal"><a href="#__codelineno-0-582">582</a></span>
+<span class="normal"><a href="#__codelineno-0-583">583</a></span>
+<span class="normal"><a href="#__codelineno-0-584">584</a></span>
+<span class="normal"><a href="#__codelineno-0-585">585</a></span>
+<span class="normal"><a href="#__codelineno-0-586">586</a></span>
+<span class="normal"><a href="#__codelineno-0-587">587</a></span>
+<span class="normal"><a href="#__codelineno-0-588">588</a></span>
+<span class="normal"><a href="#__codelineno-0-589">589</a></span>
+<span class="normal"><a href="#__codelineno-0-590">590</a></span>
+<span class="normal"><a href="#__codelineno-0-591">591</a></span>
+<span class="normal"><a href="#__codelineno-0-592">592</a></span>
+<span class="normal"><a href="#__codelineno-0-593">593</a></span>
+<span class="normal"><a href="#__codelineno-0-594">594</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-552"><a id="__codelineno-0-552" name="__codelineno-0-552"></a><span class="k">def</span> <span class="nf">new_ev_charger_pool</span><span class="p">(</span>
+</span><span id="__span-0-553"><a id="__codelineno-0-553" name="__codelineno-0-553"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-554"><a id="__codelineno-0-554" name="__codelineno-0-554"></a>    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-555"><a id="__codelineno-0-555" name="__codelineno-0-555"></a>    <span class="n">component_ids</span><span class="p">:</span> <span class="n">abc</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-556"><a id="__codelineno-0-556" name="__codelineno-0-556"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-557"><a id="__codelineno-0-557" name="__codelineno-0-557"></a>    <span class="n">set_operating_point</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-558"><a id="__codelineno-0-558" name="__codelineno-0-558"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EVChargerPool</span><span class="p">:</span>
+</span><span id="__span-0-559"><a id="__codelineno-0-559" name="__codelineno-0-559"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new `EVChargerPool` instance for the given parameters.</span>
+</span><span id="__span-0-560"><a id="__codelineno-0-560" name="__codelineno-0-560"></a>
+</span><span id="__span-0-561"><a id="__codelineno-0-561" name="__codelineno-0-561"></a><span class="sd">    The priority value is used to resolve conflicts when multiple actors are trying to</span>
+</span><span id="__span-0-562"><a id="__codelineno-0-562" name="__codelineno-0-562"></a><span class="sd">    propose different power values for the same set of EV chargers.</span>
+</span><span id="__span-0-563"><a id="__codelineno-0-563" name="__codelineno-0-563"></a>
+</span><span id="__span-0-564"><a id="__codelineno-0-564" name="__codelineno-0-564"></a><span class="sd">    !!! note</span>
+</span><span id="__span-0-565"><a id="__codelineno-0-565" name="__codelineno-0-565"></a><span class="sd">        When specifying priority, bigger values indicate higher priority.</span>
+</span><span id="__span-0-566"><a id="__codelineno-0-566" name="__codelineno-0-566"></a>
+</span><span id="__span-0-567"><a id="__codelineno-0-567" name="__codelineno-0-567"></a><span class="sd">        It is recommended to reuse the same instance of the `EVChargerPool` within the</span>
+</span><span id="__span-0-568"><a id="__codelineno-0-568" name="__codelineno-0-568"></a><span class="sd">        same actor, unless they are managing different sets of EV chargers.</span>
+</span><span id="__span-0-569"><a id="__codelineno-0-569" name="__codelineno-0-569"></a>
+</span><span id="__span-0-570"><a id="__codelineno-0-570" name="__codelineno-0-570"></a><span class="sd">        In deployments with multiple actors managing the same set of EV chargers, it is</span>
+</span><span id="__span-0-571"><a id="__codelineno-0-571" name="__codelineno-0-571"></a><span class="sd">        recommended to use different priorities to distinguish between them.  If not,</span>
+</span><span id="__span-0-572"><a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="sd">        a random prioritization will be imposed on them to resolve conflicts, which may</span>
+</span><span id="__span-0-573"><a id="__codelineno-0-573" name="__codelineno-0-573"></a><span class="sd">        lead to unexpected behavior like longer duration to converge on the desired</span>
+</span><span id="__span-0-574"><a id="__codelineno-0-574" name="__codelineno-0-574"></a><span class="sd">        power.</span>
+</span><span id="__span-0-575"><a id="__codelineno-0-575" name="__codelineno-0-575"></a>
+</span><span id="__span-0-576"><a id="__codelineno-0-576" name="__codelineno-0-576"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-577"><a id="__codelineno-0-577" name="__codelineno-0-577"></a><span class="sd">        priority: The priority of the actor making the call.</span>
+</span><span id="__span-0-578"><a id="__codelineno-0-578" name="__codelineno-0-578"></a><span class="sd">        component_ids: Optional set of IDs of EV Chargers to be managed by the</span>
+</span><span id="__span-0-579"><a id="__codelineno-0-579" name="__codelineno-0-579"></a><span class="sd">            EVChargerPool.  If not specified, all EV Chargers available in the</span>
+</span><span id="__span-0-580"><a id="__codelineno-0-580" name="__codelineno-0-580"></a><span class="sd">            component graph are used.</span>
+</span><span id="__span-0-581"><a id="__codelineno-0-581" name="__codelineno-0-581"></a><span class="sd">        name: An optional name used to identify this instance of the pool or a</span>
+</span><span id="__span-0-582"><a id="__codelineno-0-582" name="__codelineno-0-582"></a><span class="sd">            corresponding actor in the logs.</span>
+</span><span id="__span-0-583"><a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">        set_operating_point: Whether this instance sets the operating point power or the</span>
+</span><span id="__span-0-584"><a id="__codelineno-0-584" name="__codelineno-0-584"></a><span class="sd">            normal power for the components.</span>
+</span><span id="__span-0-585"><a id="__codelineno-0-585" name="__codelineno-0-585"></a>
+</span><span id="__span-0-586"><a id="__codelineno-0-586" name="__codelineno-0-586"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-587"><a id="__codelineno-0-587" name="__codelineno-0-587"></a><span class="sd">        An `EVChargerPool` instance.</span>
+</span><span id="__span-0-588"><a id="__codelineno-0-588" name="__codelineno-0-588"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-589"><a id="__codelineno-0-589" name="__codelineno-0-589"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">new_ev_charger_pool</span><span class="p">(</span>
+</span><span id="__span-0-590"><a id="__codelineno-0-590" name="__codelineno-0-590"></a>        <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
+</span><span id="__span-0-591"><a id="__codelineno-0-591" name="__codelineno-0-591"></a>        <span class="n">component_ids</span><span class="o">=</span><span class="n">component_ids</span><span class="p">,</span>
+</span><span id="__span-0-592"><a id="__codelineno-0-592" name="__codelineno-0-592"></a>        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span><span id="__span-0-593"><a id="__codelineno-0-593" name="__codelineno-0-593"></a>        <span class="n">set_operating_point</span><span class="o">=</span><span class="n">set_operating_point</span><span class="p">,</span>
+</span><span id="__span-0-594"><a id="__codelineno-0-594" name="__codelineno-0-594"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="frequenz.sdk.microgrid.new_pv_pool" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.new_pv_pool</span>
+
+
+<a href="#frequenz.sdk.microgrid.new_pv_pool" class="headerlink" title="Permanent link">¤</a></h4>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">new_pv_pool</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">priority</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">component_ids</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">set_operating_point</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.pv_pool.PVPool" href="../timeseries/pv_pool/#frequenz.sdk.timeseries.pv_pool.PVPool">PVPool</a></span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return a new <code>PVPool</code> instance for the given parameters.</p>
+<p>The priority value is used to resolve conflicts when multiple actors are trying to
+propose different power values for the same set of PV inverters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When specifying priority, bigger values indicate higher priority.</p>
+<p>It is recommended to reuse the same instance of the <code>PVPool</code> within the same
+actor, unless they are managing different sets of PV inverters.</p>
+<p>In deployments with multiple actors managing the same set of PV inverters, it is
+recommended to use different priorities to distinguish between them.  If not,
+a random prioritization will be imposed on them to resolve conflicts, which may
+lead to unexpected behavior like longer duration to converge on the desired
+power.</p>
+</div>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>priority</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>The priority of the actor making the call.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>component_ids</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Optional set of IDs of PV inverters to be managed by the
+<code>PVPool</code>. If not specified, all PV inverters available in the component
+graph are used.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" title="collections.abc.Set" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Set">Set</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>] | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>An optional name used to identify this instance of the pool or a
+corresponding actor in the logs.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>set_operating_point</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>Whether this instance sets the operating point power or the
+normal power for the components.</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>False</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.pv_pool.PVPool" href="../timeseries/pv_pool/#frequenz.sdk.timeseries.pv_pool.PVPool">PVPool</a></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>A <code>PVPool</code> instance.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-642">642</a></span>
+<span class="normal"><a href="#__codelineno-0-643">643</a></span>
+<span class="normal"><a href="#__codelineno-0-644">644</a></span>
+<span class="normal"><a href="#__codelineno-0-645">645</a></span>
+<span class="normal"><a href="#__codelineno-0-646">646</a></span>
+<span class="normal"><a href="#__codelineno-0-647">647</a></span>
+<span class="normal"><a href="#__codelineno-0-648">648</a></span>
+<span class="normal"><a href="#__codelineno-0-649">649</a></span>
+<span class="normal"><a href="#__codelineno-0-650">650</a></span>
+<span class="normal"><a href="#__codelineno-0-651">651</a></span>
+<span class="normal"><a href="#__codelineno-0-652">652</a></span>
+<span class="normal"><a href="#__codelineno-0-653">653</a></span>
+<span class="normal"><a href="#__codelineno-0-654">654</a></span>
+<span class="normal"><a href="#__codelineno-0-655">655</a></span>
+<span class="normal"><a href="#__codelineno-0-656">656</a></span>
+<span class="normal"><a href="#__codelineno-0-657">657</a></span>
+<span class="normal"><a href="#__codelineno-0-658">658</a></span>
+<span class="normal"><a href="#__codelineno-0-659">659</a></span>
+<span class="normal"><a href="#__codelineno-0-660">660</a></span>
+<span class="normal"><a href="#__codelineno-0-661">661</a></span>
+<span class="normal"><a href="#__codelineno-0-662">662</a></span>
+<span class="normal"><a href="#__codelineno-0-663">663</a></span>
+<span class="normal"><a href="#__codelineno-0-664">664</a></span>
+<span class="normal"><a href="#__codelineno-0-665">665</a></span>
+<span class="normal"><a href="#__codelineno-0-666">666</a></span>
+<span class="normal"><a href="#__codelineno-0-667">667</a></span>
+<span class="normal"><a href="#__codelineno-0-668">668</a></span>
+<span class="normal"><a href="#__codelineno-0-669">669</a></span>
+<span class="normal"><a href="#__codelineno-0-670">670</a></span>
+<span class="normal"><a href="#__codelineno-0-671">671</a></span>
+<span class="normal"><a href="#__codelineno-0-672">672</a></span>
+<span class="normal"><a href="#__codelineno-0-673">673</a></span>
+<span class="normal"><a href="#__codelineno-0-674">674</a></span>
+<span class="normal"><a href="#__codelineno-0-675">675</a></span>
+<span class="normal"><a href="#__codelineno-0-676">676</a></span>
+<span class="normal"><a href="#__codelineno-0-677">677</a></span>
+<span class="normal"><a href="#__codelineno-0-678">678</a></span>
+<span class="normal"><a href="#__codelineno-0-679">679</a></span>
+<span class="normal"><a href="#__codelineno-0-680">680</a></span>
+<span class="normal"><a href="#__codelineno-0-681">681</a></span>
+<span class="normal"><a href="#__codelineno-0-682">682</a></span>
+<span class="normal"><a href="#__codelineno-0-683">683</a></span>
+<span class="normal"><a href="#__codelineno-0-684">684</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-642"><a id="__codelineno-0-642" name="__codelineno-0-642"></a><span class="k">def</span> <span class="nf">new_pv_pool</span><span class="p">(</span>
+</span><span id="__span-0-643"><a id="__codelineno-0-643" name="__codelineno-0-643"></a>    <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-0-644"><a id="__codelineno-0-644" name="__codelineno-0-644"></a>    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-645"><a id="__codelineno-0-645" name="__codelineno-0-645"></a>    <span class="n">component_ids</span><span class="p">:</span> <span class="n">abc</span><span class="o">.</span><span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-646"><a id="__codelineno-0-646" name="__codelineno-0-646"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-647"><a id="__codelineno-0-647" name="__codelineno-0-647"></a>    <span class="n">set_operating_point</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-648"><a id="__codelineno-0-648" name="__codelineno-0-648"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PVPool</span><span class="p">:</span>
+</span><span id="__span-0-649"><a id="__codelineno-0-649" name="__codelineno-0-649"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new `PVPool` instance for the given parameters.</span>
+</span><span id="__span-0-650"><a id="__codelineno-0-650" name="__codelineno-0-650"></a>
+</span><span id="__span-0-651"><a id="__codelineno-0-651" name="__codelineno-0-651"></a><span class="sd">    The priority value is used to resolve conflicts when multiple actors are trying to</span>
+</span><span id="__span-0-652"><a id="__codelineno-0-652" name="__codelineno-0-652"></a><span class="sd">    propose different power values for the same set of PV inverters.</span>
+</span><span id="__span-0-653"><a id="__codelineno-0-653" name="__codelineno-0-653"></a>
+</span><span id="__span-0-654"><a id="__codelineno-0-654" name="__codelineno-0-654"></a><span class="sd">    !!! note</span>
+</span><span id="__span-0-655"><a id="__codelineno-0-655" name="__codelineno-0-655"></a><span class="sd">        When specifying priority, bigger values indicate higher priority.</span>
+</span><span id="__span-0-656"><a id="__codelineno-0-656" name="__codelineno-0-656"></a>
+</span><span id="__span-0-657"><a id="__codelineno-0-657" name="__codelineno-0-657"></a><span class="sd">        It is recommended to reuse the same instance of the `PVPool` within the same</span>
+</span><span id="__span-0-658"><a id="__codelineno-0-658" name="__codelineno-0-658"></a><span class="sd">        actor, unless they are managing different sets of PV inverters.</span>
+</span><span id="__span-0-659"><a id="__codelineno-0-659" name="__codelineno-0-659"></a>
+</span><span id="__span-0-660"><a id="__codelineno-0-660" name="__codelineno-0-660"></a><span class="sd">        In deployments with multiple actors managing the same set of PV inverters, it is</span>
+</span><span id="__span-0-661"><a id="__codelineno-0-661" name="__codelineno-0-661"></a><span class="sd">        recommended to use different priorities to distinguish between them.  If not,</span>
+</span><span id="__span-0-662"><a id="__codelineno-0-662" name="__codelineno-0-662"></a><span class="sd">        a random prioritization will be imposed on them to resolve conflicts, which may</span>
+</span><span id="__span-0-663"><a id="__codelineno-0-663" name="__codelineno-0-663"></a><span class="sd">        lead to unexpected behavior like longer duration to converge on the desired</span>
+</span><span id="__span-0-664"><a id="__codelineno-0-664" name="__codelineno-0-664"></a><span class="sd">        power.</span>
+</span><span id="__span-0-665"><a id="__codelineno-0-665" name="__codelineno-0-665"></a>
+</span><span id="__span-0-666"><a id="__codelineno-0-666" name="__codelineno-0-666"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-667"><a id="__codelineno-0-667" name="__codelineno-0-667"></a><span class="sd">        priority: The priority of the actor making the call.</span>
+</span><span id="__span-0-668"><a id="__codelineno-0-668" name="__codelineno-0-668"></a><span class="sd">        component_ids: Optional set of IDs of PV inverters to be managed by the</span>
+</span><span id="__span-0-669"><a id="__codelineno-0-669" name="__codelineno-0-669"></a><span class="sd">            `PVPool`. If not specified, all PV inverters available in the component</span>
+</span><span id="__span-0-670"><a id="__codelineno-0-670" name="__codelineno-0-670"></a><span class="sd">            graph are used.</span>
+</span><span id="__span-0-671"><a id="__codelineno-0-671" name="__codelineno-0-671"></a><span class="sd">        name: An optional name used to identify this instance of the pool or a</span>
+</span><span id="__span-0-672"><a id="__codelineno-0-672" name="__codelineno-0-672"></a><span class="sd">            corresponding actor in the logs.</span>
+</span><span id="__span-0-673"><a id="__codelineno-0-673" name="__codelineno-0-673"></a><span class="sd">        set_operating_point: Whether this instance sets the operating point power or the</span>
+</span><span id="__span-0-674"><a id="__codelineno-0-674" name="__codelineno-0-674"></a><span class="sd">            normal power for the components.</span>
+</span><span id="__span-0-675"><a id="__codelineno-0-675" name="__codelineno-0-675"></a>
+</span><span id="__span-0-676"><a id="__codelineno-0-676" name="__codelineno-0-676"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-677"><a id="__codelineno-0-677" name="__codelineno-0-677"></a><span class="sd">        A `PVPool` instance.</span>
+</span><span id="__span-0-678"><a id="__codelineno-0-678" name="__codelineno-0-678"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-679"><a id="__codelineno-0-679" name="__codelineno-0-679"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">new_pv_pool</span><span class="p">(</span>
+</span><span id="__span-0-680"><a id="__codelineno-0-680" name="__codelineno-0-680"></a>        <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
+</span><span id="__span-0-681"><a id="__codelineno-0-681" name="__codelineno-0-681"></a>        <span class="n">component_ids</span><span class="o">=</span><span class="n">component_ids</span><span class="p">,</span>
+</span><span id="__span-0-682"><a id="__codelineno-0-682" name="__codelineno-0-682"></a>        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span><span id="__span-0-683"><a id="__codelineno-0-683" name="__codelineno-0-683"></a>        <span class="n">set_operating_point</span><span class="o">=</span><span class="n">set_operating_point</span><span class="p">,</span>
+</span><span id="__span-0-684"><a id="__codelineno-0-684" name="__codelineno-0-684"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
 
 
 <h4 id="frequenz.sdk.microgrid.producer" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.producer</span>
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.producer</span>
 
 
 <a href="#frequenz.sdk.microgrid.producer" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">producer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.producer.Producer" href="../timeseries/producer/#frequenz.sdk.timeseries.producer.Producer">Producer</a></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">producer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="frequenz.sdk.timeseries.producer.Producer" href="../timeseries/producer/#frequenz.sdk.timeseries.producer.Producer">Producer</a></span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the <a class="autorefs autorefs-internal" href="../timeseries/producer/#frequenz.sdk.timeseries.producer.Producer"><code>Production</code></a> measuring point.</p>
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-447">447</a></span>
-<span class="normal"><a href="#__codelineno-0-448">448</a></span>
-<span class="normal"><a href="#__codelineno-0-449">449</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-447"><a id="__codelineno-0-447" name="__codelineno-0-447"></a><span class="k">def</span> <span class="nf">producer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Producer</span><span class="p">:</span>
-</span><span id="__span-0-448"><a id="__codelineno-0-448" name="__codelineno-0-448"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the [`Production`][frequenz.sdk.timeseries.producer.Producer] measuring point.&quot;&quot;&quot;</span>
-</span><span id="__span-0-449"><a id="__codelineno-0-449" name="__codelineno-0-449"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">producer</span><span class="p">()</span>
+        <p>Return the <a class="autorefs autorefs-internal" href="../timeseries/producer/#frequenz.sdk.timeseries.producer.Producer"><code>Production</code></a> measuring point.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-547">547</a></span>
+<span class="normal"><a href="#__codelineno-0-548">548</a></span>
+<span class="normal"><a href="#__codelineno-0-549">549</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-547"><a id="__codelineno-0-547" name="__codelineno-0-547"></a><span class="k">def</span> <span class="nf">producer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Producer</span><span class="p">:</span>
+</span><span id="__span-0-548"><a id="__codelineno-0-548" name="__codelineno-0-548"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the [`Production`][frequenz.sdk.timeseries.producer.Producer] measuring point.&quot;&quot;&quot;</span>
+</span><span id="__span-0-549"><a id="__codelineno-0-549" name="__codelineno-0-549"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">producer</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
+<h4 id="frequenz.sdk.microgrid.voltage_per_phase" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.voltage_per_phase</span>
 
-<h4 id="frequenz.sdk.microgrid.voltage" class="doc doc-heading">
-          <span class="doc doc-object-name doc-function-name">frequenz.sdk.microgrid.voltage</span>
 
-
-<a href="#frequenz.sdk.microgrid.voltage" class="headerlink" title="Permanent link">¤</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">voltage</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="frequenz.sdk.timeseries._voltage_streamer.VoltageStreamer">VoltageStreamer</span></span>
+<a href="#frequenz.sdk.microgrid.voltage_per_phase" class="headerlink" title="Permanent link">¤</a></h4>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">voltage_per_phase</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="frequenz.sdk.timeseries._voltage_streamer.VoltageStreamer">VoltageStreamer</span></span>
 </span></code></pre></div>
 
-  <div class="doc doc-contents ">
-  
-      <p>Return the 3-phase voltage measuring point.</p>
+    <div class="doc doc-contents ">
 
-          <details class="quote">
-            <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-432">432</a></span>
-<span class="normal"><a href="#__codelineno-0-433">433</a></span>
-<span class="normal"><a href="#__codelineno-0-434">434</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-432"><a id="__codelineno-0-432" name="__codelineno-0-432"></a><span class="k">def</span> <span class="nf">voltage</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">VoltageStreamer</span><span class="p">:</span>
-</span><span id="__span-0-433"><a id="__codelineno-0-433" name="__codelineno-0-433"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the 3-phase voltage measuring point.&quot;&quot;&quot;</span>
-</span><span id="__span-0-434"><a id="__codelineno-0-434" name="__codelineno-0-434"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">voltage</span><span class="p">()</span>
+        <p>Return the per-phase voltage measuring point.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>frequenz/sdk/microgrid/_data_pipeline.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-532">532</a></span>
+<span class="normal"><a href="#__codelineno-0-533">533</a></span>
+<span class="normal"><a href="#__codelineno-0-534">534</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-532"><a id="__codelineno-0-532" name="__codelineno-0-532"></a><span class="k">def</span> <span class="nf">voltage_per_phase</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">VoltageStreamer</span><span class="p">:</span>
+</span><span id="__span-0-533"><a id="__codelineno-0-533" name="__codelineno-0-533"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the per-phase voltage measuring point.&quot;&quot;&quot;</span>
+</span><span id="__span-0-534"><a id="__codelineno-0-534" name="__codelineno-0-534"></a>    <span class="k">return</span> <span class="n">_get</span><span class="p">()</span><span class="o">.</span><span class="n">voltage_per_phase</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -2388,7 +2917,7 @@ component graph are used.</p>
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -2413,7 +2942,7 @@ component graph are used.</p>
         
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
   Back to top
 </button>
         
@@ -2429,7 +2958,7 @@ component graph are used.</p>
           <a href="../config/" class="md-footer__link md-footer__link--prev" aria-label="Previous: config">
             <div class="md-footer__button md-icon">
               
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
@@ -2443,18 +2972,18 @@ component graph are used.</p>
         
         
           
-          <a href="client/" class="md-footer__link md-footer__link--next" aria-label="Next: client">
+          <a href="component_graph/" class="md-footer__link md-footer__link--next" aria-label="Next: component_graph">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                client
+                component_graph
               </div>
             </div>
             <div class="md-footer__button md-icon">
               
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
             </div>
           </a>
         
@@ -2487,7 +3016,7 @@ component graph are used.</p>
       
     
     <a href="https://github.com/frequenz-floss" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
     </a>
   
     
@@ -2498,7 +3027,7 @@ component graph are used.</p>
       
     
     <a href="https://www.linkedin.com/company/frequenz-com" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
     </a>
   
 </div>
@@ -2513,10 +3042,10 @@ component graph are used.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.instant", "navigation.footer", "navigation.tabs", "navigation.top", "navigation.tracking", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.instant", "navigation.footer", "navigation.tabs", "navigation.top", "navigation.tracking", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
     
   </body>
