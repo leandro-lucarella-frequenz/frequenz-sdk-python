@@ -2,7 +2,7 @@
 
 ## Summary
 
-<!-- Here goes a general summary of what this release is about -->
+This release focus on improving the config management, but also introduces other minor improvements and fixes an important bug.
 
 ## Upgrading
 
