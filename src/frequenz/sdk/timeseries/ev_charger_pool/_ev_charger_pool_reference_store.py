@@ -93,7 +93,8 @@ class EVChargerPoolReferenceStore:
         )
 
         self.bounds_channel: Broadcast[SystemBounds] = Broadcast(
-            name=f"System Bounds for EV Chargers: {component_ids}"
+            name=f"System Bounds for EV Chargers: {component_ids}",
+            resend_latest=True,
         )
         self.bounds_tracker: EVCSystemBoundsTracker = EVCSystemBoundsTracker(
             self.component_ids,

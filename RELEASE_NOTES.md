@@ -30,4 +30,4 @@
 
 ## Bug Fixes
 
-<!-- Here goes notable bug fixes that are worth a special mention or explanation -->
+- Fixes an issue where PV and EV system bounds were not available to the Power Manager sometimes when requested after startup.
