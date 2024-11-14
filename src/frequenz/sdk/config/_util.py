@@ -4,22 +4,37 @@
 """Utilities to deal with configuration."""
 
 from collections.abc import Mapping
-from typing import Any, TypeVar, cast
+from typing import Any, ClassVar, Protocol, TypeVar, cast
 
 from marshmallow import Schema
 from marshmallow_dataclass import class_schema
 
-T = TypeVar("T")
+
+# This is a hack that relies on identifying dataclasses by looking into an undocumented
+# property of dataclasses[1], so it might break in the future. Nevertheless, it seems to
+# be widely used in the community, for example `mypy` and `pyright` seem to rely on
+# it[2].
+#
+# [1]: https://github.com/python/mypy/issues/15974#issuecomment-1694781006
+# [2]: https://github.com/python/mypy/issues/15974#issuecomment-1694993493
+class Dataclass(Protocol):
+    """A protocol for dataclasses."""
+
+    __dataclass_fields__: ClassVar[dict[str, Any]]
+    """The fields of the dataclass."""
+
+
+DataclassT = TypeVar("DataclassT", bound=Dataclass)
 """Type variable for configuration classes."""
 
 
 def load_config(
-    cls: type[T],
+    cls: type[DataclassT],
     config: Mapping[str, Any],
     /,
     base_schema: type[Schema] | None = None,
     **marshmallow_load_kwargs: Any,
-) -> T:
+) -> DataclassT:
     """Load a configuration from a dictionary into an instance of a configuration class.
 
     The configuration class is expected to be a [`dataclasses.dataclass`][], which is
@@ -56,4 +71,4 @@ def load_config(
     instance = class_schema(cls, base_schema)().load(config, **marshmallow_load_kwargs)
     # We need to cast because `.load()` comes from marshmallow and doesn't know which
     # type is returned.
-    return cast(T, instance)
+    return cast(DataclassT, instance)
