@@ -22,13 +22,22 @@ def load_config(
 
     The configuration class is expected to be a [`dataclasses.dataclass`][], which is
     used to create a [`marshmallow.Schema`][] schema to validate the configuration
-    dictionary.
+    dictionary using [`marshmallow_dataclass.class_schema`][] (which in turn uses the
+    [`marshmallow.Schema.load`][] method to do the validation and deserialization).
 
-    To customize the schema derived from the configuration dataclass, you can use
-    [`marshmallow_dataclass.dataclass`][] to specify extra metadata.
+    To customize the schema derived from the configuration dataclass, you can use the
+    `metadata` key in [`dataclasses.field`][] to pass extra options to
+    [`marshmallow_dataclass`][] to be used during validation and deserialization.
 
     Additional arguments can be passed to [`marshmallow.Schema.load`][] using keyword
-    arguments.
+    arguments `marshmallow_load_kwargs`.
+
+    Note:
+        This method will raise [`marshmallow.ValidationError`][] if the configuration
+        dictionary is invalid and you have to have in mind all of the gotchas of
+        [`marshmallow`][] and [`marshmallow_dataclass`][] applies when using this
+        function.  It is recommended to carefully read the documentation of these
+        libraries.
 
     Args:
         cls: The configuration class.
