@@ -6,6 +6,7 @@
 from collections.abc import Mapping
 from typing import Any, TypeVar, cast
 
+from marshmallow import Schema
 from marshmallow_dataclass import class_schema
 
 T = TypeVar("T")
@@ -16,6 +17,7 @@ def load_config(
     cls: type[T],
     config: Mapping[str, Any],
     /,
+    base_schema: type[Schema] | None = None,
     **marshmallow_load_kwargs: Any,
 ) -> T:
     """Load a configuration from a dictionary into an instance of a configuration class.
@@ -42,13 +44,16 @@ def load_config(
     Args:
         cls: The configuration class.
         config: The configuration dictionary.
+        base_schema: An optional class to be used as a base schema for the configuration
+            class. This allow using custom fields for example. Will be passed to
+            [`marshmallow_dataclass.class_schema`][].
         **marshmallow_load_kwargs: Additional arguments to be passed to
             [`marshmallow.Schema.load`][].
 
     Returns:
         The loaded configuration as an instance of the configuration class.
     """
-    instance = class_schema(cls)().load(config, **marshmallow_load_kwargs)
+    instance = class_schema(cls, base_schema)().load(config, **marshmallow_load_kwargs)
     # We need to cast because `.load()` comes from marshmallow and doesn't know which
     # type is returned.
     return cast(T, instance)

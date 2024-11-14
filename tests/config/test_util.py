@@ -37,7 +37,27 @@ def test_load_config_load_None() -> None:
     """Test that load_config raises ValidationError if the configuration is None."""
     config: dict[str, Any] = {}
     with pytest.raises(marshmallow.ValidationError):
-        _ = load_config(MmSimpleConfig, config.get("loggers", None))
+        _ = load_config(SimpleConfig, config.get("loggers", None))
+
+
+def test_load_config_with_base_schema() -> None:
+    """Test that load_config loads a configuration using a base schema."""
+
+    class _MyBaseSchema(marshmallow.Schema):
+        """A base schema for testing."""
+
+        class Meta:
+            """Meta options for the schema."""
+
+            unknown = marshmallow.EXCLUDE
+
+    config: dict[str, Any] = {"name": "test", "value": 42, "extra": "extra"}
+
+    loaded_config = load_config(SimpleConfig, config, base_schema=_MyBaseSchema)
+    assert loaded_config == SimpleConfig(name="test", value=42)
+
+    with pytest.raises(marshmallow.ValidationError):
+        _ = load_config(SimpleConfig, config)
 
 
 def test_load_config_type_hints(mocker: MockerFixture) -> None:

@@ -10,7 +10,8 @@
 
 ## New Features
 
-<!-- Here goes the main new features and examples or instructions on how to use them -->
+
+- `frequenz.sdk.config.load_config()` can now use a base schema to customize even further how data is loaded.
 
 ## Bug Fixes
 
