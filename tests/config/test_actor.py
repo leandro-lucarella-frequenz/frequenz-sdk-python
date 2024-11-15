@@ -16,7 +16,7 @@ from frequenz.channels.file_watcher import Event, EventType
 from pytest_mock import MockerFixture
 
 from frequenz.sdk.config import ConfigManagingActor
-from frequenz.sdk.config._config_managing import _recursive_update
+from frequenz.sdk.config._managing_actor import _recursive_update
 
 
 class Item:
