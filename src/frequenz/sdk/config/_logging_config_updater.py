@@ -85,7 +85,7 @@ class LoggingConfig:
         return cast(Self, schema.load(configs, unknown=RAISE))
 
 
-class LoggingConfigUpdater(Actor):
+class LoggingConfigUpdatingActor(Actor):
     """Actor that listens for logging configuration changes and sets them.
 
     Example:
@@ -107,14 +107,14 @@ class LoggingConfigUpdater(Actor):
         from typing import Any
 
         from frequenz.channels import Broadcast
-        from frequenz.sdk.config import LoggingConfigUpdater, ConfigManager
+        from frequenz.sdk.config import LoggingConfigUpdatingActor, ConfigManager
         from frequenz.sdk.actor import run as run_actors
 
         async def run() -> None:
             config_channel = Broadcast[Mapping[str, Any]](name="config", resend_latest=True)
             actors = [
                 ConfigManager(config_paths=["config.toml"], output=config_channel.new_sender()),
-                LoggingConfigUpdater(
+                LoggingConfigUpdatingActor(
                     config_recv=config_channel.new_receiver(limit=1)).map(
                         lambda app_config: app_config.get("logging", {}
                     )
