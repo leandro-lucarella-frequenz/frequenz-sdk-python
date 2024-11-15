@@ -53,6 +53,13 @@ def test_load_config_marshmallow_dataclass() -> None:
         _ = load_config(MmSimpleConfig, config)
 
 
+def test_load_config_load_None() -> None:
+    """Test that load_config raises ValidationError if the configuration is None."""
+    config: dict[str, Any] = {}
+    with pytest.raises(marshmallow.ValidationError):
+        _ = load_config(MmSimpleConfig, config.get("loggers", None))
+
+
 def test_load_config_type_hints(mocker: MockerFixture) -> None:
     """Test that load_config loads a configuration into a configuration class."""
     mock_class_schema = mocker.Mock()
