@@ -126,7 +126,7 @@ class TestMicrogridApi:
         microgrid_client.metadata = AsyncMock(return_value=metadata)
 
         with mock.patch(
-            "frequenz.sdk.microgrid.connection_manager.ApiClient",
+            "frequenz.sdk.microgrid.connection_manager.MicrogridApiClient",
             return_value=microgrid_client,
         ):
             # Get instance without initializing git first.
