@@ -6,8 +6,6 @@
 
 ## Upgrading
 
-- `frequenz.sdk.config.load_config()` doesn't accept classes decorated with `marshmallow_dataclass.dataclass` anymore. You should use the built-in `dataclasses.dataclass` directly instead, no other changes should be needed, the metadata in the `dataclass` fields will still be used.
-
 ## New Features
 
 

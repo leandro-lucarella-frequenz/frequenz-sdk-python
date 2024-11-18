@@ -7,6 +7,7 @@ import dataclasses
 from typing import Any
 
 import marshmallow
+import marshmallow_dataclass
 import pytest
 from pytest_mock import MockerFixture
 
@@ -21,26 +22,55 @@ class SimpleConfig:
     value: int
 
 
-def test_load_config_dataclass() -> None:
+@marshmallow_dataclass.dataclass
+class MmSimpleConfig:
+    """A simple marshmallow_dataclass configuration class for testing."""
+
+    name: str = dataclasses.field(metadata={"validate": lambda s: s.startswith("test")})
+    value: int
+
+
+@pytest.mark.parametrize(
+    "config_class",
+    [SimpleConfig, MmSimpleConfig],
+    ids=["dataclass", "marshmallow_dataclass"],
+)
+def test_load_config_dataclass(
+    config_class: type[SimpleConfig] | type[MmSimpleConfig],
+) -> None:
     """Test that load_config loads a configuration into a configuration class."""
     config: dict[str, Any] = {"name": "test", "value": 42}
 
-    loaded_config = load_config(SimpleConfig, config)
-    assert loaded_config == SimpleConfig(name="test", value=42)
+    loaded_config = load_config(config_class, config)
+    assert loaded_config == config_class(name="test", value=42)
 
     config["name"] = "not test"
     with pytest.raises(marshmallow.ValidationError):
-        _ = load_config(SimpleConfig, config)
+        _ = load_config(config_class, config)
 
 
-def test_load_config_load_None() -> None:
+@pytest.mark.parametrize(
+    "config_class",
+    [SimpleConfig, MmSimpleConfig],
+    ids=["dataclass", "marshmallow_dataclass"],
+)
+def test_load_config_load_None(
+    config_class: type[SimpleConfig] | type[MmSimpleConfig],
+) -> None:
     """Test that load_config raises ValidationError if the configuration is None."""
     config: dict[str, Any] = {}
     with pytest.raises(marshmallow.ValidationError):
-        _ = load_config(SimpleConfig, config.get("loggers", None))
+        _ = load_config(config_class, config.get("loggers", None))
 
 
-def test_load_config_with_base_schema() -> None:
+@pytest.mark.parametrize(
+    "config_class",
+    [SimpleConfig, MmSimpleConfig],
+    ids=["dataclass", "marshmallow_dataclass"],
+)
+def test_load_config_with_base_schema(
+    config_class: type[SimpleConfig] | type[MmSimpleConfig],
+) -> None:
     """Test that load_config loads a configuration using a base schema."""
 
     class _MyBaseSchema(marshmallow.Schema):
@@ -53,11 +83,11 @@ def test_load_config_with_base_schema() -> None:
 
     config: dict[str, Any] = {"name": "test", "value": 42, "extra": "extra"}
 
-    loaded_config = load_config(SimpleConfig, config, base_schema=_MyBaseSchema)
-    assert loaded_config == SimpleConfig(name="test", value=42)
+    loaded_config = load_config(config_class, config, base_schema=_MyBaseSchema)
+    assert loaded_config == config_class(name="test", value=42)
 
     with pytest.raises(marshmallow.ValidationError):
-        _ = load_config(SimpleConfig, config)
+        _ = load_config(config_class, config)
 
 
 def test_load_config_type_hints(mocker: MockerFixture) -> None:
