@@ -11,13 +11,13 @@ from unittest import mock
 
 import pytest
 from frequenz.client.microgrid import (
-    ApiClient,
     Component,
     ComponentCategory,
     ComponentMetadata,
     Connection,
     Fuse,
     InverterType,
+    MicrogridApiClient,
 )
 
 import frequenz.sdk.microgrid.component_graph as gr
@@ -899,7 +899,7 @@ class Test_MicrogridComponentGraph:
         with pytest.raises(gr.InvalidGraphError):
             graph.validate()
 
-        client = mock.MagicMock(name="client", spec=ApiClient)
+        client = mock.MagicMock(name="client", spec=MicrogridApiClient)
         client.components = mock.AsyncMock(name="client.components()", return_value=[])
         client.connections = mock.AsyncMock(
             name="client.connections()", return_value=[]

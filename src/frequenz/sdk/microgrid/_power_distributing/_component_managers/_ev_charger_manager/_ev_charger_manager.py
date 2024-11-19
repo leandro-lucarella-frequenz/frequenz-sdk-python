@@ -17,10 +17,10 @@ from frequenz.channels import (
     selected_from,
 )
 from frequenz.client.microgrid import (
-    ApiClient,
     ApiClientError,
     ComponentCategory,
     EVChargerData,
+    MicrogridApiClient,
 )
 from frequenz.quantities import Power, Voltage
 from typing_extensions import override
@@ -292,7 +292,7 @@ class EVChargerManager(ComponentManager):
 
     async def _set_api_power(
         self,
-        api: ApiClient,
+        api: MicrogridApiClient,
         target_power_changes: dict[int, Power],
         api_request_timeout: timedelta,
     ) -> Result:

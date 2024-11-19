@@ -28,11 +28,11 @@ from collections.abc import Callable, Iterable
 
 import networkx as nx
 from frequenz.client.microgrid import (
-    ApiClient,
     Component,
     ComponentCategory,
     Connection,
     InverterType,
+    MicrogridApiClient,
 )
 
 _logger = logging.getLogger(__name__)
@@ -559,7 +559,7 @@ class _MicrogridComponentGraph(
 
     async def refresh_from_api(
         self,
-        api: ApiClient,
+        api: MicrogridApiClient,
         correct_errors: Callable[["_MicrogridComponentGraph"], None] | None = None,
     ) -> None:
         """Refresh the contents of a component graph from the remote API.

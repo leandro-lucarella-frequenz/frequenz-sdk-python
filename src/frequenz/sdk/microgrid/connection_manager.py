@@ -11,7 +11,7 @@ component graph.
 import logging
 from abc import ABC, abstractmethod
 
-from frequenz.client.microgrid import ApiClient, Location, Metadata
+from frequenz.client.microgrid import Location, Metadata, MicrogridApiClient
 
 from .component_graph import ComponentGraph, _MicrogridComponentGraph
 
@@ -41,8 +41,8 @@ class ConnectionManager(ABC):
 
     @property
     @abstractmethod
-    def api_client(self) -> ApiClient:
-        """Get ApiClient.
+    def api_client(self) -> MicrogridApiClient:
+        """Get the MicrogridApiClient.
 
         Returns:
             api client
@@ -97,7 +97,7 @@ class _InsecureConnectionManager(ConnectionManager):
                 `grpc://localhost:1090?ssl=true`.
         """
         super().__init__(server_url)
-        self._api = ApiClient(server_url)
+        self._api = MicrogridApiClient(server_url)
         # To create graph from the api we need await.
         # So create empty graph here, and update it in `run` method.
         self._graph = _MicrogridComponentGraph()
@@ -106,8 +106,8 @@ class _InsecureConnectionManager(ConnectionManager):
         """The metadata of the microgrid."""
 
     @property
-    def api_client(self) -> ApiClient:
-        """Get ApiClient.
+    def api_client(self) -> MicrogridApiClient:
+        """Get the MicrogridApiClient.
 
         Returns:
             api client
@@ -154,7 +154,7 @@ class _InsecureConnectionManager(ConnectionManager):
         """
         await super()._update_api(server_url)  # pylint: disable=protected-access
 
-        self._api = ApiClient(server_url)
+        self._api = MicrogridApiClient(server_url)
         await self._initialize()
 
     async def _initialize(self) -> None:
