@@ -77,6 +77,7 @@ logged.
 ???+ example
 
     ```python
+    import asyncio
     from frequenz.sdk.actor import Actor, run
 
     class MyActor(Actor):
@@ -85,7 +86,7 @@ logged.
                 print("Hello World!")
                 await asyncio.sleep(1)
 
-    await run(MyActor()) # (1)!
+    await asyncio.run(MyActor()) # (1)!
     ```
 
     1. This line will block until the actor completes its execution or is manually stopped.
@@ -187,26 +188,26 @@ composed easily.
     class EchoActor(Actor):  # (1)!
         def __init__(
                 self,
-                input: Receiver[int],  # (2)!
+                receiver: Receiver[int],  # (2)!
                 output: Sender[int],  # (3)!
                 name: str | None = None,  # (4)!
         ) -> None:
             super().__init__(name=name) # (5)!
-            self._input: Receiver[int] = input  # (6)!
+            self._input: Receiver[int] = receiver  # (6)!
             self._output: Sender[int] = output  # (7)!
     ```
 
     1. We define a new actor class called `EchoActor` that inherits from
         [`Actor`][frequenz.sdk.actor.Actor].
 
-    2. We accept an `input` argument that will be used to receive messages from
+    2. We accept an `receiver` argument that will be used to receive messages from
         a channel.
     3. We accept an `output` argument that will be used to send messages to a channel.
     4. We accept an optional `name` argument that will be used to identify the actor in
         logs.
     5. We call [`Actor.__init__()`][frequenz.sdk.actor.Actor.__init__] to make sure the
         actor is properly initialized.
-    6. We store the `input` argument in a *private* attribute to use it later.
+    6. We store the `receiver` argument in a *private* attribute to use it later.
     7. We store the `output` argument in a *private* attribute to use it later.
 
 ### The `_run()` Method
@@ -231,12 +232,12 @@ or a limited number of runs, terminating upon completion.
     class EchoActor(Actor):
         def __init__(
                 self,
-                input: Receiver[int],
+                receiver: Receiver[int],
                 output: Sender[int],
                 name: str | None = None,
         ) -> None:
             super().__init__(name=name)
-            self._input: Receiver[int] = input
+            self._input: Receiver[int] = receiver
             self._output: Sender[int] = output
 
         async def _run(self) -> None:  # (1)!
@@ -245,7 +246,7 @@ or a limited number of runs, terminating upon completion.
     ```
 
     1. We implement the abstract [`_run()`][_run] method.
-    2. We receive messages from the `input` channel one by one.
+    2. We receive messages from the `receiver` one by one.
     3. We send the received message to the `output` channel.
 
 ### Stopping

@@ -3,9 +3,9 @@
 
 [build-system]
 requires = [
-  "setuptools == 69.0.3",
-  "setuptools_scm[toml] == 8.0.4",
-  "frequenz-repo-config[lib] == 0.10.0",
+  "setuptools == 75.6.0",
+  "setuptools_scm[toml] == 8.1.0",
+  "frequenz-repo-config[lib] == 0.11.0",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -63,7 +63,7 @@ dev-mkdocs = [
   "mkdocs-material == 9.5.43",
   "mkdocstrings[python] == 0.26.2",
   "mkdocstrings-python == 1.12.2",
-  "frequenz-repo-config[lib] == 0.10.0",
+  "frequenz-repo-config[lib] == 0.11.0",
 ]
 dev-mypy = [
   "mypy == 1.13.0",
@@ -73,7 +73,7 @@ dev-mypy = [
   # For checking the noxfile, docs/ script, and tests
   "frequenz-sdk[dev-mkdocs,dev-noxfile,dev-pytest]",
 ]
-dev-noxfile = ["nox == 2024.10.9", "frequenz-repo-config[lib] == 0.10.0"]
+dev-noxfile = ["nox == 2024.10.9", "frequenz-repo-config[lib] == 0.11.0"]
 dev-pylint = [
   "pylint == 3.3.1",
   # For checking the noxfile, docs/ script, and tests
@@ -81,7 +81,7 @@ dev-pylint = [
 ]
 dev-pytest = [
   "pytest == 8.3.3",
-  "frequenz-repo-config[extra-lint-examples] == 0.10.0",
+  "frequenz-repo-config[extra-lint-examples] == 0.11.0",
   "pytest-mock == 3.14.0",
   "pytest-asyncio == 0.24.0",
   "time-machine == 2.12.0",
@@ -145,6 +145,8 @@ disable = [
   "unsubscriptable-object",
   # Checked by mypy
   "no-member",
+  "possibly-used-before-assignment",
+  "no-name-in-module",
   # Checked by flake8
   "f-string-without-interpolation",
   "redefined-outer-name",
@@ -163,6 +165,7 @@ max-attributes = 12
 [tool.pytest.ini_options]
 testpaths = ["tests", "src"]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 required_plugins = ["pytest-asyncio", "pytest-mock"]
 markers = [
   "integration: integration tests (deselect with '-m \"not integration\"')",
