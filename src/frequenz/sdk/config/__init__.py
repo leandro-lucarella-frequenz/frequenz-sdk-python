@@ -3,11 +3,7 @@
 
 """Read and update config variables."""
 
-from ._logging_config_updater import (
-    LoggerConfig,
-    LoggingConfig,
-    LoggingConfigUpdatingActor,
-)
+from ._logging_actor import LoggerConfig, LoggingConfig, LoggingConfigUpdatingActor
 from ._managing_actor import ConfigManagingActor
 from ._util import load_config
 

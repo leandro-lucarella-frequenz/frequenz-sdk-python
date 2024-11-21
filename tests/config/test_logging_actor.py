@@ -70,7 +70,7 @@ async def test_logging_config_updating_actor(
     # Overriding logging.basicConfig would mess up other tests, so we mock it.
     # This is just for extra safety because changing root logging level in unit tests
     # is not working anyway - python ignores it.
-    mocker.patch("frequenz.sdk.config._logging_config_updater.logging.basicConfig")
+    mocker.patch("frequenz.sdk.config._logging_actor.logging.basicConfig")
 
     config_channel = Broadcast[Mapping[str, Any]](name="config")
     config_sender = config_channel.new_sender()
