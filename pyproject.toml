@@ -60,8 +60,8 @@ dev-mkdocs = [
   "mkdocs-gen-files == 0.5.0",
   "mkdocs-literate-nav == 0.6.1",
   "mkdocs-macros-plugin == 1.3.7",
-  "mkdocs-material == 9.5.43",
-  "mkdocstrings[python] == 0.26.2",
+  "mkdocs-material == 9.5.45",
+  "mkdocstrings[python] == 0.27.0",
   "mkdocstrings-python == 1.12.2",
   "frequenz-repo-config[lib] == 0.11.0",
 ]
@@ -86,7 +86,7 @@ dev-pytest = [
   "pytest-asyncio == 0.24.0",
   "time-machine == 2.12.0",
   "async-solipsism == 0.7",
-  "hypothesis == 6.116.0",
+  "hypothesis == 6.119.3",
 ]
 dev = [
   "frequenz-sdk[dev-mkdocs,dev-flake8,dev-formatting,dev-mkdocs,dev-mypy,dev-noxfile,dev-pylint,dev-pytest]",
