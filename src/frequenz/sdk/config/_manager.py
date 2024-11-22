@@ -3,6 +3,7 @@
 
 """Management of configuration."""
 
+import asyncio
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
@@ -29,6 +30,7 @@ class ConfigManager:
         force_polling: bool = True,
         name: str | None = None,
         polling_interval: timedelta = timedelta(seconds=5),
+        wait_for_first_timeout: timedelta = timedelta(seconds=5),
     ) -> None:
         """Initialize this config manager.
 
@@ -45,6 +47,10 @@ class ConfigManager:
                 be used. This is used mostly for debugging purposes.
             polling_interval: The interval to poll for changes. Only relevant if
                 polling is enabled.
+            wait_for_first_timeout: The timeout to use when waiting for the first
+                configuration in
+                [`new_receiver`][frequenz.sdk.config.ConfigManager.new_receiver] if
+                `wait_for_first` is `True`.
         """
         self.name: Final[str] = str(id(self)) if name is None else name
         """The name of this config manager."""
@@ -63,6 +69,14 @@ class ConfigManager:
         )
         """The actor that manages the configuration."""
 
+        self.wait_for_first_timeout: timedelta = wait_for_first_timeout
+        """The timeout to use when waiting for the first configuration.
+
+        When passing `wait_for_first` as `True` to
+        [`new_receiver`][frequenz.sdk.config.ConfigManager.new_receiver], this timeout
+        will be used to wait for the first configuration to be received.
+        """
+
         if auto_start:
             self.actor.start()
 
@@ -71,6 +85,7 @@ class ConfigManager:
         return (
             f"<{self.__class__.__name__}: "
             f"name={self.name!r}, "
+            f"wait_for_first_timeout={self.wait_for_first_timeout!r}, "
             f"config_channel={self.config_channel!r}, "
             f"actor={self.actor!r}>"
         )
@@ -80,20 +95,53 @@ class ConfigManager:
         return f"{type(self).__name__}[{self.name}]"
 
     # The noqa DOC502 is needed because we raise TimeoutError indirectly.
-    async def new_receiver(self) -> Receiver[Mapping[str, Any] | None]:  # noqa: DOC502
+    async def new_receiver(  # pylint: disable=too-many-arguments # noqa: DOC502
+        self,
+        *,
+        wait_for_first: bool = False,
+    ) -> Receiver[Mapping[str, Any] | None]:
         """Create a new receiver for the configuration.
 
         Note:
             If there is a burst of configuration updates, the receiver will only
             receive the last configuration, older configurations will be ignored.
 
+        ### Waiting for the first configuration
+
+        If `wait_for_first` is `True`, the receiver will wait for the first
+        configuration to be received before returning the receiver. If the
+        configuration can't be received in time, a timeout error will be raised.
+
+        If the configuration is received successfully, the first configuration can be
+        simply retrieved by calling [`consume()`][frequenz.channels.Receiver.consume] on
+        the receiver without blocking.
+
         Example:
             ```python
             # TODO: Add Example
             ```
 
+        Args:
+            wait_for_first: Whether to wait for the first configuration to be received
+                before returning the receiver. If the configuration can't be received
+                for
+                [`wait_for_first_timeout`][frequenz.sdk.config.ConfigManager.wait_for_first_timeout]
+                time, a timeout error will be raised. If receiving was successful, the
+                first configuration can be simply retrieved by calling
+                [`consume()`][frequenz.channels.Receiver.consume] on the receiver.
+
         Returns:
             The receiver for the configuration.
+
+        Raises:
+            asyncio.TimeoutError: If `wait_for_first` is `True` and the first
+                configuration can't be received in time.
         """
         recv_name = f"{self}_receiver"
-        return self.config_channel.new_receiver(name=recv_name, limit=1)
+        receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
+
+        if wait_for_first:
+            async with asyncio.timeout(self.wait_for_first_timeout.total_seconds()):
+                await receiver.ready()
+
+        return receiver
