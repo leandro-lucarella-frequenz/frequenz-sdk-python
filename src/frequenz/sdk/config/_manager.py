@@ -49,7 +49,10 @@ class ConfigManager(BackgroundService):
     """A manager for configuration files.
 
     This class reads configuration files and sends the configuration to the receivers,
-    providing optional configuration key filtering and schema validation.
+    providing configuration key filtering and value validation.
+
+    For a more in-depth introduction and examples, please read the [module
+    documentation][frequenz.sdk.config].
     """
 
     def __init__(  # pylint: disable=too-many-arguments
@@ -85,7 +88,12 @@ class ConfigManager(BackgroundService):
         self.config_channel: Final[Broadcast[Mapping[str, Any]]] = Broadcast(
             name=f"{self}_config", resend_latest=True
         )
-        """The broadcast channel for the configuration."""
+        """The channel used for sending configuration updates (resends the latest value).
+
+        This is the channel used to communicate with the
+        [`ConfigManagingActor`][frequenz.sdk.config.ConfigManager.config_actor] and will
+        receive the complete raw configuration as a mapping.
+        """
 
         self.config_actor: Final[ConfigManagingActor] = ConfigManagingActor(
             config_paths,
@@ -94,7 +102,7 @@ class ConfigManager(BackgroundService):
             force_polling=force_polling,
             polling_interval=polling_interval,
         )
-        """The actor that manages the configuration."""
+        """The actor that manages the configuration for this manager."""
 
         # pylint: disable-next=import-outside-toplevel,cyclic-import
         from ._logging_actor import LoggingConfigUpdatingActor
@@ -106,6 +114,7 @@ class ConfigManager(BackgroundService):
                 self, config_key=logging_config_key, name=self.name
             )
         )
+        """The actor that manages the logging configuration for this manager."""
 
     @override
     def start(self) -> None:
@@ -196,68 +205,8 @@ class ConfigManager(BackgroundService):
         receiver, you can create a receiver directly using
         [`config_channel.new_receiver()`][frequenz.sdk.config.ConfigManager.config_channel].
 
-        ### Filtering
-
-        Only the configuration under the `key` will be received by the receiver. If the
-        `key` is not found in the configuration, the receiver will receive `None`.
-
-        If the key is a sequence of strings, it will be treated as a nested key and the
-        receiver will receive the configuration under the nested key. For example
-        `["key", "subkey"]` will get only `config["key"]["subkey"]`.
-
-        The value under `key` must be another mapping, otherwise an error
-        will be logged and a [`frequenz.sdk.config.InvalidValueForKeyError`][] instance
-        will be sent to the receiver.
-
-        ### Schema validation
-
-        The raw configuration received as a `Mapping` will be validated and loaded to
-        as a `config_class`. The `config_class` class is expected to be
-        a [`dataclasses.dataclass`][], which is used to create
-        a [`marshmallow.Schema`][] via the [`marshmallow_dataclass.class_schema`][]
-        function.
-
-        This means you can customize the schema derived from the configuration
-        dataclass using [`marshmallow_dataclass`][] to specify extra validation and
-        options via field metadata.
-
-        Additional arguments can be passed to [`marshmallow.Schema.load`][] using
-        the `marshmallow_load_kwargs` keyword arguments.
-
-        If unspecified, the `marshmallow_load_kwargs` will have the `unknown` key set to
-        [`marshmallow.EXCLUDE`][] (instead of the normal [`marshmallow.RAISE`][]
-        default).
-
-        But when [`marshmallow.EXCLUDE`][] is used, a warning will still be logged if
-        there are extra fields in the configuration that are excluded. This is useful,
-        for example, to catch typos in the configuration file.
-
-        ### Skipping superfluous updates
-
-        If there is a burst of configuration updates, the receiver will only receive the
-        last configuration, older configurations will be ignored.
-
-        If `skip_unchanged` is set to `True`, then a configuration that didn't change
-        compared to the last one received will be ignored and not sent to the receiver.
-        The comparison is done using the *raw* `dict` to determine if the configuration
-        has changed.
-
-        ### Error handling
-
-        The value under `key` must be another mapping, otherwise an error
-        will be logged and a [`frequenz.sdk.config.InvalidValueForKeyError`][] instance
-        will be sent to the receiver.
-
-        Configurations that don't pass the validation will be logged as an error and
-        the [`ValidationError`][marshmallow.ValidationError] sent to the receiver.
-
-        Any other unexpected error raised during the configuration loading will be
-        logged as an error and the error instance sent to the receiver.
-
-        Example:
-            ```python
-            # TODO: Add Example
-            ```
+        For a more in-depth introduction and examples, please read the [module
+        documentation][frequenz.sdk.config].
 
         Args:
             key: The configuration key to be read by the receiver. If a sequence of
@@ -345,7 +294,10 @@ async def wait_for_first(
     allow_none: bool = False,
     timeout: timedelta = timedelta(minutes=1),
 ) -> DataclassT | None:
-    """Receive the first configuration.
+    """Wait for and receive the the first configuration.
+
+    For a more in-depth introduction and examples, please read the [module
+    documentation][frequenz.sdk.config].
 
     Args:
         receiver: The receiver to receive the first configuration from.
