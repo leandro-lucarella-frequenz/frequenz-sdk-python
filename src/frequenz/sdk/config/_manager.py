@@ -3,16 +3,20 @@
 
 """Management of configuration."""
 
+import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
 from typing import Any, Final
 
 from frequenz.channels import Broadcast, Receiver
+from frequenz.channels.experimental import WithPrevious
 from typing_extensions import override
 
 from ..actor._background_service import BackgroundService
 from ._managing_actor import ConfigManagingActor
+
+_logger = logging.getLogger(__name__)
 
 
 class ConfigManager(BackgroundService):
@@ -100,19 +104,55 @@ class ConfigManager(BackgroundService):
         """Return a string representation of this config manager."""
         return f"config_channel={self.config_channel!r}, " f"actor={self.actor!r}>"
 
-    async def new_receiver(self) -> Receiver[Mapping[str, Any] | None]:
+    def new_receiver(
+        self,
+        *,
+        skip_unchanged: bool = True,
+    ) -> Receiver[Mapping[str, Any] | None]:
         """Create a new receiver for the configuration.
 
-        Note:
-            If there is a burst of configuration updates, the receiver will only
-            receive the last configuration, older configurations will be ignored.
+        This method has a lot of features and functionalities to make it easier to
+        receive configurations, but it also imposes some restrictions on how the
+        configurations are received. If you need more control over the configuration
+        receiver, you can create a receiver directly using
+        [`config_channel.new_receiver()`][frequenz.sdk.config.ConfigManager.config_channel].
+
+        ### Skipping superfluous updates
+
+        If there is a burst of configuration updates, the receiver will only receive the
+        last configuration, older configurations will be ignored.
+
+        If `skip_unchanged` is set to `True`, then a configuration that didn't change
+        compared to the last one received will be ignored and not sent to the receiver.
+        The comparison is done using the *raw* `dict` to determine if the configuration
+        has changed.
 
         Example:
             ```python
             # TODO: Add Example
             ```
 
+        Args:
+            skip_unchanged: Whether to skip sending the configuration if it hasn't
+                changed compared to the last one received.
+
         Returns:
             The receiver for the configuration.
         """
-        return self.config_channel.new_receiver(name=str(self), limit=1)
+        receiver = self.config_channel.new_receiver(name=str(self), limit=1)
+
+        if skip_unchanged:
+            receiver = receiver.filter(WithPrevious(not_equal_with_logging))
+
+        return receiver
+
+
+def not_equal_with_logging(
+    old_config: Mapping[str, Any], new_config: Mapping[str, Any]
+) -> bool:
+    """Return whether the two mappings are not equal, logging if they are the same."""
+    if old_config == new_config:
+        _logger.info("Configuration has not changed, skipping update")
+        _logger.debug("Old configuration being kept: %r", old_config)
+        return False
+    return True
