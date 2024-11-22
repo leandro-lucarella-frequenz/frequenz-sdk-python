@@ -19,6 +19,26 @@ from ._managing_actor import ConfigManagingActor
 _logger = logging.getLogger(__name__)
 
 
+class InvalidValueForKeyError(ValueError):
+    """An error indicating that the value under the specified key is invalid."""
+
+    def __init__(self, msg: str, *, key: str, value: Any) -> None:
+        """Initialize this error.
+
+        Args:
+            msg: The error message.
+            key: The key that has an invalid value.
+            value: The actual value that was found that is not a mapping.
+        """
+        super().__init__(msg)
+
+        self.key: Final[Sequence[str]] = key
+        """The key that has an invalid value."""
+
+        self.value: Final[Any] = value
+        """The actual value that was found that is not a mapping."""
+
+
 class ConfigManager(BackgroundService):
     """A manager for configuration files.
 
@@ -106,16 +126,27 @@ class ConfigManager(BackgroundService):
 
     def new_receiver(
         self,
+        key: str,
+        /,
         *,
         skip_unchanged: bool = True,
-    ) -> Receiver[Mapping[str, Any] | None]:
-        """Create a new receiver for the configuration.
+    ) -> Receiver[Mapping[str, Any] | InvalidValueForKeyError | None]:
+        """Create a new receiver for receiving the configuration for a particular key.
 
         This method has a lot of features and functionalities to make it easier to
         receive configurations, but it also imposes some restrictions on how the
         configurations are received. If you need more control over the configuration
         receiver, you can create a receiver directly using
         [`config_channel.new_receiver()`][frequenz.sdk.config.ConfigManager.config_channel].
+
+        ### Filtering
+
+        Only the configuration under the `key` will be received by the receiver. If the
+        `key` is not found in the configuration, the receiver will receive `None`.
+
+        The value under `key` must be another mapping, otherwise an error
+        will be logged and a [`frequenz.sdk.config.InvalidValueForKeyError`][] instance
+        will be sent to the receiver.
 
         ### Skipping superfluous updates
 
@@ -133,26 +164,72 @@ class ConfigManager(BackgroundService):
             ```
 
         Args:
+            key: The configuration key to be read by the receiver.
             skip_unchanged: Whether to skip sending the configuration if it hasn't
                 changed compared to the last one received.
 
         Returns:
             The receiver for the configuration.
         """
-        receiver = self.config_channel.new_receiver(name=str(self), limit=1)
+        receiver = self.config_channel.new_receiver(name=f"{self}:{key}", limit=1)
+
+        def _get_key_or_error(
+            config: Mapping[str, Any]
+        ) -> Mapping[str, Any] | InvalidValueForKeyError | None:
+            try:
+                return _get_key(config, key)
+            except InvalidValueForKeyError as error:
+                return error
+
+        key_receiver = receiver.map(_get_key_or_error)
 
         if skip_unchanged:
-            receiver = receiver.filter(WithPrevious(not_equal_with_logging))
+            return key_receiver.filter(WithPrevious(_not_equal_with_logging))
 
-        return receiver
+        return key_receiver
 
 
-def not_equal_with_logging(
-    old_config: Mapping[str, Any], new_config: Mapping[str, Any]
+def _not_equal_with_logging(
+    old_value: Mapping[str, Any] | InvalidValueForKeyError | None,
+    new_value: Mapping[str, Any] | InvalidValueForKeyError | None,
 ) -> bool:
     """Return whether the two mappings are not equal, logging if they are the same."""
-    if old_config == new_config:
+    if old_value == new_value:
         _logger.info("Configuration has not changed, skipping update")
-        _logger.debug("Old configuration being kept: %r", old_config)
         return False
+
+    if isinstance(new_value, InvalidValueForKeyError) and not isinstance(
+        old_value, InvalidValueForKeyError
+    ):
+        _logger.error(
+            "Configuration for key %r has an invalid value: %r",
+            new_value.key,
+            new_value.value,
+        )
     return True
+
+
+def _get_key(config: Mapping[str, Any], key: str) -> Mapping[str, Any] | None:
+    """Get the value from the configuration under the specified key.
+
+    Args:
+        config: The configuration to get the value from.
+        key: The key to get the value for.
+
+    Returns:
+        The value under the key, or `None` if the key is not found.
+
+    Raises:
+        InvalidValueForKeyError: If the value under the key is not a mapping.
+    """
+    match config.get(key):
+        case None:
+            return None
+        case Mapping() as value:
+            return value
+        case invalid_value:
+            raise InvalidValueForKeyError(
+                f"Value for key {key!r} is not a mapping: {invalid_value!r}",
+                key=key,
+                value=invalid_value,
+            )
