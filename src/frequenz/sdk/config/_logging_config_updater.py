@@ -141,16 +141,25 @@ class LoggingConfigUpdater(Actor):
             config_recv: The receiver to listen for configuration changes.
             log_format: Use the specified format string in logs.
             log_datefmt: Use the specified date/time format in logs.
+
+        Note:
+            The `log_format` and `log_datefmt` parameters are used in a call to
+            `logging.basicConfig()`. If logging has already been configured elsewhere
+            in the application (through a previous `basicConfig()` call), then the format
+            settings specified here will be ignored.
         """
         super().__init__()
         self._config_recv = config_recv
-        self._format = log_format
-        self._datefmt = log_datefmt
 
         # Setup default configuration.
         # This ensures logging is configured even if actor fails to start or
         # if the configuration cannot be loaded.
         self._current_config: LoggingConfig = LoggingConfig()
+
+        logging.basicConfig(
+            format=log_format,
+            datefmt=log_datefmt,
+        )
         self._update_logging(self._current_config)
 
     async def _run(self) -> None:
@@ -176,11 +185,10 @@ class LoggingConfigUpdater(Actor):
             logging.getLogger(logger_id).setLevel(logging.NOTSET)
 
         self._current_config = config
-        logging.basicConfig(
-            format=self._format,
-            level=self._current_config.root_logger.level,
-            datefmt=self._datefmt,
+        _logger.debug(
+            "Setting root logger level to '%s'", self._current_config.root_logger.level
         )
+        logging.getLogger().setLevel(self._current_config.root_logger.level)
 
         # For each logger in the new config, set the log level
         for logger_id, logger_config in self._current_config.loggers.items():
