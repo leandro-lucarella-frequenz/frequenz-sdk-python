@@ -4,14 +4,18 @@
 """Management of configuration."""
 
 import asyncio
+import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
 from typing import Any, Final
 
 from frequenz.channels import Broadcast, Receiver
+from frequenz.channels.experimental import WithPrevious
 
 from ._managing_actor import ConfigManagingActor
+
+_logger = logging.getLogger(__name__)
 
 
 class ConfigManager:
@@ -99,12 +103,23 @@ class ConfigManager:
         self,
         *,
         wait_for_first: bool = False,
+        skip_unchanged: bool = True,
     ) -> Receiver[Mapping[str, Any] | None]:
         """Create a new receiver for the configuration.
+
+        This method has a lot of features and functionalities to make it easier to
+        receive configurations.
 
         Note:
             If there is a burst of configuration updates, the receiver will only
             receive the last configuration, older configurations will be ignored.
+
+        ### Skipping superfluous updates
+
+        If `skip_unchanged` is set to `True`, then a configuration that didn't change
+        compared to the last one received will be ignored and not sent to the receiver.
+        The comparison is done using the *raw* `dict` to determine if the configuration
+        has changed.
 
         ### Waiting for the first configuration
 
@@ -129,6 +144,8 @@ class ConfigManager:
                 time, a timeout error will be raised. If receiving was successful, the
                 first configuration can be simply retrieved by calling
                 [`consume()`][frequenz.channels.Receiver.consume] on the receiver.
+            skip_unchanged: Whether to skip sending the configuration if it hasn't
+                changed compared to the last one received.
 
         Returns:
             The receiver for the configuration.
@@ -140,8 +157,22 @@ class ConfigManager:
         recv_name = f"{self}_receiver"
         receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
 
+        if skip_unchanged:
+            receiver = receiver.filter(WithPrevious(not_equal_with_logging))
+
         if wait_for_first:
             async with asyncio.timeout(self.wait_for_first_timeout.total_seconds()):
                 await receiver.ready()
 
         return receiver
+
+
+def not_equal_with_logging(
+    old_config: Mapping[str, Any], new_config: Mapping[str, Any]
+) -> bool:
+    """Return whether the two mappings are not equal, logging if they are the same."""
+    if old_config == new_config:
+        _logger.info("Configuration has not changed, skipping update")
+        _logger.debug("Old configuration being kept: %r", old_config)
+        return False
+    return True
