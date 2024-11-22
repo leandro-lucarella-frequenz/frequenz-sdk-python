@@ -8,7 +8,7 @@ import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
-from typing import Any, Final
+from typing import Any, Final, overload
 
 from frequenz.channels import Broadcast, Receiver
 from frequenz.channels.experimental import WithPrevious
@@ -98,13 +98,31 @@ class ConfigManager:
         """Return a string representation of this config manager."""
         return f"{type(self).__name__}[{self.name}]"
 
+    @overload
+    async def new_receiver(
+        self,
+        *,
+        wait_for_first: bool = True,
+        skip_unchanged: bool = True,
+    ) -> Receiver[Mapping[str, Any]]: ...
+
+    @overload
+    async def new_receiver(
+        self,
+        *,
+        wait_for_first: bool = True,
+        skip_unchanged: bool = True,
+        key: str,
+    ) -> Receiver[Mapping[str, Any] | None]: ...
+
     # The noqa DOC502 is needed because we raise TimeoutError indirectly.
     async def new_receiver(  # pylint: disable=too-many-arguments # noqa: DOC502
         self,
         *,
         wait_for_first: bool = False,
         skip_unchanged: bool = True,
-    ) -> Receiver[Mapping[str, Any] | None]:
+        key: str | None = None,
+    ) -> Receiver[Mapping[str, Any]] | Receiver[Mapping[str, Any] | None]:
         """Create a new receiver for the configuration.
 
         This method has a lot of features and functionalities to make it easier to
@@ -120,6 +138,14 @@ class ConfigManager:
         compared to the last one received will be ignored and not sent to the receiver.
         The comparison is done using the *raw* `dict` to determine if the configuration
         has changed.
+
+        ### Filtering
+
+        The configuration can be filtered by a `key`.
+
+        If the `key` is `None`, the receiver will receive the full configuration,
+        otherwise only the part of the configuration under the specified key is
+        received, or `None` if the key is not found.
 
         ### Waiting for the first configuration
 
@@ -146,6 +172,8 @@ class ConfigManager:
                 [`consume()`][frequenz.channels.Receiver.consume] on the receiver.
             skip_unchanged: Whether to skip sending the configuration if it hasn't
                 changed compared to the last one received.
+            key: The key to filter the configuration. If `None`, the full configuration
+                will be received.
 
         Returns:
             The receiver for the configuration.
@@ -154,25 +182,65 @@ class ConfigManager:
             asyncio.TimeoutError: If `wait_for_first` is `True` and the first
                 configuration can't be received in time.
         """
-        recv_name = f"{self}_receiver"
+        recv_name = f"{self}_receiver" if key is None else f"{self}_receiver_{key}"
         receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
 
         if skip_unchanged:
-            receiver = receiver.filter(WithPrevious(not_equal_with_logging))
+            receiver = receiver.filter(WithPrevious(_NotEqualWithLogging(key)))
 
         if wait_for_first:
             async with asyncio.timeout(self.wait_for_first_timeout.total_seconds()):
                 await receiver.ready()
 
-        return receiver
+        if key is None:
+            return receiver
+
+        return receiver.map(lambda config: config.get(key))
 
 
-def not_equal_with_logging(
-    old_config: Mapping[str, Any], new_config: Mapping[str, Any]
-) -> bool:
-    """Return whether the two mappings are not equal, logging if they are the same."""
-    if old_config == new_config:
-        _logger.info("Configuration has not changed, skipping update")
-        _logger.debug("Old configuration being kept: %r", old_config)
-        return False
-    return True
+class _NotEqualWithLogging:
+    """A predicate that returns whether the two mappings are not equal.
+
+    If the mappings are equal, a logging message will be emitted indicating that the
+    configuration has not changed for the specified key.
+    """
+
+    def __init__(self, key: str | None = None) -> None:
+        """Initialize this instance.
+
+        Args:
+            key: The key to use in the logging message.
+        """
+        self._key = key
+
+    def __call__(
+        self, old_config: Mapping[str, Any] | None, new_config: Mapping[str, Any] | None
+    ) -> bool:
+        """Return whether the two mappings are not equal, logging if they are the same."""
+        if self._key is None:
+            has_changed = new_config != old_config
+        else:
+            match (new_config, old_config):
+                case (None, None):
+                    has_changed = False
+                case (None, Mapping()):
+                    has_changed = old_config.get(self._key) is not None
+                case (Mapping(), None):
+                    has_changed = new_config.get(self._key) is not None
+                case (Mapping(), Mapping()):
+                    has_changed = new_config.get(self._key) != old_config.get(self._key)
+                case unexpected:
+                    # We can't use `assert_never` here because `mypy` is having trouble
+                    # narrowing the types of a tuple. See for example:
+                    # https://github.com/python/mypy/issues/16722
+                    # https://github.com/python/mypy/issues/16650
+                    # https://github.com/python/mypy/issues/14833
+                    # assert_never(unexpected)
+                    assert False, f"Unexpected match: {unexpected}"
+
+        if not has_changed:
+            key_str = f" for key '{self._key}'" if self._key else ""
+            _logger.info("Configuration%s has not changed, skipping update", key_str)
+            _logger.debug("Old configuration%s being kept: %r", key_str, old_config)
+
+        return has_changed
