@@ -14,4 +14,4 @@
 
 ## Bug Fixes
 
-<!-- Here goes notable bug fixes that are worth a special mention or explanation -->
+- Fix a bug in the resampler that could end up with an *IndexError: list index out of range* exception when a new resampler was added while awaiting the existing resampler to finish resampling.

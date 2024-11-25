@@ -495,6 +495,11 @@ class Resampler:
                     self._config.resampling_period,
                 )
 
+            # We need to make a copy here because we need to match the results to the
+            # current resamplers, and since we await here, new resamplers could be added
+            # or removed from the dict while we awaiting the resampling, which would
+            # cause the results to be out of sync.
+            resampler_sources = list(self._resamplers)
             results = await asyncio.gather(
                 *[r.resample(self._window_end) for r in self._resamplers.values()],
                 return_exceptions=True,
@@ -508,7 +513,7 @@ class Resampler:
                 dict[Source, Exception | asyncio.CancelledError],
                 {
                     source: results[i]
-                    for i, source in enumerate(self._resamplers)
+                    for i, source in enumerate(resampler_sources)
                     # CancelledError inherits from BaseException, but we don't want
                     # to catch *all* BaseExceptions here.
                     if isinstance(results[i], (Exception, asyncio.CancelledError))
