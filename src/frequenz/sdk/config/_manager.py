@@ -22,7 +22,7 @@ _logger = logging.getLogger(__name__)
 class InvalidValueForKeyError(ValueError):
     """An error indicating that the value under the specified key is invalid."""
 
-    def __init__(self, msg: str, *, key: str, value: Any) -> None:
+    def __init__(self, msg: str, *, key: Sequence[str], value: Any) -> None:
         """Initialize this error.
 
         Args:
@@ -126,7 +126,12 @@ class ConfigManager(BackgroundService):
 
     def new_receiver(
         self,
-        key: str,
+        # This is tricky, because a str is also a Sequence[str], if we would use only
+        # Sequence[str], then a regular string would also be accepted and taken as
+        # a sequence, like "key" -> ["k", "e", "y"]. We should never remove the str from
+        # the allowed types without changing Sequence[str] to something more specific,
+        # like list[str] or tuple[str] (but both have their own problems).
+        key: str | Sequence[str],
         /,
         *,
         skip_unchanged: bool = True,
@@ -143,6 +148,10 @@ class ConfigManager(BackgroundService):
 
         Only the configuration under the `key` will be received by the receiver. If the
         `key` is not found in the configuration, the receiver will receive `None`.
+
+        If the key is a sequence of strings, it will be treated as a nested key and the
+        receiver will receive the configuration under the nested key. For example
+        `["key", "subkey"]` will get only `config["key"]["subkey"]`.
 
         The value under `key` must be another mapping, otherwise an error
         will be logged and a [`frequenz.sdk.config.InvalidValueForKeyError`][] instance
@@ -164,14 +173,16 @@ class ConfigManager(BackgroundService):
             ```
 
         Args:
-            key: The configuration key to be read by the receiver.
+            key: The configuration key to be read by the receiver. If a sequence of
+                strings is used, it is used as a sub-key.
             skip_unchanged: Whether to skip sending the configuration if it hasn't
                 changed compared to the last one received.
 
         Returns:
             The receiver for the configuration.
         """
-        receiver = self.config_channel.new_receiver(name=f"{self}:{key}", limit=1)
+        recv_name = key if isinstance(key, str) else ":".join(key)
+        receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
 
         def _get_key_or_error(
             config: Mapping[str, Any]
@@ -184,32 +195,54 @@ class ConfigManager(BackgroundService):
         key_receiver = receiver.map(_get_key_or_error)
 
         if skip_unchanged:
-            return key_receiver.filter(WithPrevious(_not_equal_with_logging))
+            # For some reason the type argument for WithPrevious is not inferred
+            # correctly, so we need to specify it explicitly.
+            return key_receiver.filter(
+                WithPrevious[Mapping[str, Any] | InvalidValueForKeyError | None](
+                    lambda old, new: _not_equal_with_logging(
+                        key=key, old_value=old, new_value=new
+                    )
+                )
+            )
 
         return key_receiver
 
 
 def _not_equal_with_logging(
+    *,
+    key: str | Sequence[str],
     old_value: Mapping[str, Any] | InvalidValueForKeyError | None,
     new_value: Mapping[str, Any] | InvalidValueForKeyError | None,
 ) -> bool:
     """Return whether the two mappings are not equal, logging if they are the same."""
     if old_value == new_value:
-        _logger.info("Configuration has not changed, skipping update")
+        _logger.info("Configuration has not changed for key %r, skipping update.", key)
         return False
 
     if isinstance(new_value, InvalidValueForKeyError) and not isinstance(
         old_value, InvalidValueForKeyError
     ):
+        subkey_str = ""
+        if key != new_value.key:
+            subkey_str = f"When looking for sub-key {key!r}: "
         _logger.error(
-            "Configuration for key %r has an invalid value: %r",
+            "%sConfiguration for key %r has an invalid value: %r",
+            subkey_str,
             new_value.key,
             new_value.value,
         )
     return True
 
 
-def _get_key(config: Mapping[str, Any], key: str) -> Mapping[str, Any] | None:
+def _get_key(
+    config: Mapping[str, Any],
+    # This is tricky, because a str is also a Sequence[str], if we would use only
+    # Sequence[str], then a regular string would also be accepted and taken as
+    # a sequence, like "key" -> ["k", "e", "y"]. We should never remove the str from
+    # the allowed types without changing Sequence[str] to something more specific,
+    # like list[str] or tuple[str].
+    key: str | Sequence[str],
+) -> Mapping[str, Any] | None:
     """Get the value from the configuration under the specified key.
 
     Args:
@@ -222,14 +255,25 @@ def _get_key(config: Mapping[str, Any], key: str) -> Mapping[str, Any] | None:
     Raises:
         InvalidValueForKeyError: If the value under the key is not a mapping.
     """
-    match config.get(key):
-        case None:
+    # We first normalize to a Sequence[str] to make it easier to work with.
+    if isinstance(key, str):
+        key = (key,)
+    value = config
+    current_path = []
+    for subkey in key:
+        current_path.append(subkey)
+        if value is None:
             return None
-        case Mapping() as value:
-            return value
-        case invalid_value:
-            raise InvalidValueForKeyError(
-                f"Value for key {key!r} is not a mapping: {invalid_value!r}",
-                key=key,
-                value=invalid_value,
-            )
+        match value.get(subkey):
+            case None:
+                return None
+            case Mapping() as new_value:
+                value = new_value
+            case invalid_value:
+                raise InvalidValueForKeyError(
+                    f"Value for key {current_path!r} is not a mapping: {invalid_value!r}",
+                    key=current_path,
+                    value=invalid_value,
+                )
+        value = new_value
+    return value
