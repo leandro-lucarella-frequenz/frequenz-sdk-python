@@ -129,7 +129,7 @@ class ConfigManager:
         *,
         wait_for_first: bool = True,
         skip_unchanged: bool = True,
-        key: str,
+        key: str | Sequence[str],
     ) -> Receiver[Mapping[str, Any] | None]: ...
 
     @overload
@@ -138,7 +138,7 @@ class ConfigManager:
         *,
         wait_for_first: bool = True,
         skip_unchanged: bool = True,
-        key: str,
+        key: str | Sequence[str],
         schema: type[DataclassT],
         base_schema: type[Schema] | None,
         **marshmallow_load_kwargs: Any,
@@ -150,7 +150,12 @@ class ConfigManager:
         *,
         wait_for_first: bool = False,
         skip_unchanged: bool = True,
-        key: str | None = None,
+        # This is tricky, because a str is also a Sequence[str], if we would use only
+        # Sequence[str], then a regular string would also be accepted and taken as
+        # a sequence, like "key" -> ["k", "e", "y"]. We should never remove the str from
+        # the allowed types without changing Sequence[str] to something more specific,
+        # like list[str] or tuple[str].
+        key: str | Sequence[str] | None = None,
         schema: type[DataclassT] | None = None,
         base_schema: type[Schema] | None = None,
         **marshmallow_load_kwargs: Any,
@@ -183,6 +188,10 @@ class ConfigManager:
         If the `key` is `None`, the receiver will receive the full configuration,
         otherwise only the part of the configuration under the specified key is
         received, or `None` if the key is not found.
+
+        If the key is a sequence of strings, it will be treated as a nested key and the
+        receiver will receive the configuration under the nested key. For example
+        `["key", "subkey"]` will get only `config["key"]["subkey"]`.
 
         ### Schema validation
 
@@ -267,7 +276,7 @@ class ConfigManager:
             config: Mapping[str, Any],
             schema: type[DataclassT],
             *,
-            key: str,
+            key: str | Sequence[str],
             base_schema: type[Schema] | None = None,
             **marshmallow_load_kwargs: Any,
         ) -> DataclassT | None | _InvalidConfig: ...
@@ -276,13 +285,13 @@ class ConfigManager:
             config: Mapping[str, Any],
             schema: type[DataclassT],
             *,
-            key: str | None = None,
+            key: str | Sequence[str] | None = None,
             base_schema: type[Schema] | None = None,
             **marshmallow_load_kwargs: Any,
         ) -> DataclassT | None | _InvalidConfig:
             """Try to load a configuration and log any validation errors."""
             if key is not None:
-                maybe_config = config.get(key, None)
+                maybe_config = _get_key(config, key)
                 if maybe_config is None:
                     _logger.debug(
                         "Configuration key %s not found, sending None: config=%r",
@@ -347,7 +356,7 @@ class ConfigManager:
                     )
                 ).filter(_is_valid)
             case (str(), None):
-                return receiver.map(lambda config: config.get(key))
+                return receiver.map(lambda config: _get_key(config, key))
             case (str(), type()):
                 return receiver.map(
                     lambda config: _load_config_with_logging(
@@ -372,7 +381,7 @@ class _NotEqualWithLogging:
     configuration has not changed for the specified key.
     """
 
-    def __init__(self, key: str | None = None) -> None:
+    def __init__(self, key: str | Sequence[str] | None) -> None:
         """Initialize this instance.
 
         Args:
@@ -384,18 +393,19 @@ class _NotEqualWithLogging:
         self, old_config: Mapping[str, Any] | None, new_config: Mapping[str, Any] | None
     ) -> bool:
         """Return whether the two mappings are not equal, logging if they are the same."""
-        if self._key is None:
+        key = self._key
+        if key is None:
             has_changed = new_config != old_config
         else:
             match (new_config, old_config):
                 case (None, None):
                     has_changed = False
                 case (None, Mapping()):
-                    has_changed = old_config.get(self._key) is not None
+                    has_changed = _get_key(old_config, key) is not None
                 case (Mapping(), None):
-                    has_changed = new_config.get(self._key) is not None
+                    has_changed = _get_key(new_config, key) is not None
                 case (Mapping(), Mapping()):
-                    has_changed = new_config.get(self._key) != old_config.get(self._key)
+                    has_changed = _get_key(new_config, key) != _get_key(old_config, key)
                 case unexpected:
                     # We can't use `assert_never` here because `mypy` is having trouble
                     # narrowing the types of a tuple. See for example:
@@ -406,11 +416,54 @@ class _NotEqualWithLogging:
                     assert False, f"Unexpected match: {unexpected}"
 
         if not has_changed:
-            key_str = f" for key '{self._key}'" if self._key else ""
+            key_str = f" for key '{key}'" if key else ""
             _logger.info("Configuration%s has not changed, skipping update", key_str)
             _logger.debug("Old configuration%s being kept: %r", key_str, old_config)
 
         return has_changed
+
+
+def _get_key(
+    config: Mapping[str, Any],
+    # This is tricky, because a str is also a Sequence[str], if we would use only
+    # Sequence[str], then a regular string would also be accepted and taken as
+    # a sequence, like "key" -> ["k", "e", "y"]. We should never remove the str from
+    # the allowed types without changing Sequence[str] to something more specific,
+    # like list[str] or tuple[str].
+    key: str | Sequence[str] | None,
+) -> Mapping[str, Any] | None:
+    """Get the value from the configuration under the specified key."""
+    if key is None:
+        return config
+    # Order here is very important too, str() needs to come first, otherwise a regular
+    # will also match the Sequence[str] case.
+    # TODO: write tests to validate this works correctly.
+    if isinstance(key, str):
+        key = (key,)
+    value = config
+    current_path = []
+    for subkey in key:
+        current_path.append(subkey)
+        if value is None:
+            return None
+        match value.get(subkey):
+            case None:
+                return None
+            case Mapping() as new_value:
+                value = new_value
+            case _:
+                subkey_str = ""
+                if len(key) > 1:
+                    subkey_str = f" when looking for sub-key {key!r}"
+                _logger.error(
+                    "Found key %r%s but it's not a mapping, returning None: config=%r",
+                    current_path[0] if len(current_path) == 1 else current_path,
+                    subkey_str,
+                    config,
+                )
+                return None
+        value = new_value
+    return value
 
 
 class _InvalidConfig:
