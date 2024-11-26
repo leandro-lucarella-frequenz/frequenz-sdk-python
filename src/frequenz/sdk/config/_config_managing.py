@@ -130,6 +130,15 @@ class ConfigManagingActor(Actor):
             except ValueError as err:
                 _logger.error("%s: Can't read config file, err: %s", self, err)
                 error_count += 1
+            except OSError as err:
+                # It is ok for config file to don't exist.
+                _logger.error(
+                    "%s: Error reading config file %s (%s). Ignoring it.",
+                    self,
+                    err,
+                    config_path,
+                )
+                error_count += 1
 
         if error_count == len(self._config_paths):
             raise ValueError(f"{self}: Can't read any of the config files")
