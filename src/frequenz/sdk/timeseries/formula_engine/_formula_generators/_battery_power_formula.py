@@ -24,7 +24,7 @@ _logger = logging.getLogger(__name__)
 
 
 class BatteryPowerFormula(FormulaGenerator[Power]):
-    """Creates a formula engine from the component graph for calculating grid power."""
+    """Creates a formula engine from the component graph for calculating battery power."""
 
     def generate(
         self,
