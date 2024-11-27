@@ -14,7 +14,6 @@ from collections import deque
 from collections.abc import AsyncIterator, Callable, Coroutine, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from typing import cast
 
 from frequenz.channels.timer import Timer, TriggerAllMissed, _to_microseconds
 from frequenz.quantities import Quantity
@@ -506,19 +505,13 @@ class Resampler:
             )
 
             self._window_end += self._config.resampling_period
-            # We need the cast because mypy is not able to infer that this can only
-            # contain Exception | CancelledError because of the condition in the list
-            # comprehension below.
-            exceptions = cast(
-                dict[Source, Exception | asyncio.CancelledError],
-                {
-                    source: result
-                    for source, result in zip(resampler_sources, results)
-                    # CancelledError inherits from BaseException, but we don't want
-                    # to catch *all* BaseExceptions here.
-                    if isinstance(result, (Exception, asyncio.CancelledError))
-                },
-            )
+            exceptions = {
+                source: result
+                for source, result in zip(resampler_sources, results)
+                # CancelledError inherits from BaseException, but we don't want
+                # to catch *all* BaseExceptions here.
+                if isinstance(result, (Exception, asyncio.CancelledError))
+            }
             if exceptions:
                 raise ResamplingError(exceptions)
             if one_shot:
