@@ -14,7 +14,6 @@ from collections import deque
 from collections.abc import AsyncIterator, Callable, Coroutine, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from typing import cast
 
 from frequenz.channels.timer import Timer, TriggerAllMissed, _to_microseconds
 from frequenz.quantities import Quantity
@@ -495,25 +494,24 @@ class Resampler:
                     self._config.resampling_period,
                 )
 
+            # We need to make a copy here because we need to match the results to the
+            # current resamplers, and since we await here, new resamplers could be added
+            # or removed from the dict while we awaiting the resampling, which would
+            # cause the results to be out of sync.
+            resampler_sources = list(self._resamplers)
             results = await asyncio.gather(
                 *[r.resample(self._window_end) for r in self._resamplers.values()],
                 return_exceptions=True,
             )
 
             self._window_end += self._config.resampling_period
-            # We need the cast because mypy is not able to infer that this can only
-            # contain Exception | CancelledError because of the condition in the list
-            # comprehension below.
-            exceptions = cast(
-                dict[Source, Exception | asyncio.CancelledError],
-                {
-                    source: results[i]
-                    for i, source in enumerate(self._resamplers)
-                    # CancelledError inherits from BaseException, but we don't want
-                    # to catch *all* BaseExceptions here.
-                    if isinstance(results[i], (Exception, asyncio.CancelledError))
-                },
-            )
+            exceptions = {
+                source: result
+                for source, result in zip(resampler_sources, results)
+                # CancelledError inherits from BaseException, but we don't want
+                # to catch *all* BaseExceptions here.
+                if isinstance(result, (Exception, asyncio.CancelledError))
+            }
             if exceptions:
                 raise ResamplingError(exceptions)
             if one_shot:
