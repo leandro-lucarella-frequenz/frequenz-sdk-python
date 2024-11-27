@@ -512,11 +512,11 @@ class Resampler:
             exceptions = cast(
                 dict[Source, Exception | asyncio.CancelledError],
                 {
-                    source: results[i]
-                    for i, source in enumerate(resampler_sources)
+                    source: result
+                    for source, result in zip(resampler_sources, results)
                     # CancelledError inherits from BaseException, but we don't want
                     # to catch *all* BaseExceptions here.
-                    if isinstance(results[i], (Exception, asyncio.CancelledError))
+                    if isinstance(result, (Exception, asyncio.CancelledError))
                 },
             )
             if exceptions:
