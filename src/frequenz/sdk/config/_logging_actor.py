@@ -107,13 +107,15 @@ class LoggingConfigUpdatingActor(Actor):
         from typing import Any
 
         from frequenz.channels import Broadcast
-        from frequenz.sdk.config import LoggingConfigUpdatingActor, ConfigManager
+        from frequenz.sdk.config import LoggingConfigUpdatingActor, ConfigManagingActor
         from frequenz.sdk.actor import run as run_actors
 
         async def run() -> None:
             config_channel = Broadcast[Mapping[str, Any]](name="config", resend_latest=True)
             actors = [
-                ConfigManager(config_paths=["config.toml"], output=config_channel.new_sender()),
+                ConfigManagingActor(
+                    config_paths=["config.toml"], output=config_channel.new_sender()
+                ),
                 LoggingConfigUpdatingActor(
                     config_recv=config_channel.new_receiver(limit=1)).map(
                         lambda app_config: app_config.get("logging", {}
