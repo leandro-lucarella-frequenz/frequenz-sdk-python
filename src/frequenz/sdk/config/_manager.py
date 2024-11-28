@@ -8,12 +8,14 @@ import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
-from typing import Any, Final, overload
+from typing import Any, Final, TypeGuard, overload
 
 from frequenz.channels import Broadcast, Receiver
 from frequenz.channels.experimental import WithPrevious
+from marshmallow import Schema, ValidationError
 
 from ._managing_actor import ConfigManagingActor
+from ._util import DataclassT, load_config
 
 _logger = logging.getLogger(__name__)
 
@@ -107,6 +109,21 @@ class ConfigManager:
     ) -> Receiver[Mapping[str, Any]]: ...
 
     @overload
+    async def new_receiver(  # pylint: disable=too-many-arguments
+        self,
+        *,
+        wait_for_first: bool = True,
+        skip_unchanged: bool = True,
+        # We need to specify the key here because we have kwargs, so if it is not
+        # present is not considered None as the only possible value, as any value can be
+        # accepted as part of the kwargs.
+        key: None = None,
+        schema: type[DataclassT],
+        base_schema: type[Schema] | None = None,
+        **marshmallow_load_kwargs: Any,
+    ) -> Receiver[DataclassT]: ...
+
+    @overload
     async def new_receiver(
         self,
         *,
@@ -115,6 +132,18 @@ class ConfigManager:
         key: str,
     ) -> Receiver[Mapping[str, Any] | None]: ...
 
+    @overload
+    async def new_receiver(  # pylint: disable=too-many-arguments
+        self,
+        *,
+        wait_for_first: bool = True,
+        skip_unchanged: bool = True,
+        key: str,
+        schema: type[DataclassT],
+        base_schema: type[Schema] | None,
+        **marshmallow_load_kwargs: Any,
+    ) -> Receiver[DataclassT | None]: ...
+
     # The noqa DOC502 is needed because we raise TimeoutError indirectly.
     async def new_receiver(  # pylint: disable=too-many-arguments # noqa: DOC502
         self,
@@ -122,7 +151,15 @@ class ConfigManager:
         wait_for_first: bool = False,
         skip_unchanged: bool = True,
         key: str | None = None,
-    ) -> Receiver[Mapping[str, Any]] | Receiver[Mapping[str, Any] | None]:
+        schema: type[DataclassT] | None = None,
+        base_schema: type[Schema] | None = None,
+        **marshmallow_load_kwargs: Any,
+    ) -> (
+        Receiver[Mapping[str, Any]]
+        | Receiver[Mapping[str, Any] | None]
+        | Receiver[DataclassT]
+        | Receiver[DataclassT | None]
+    ):
         """Create a new receiver for the configuration.
 
         This method has a lot of features and functionalities to make it easier to
@@ -146,6 +183,26 @@ class ConfigManager:
         If the `key` is `None`, the receiver will receive the full configuration,
         otherwise only the part of the configuration under the specified key is
         received, or `None` if the key is not found.
+
+        ### Schema validation
+
+        The configuration is received as a dictionary unless a `schema` is provided. In
+        this case, the configuration will be validated against the schema and received
+        as an instance of the configuration class.
+
+        The configuration `schema` class is expected to be
+        a [`dataclasses.dataclass`][], which is used to create
+        a [`marshmallow.Schema`][] schema to validate the configuration dictionary.
+
+        To customize the schema derived from the configuration dataclass, you can
+        use [`marshmallow_dataclass.dataclass`][] to specify extra metadata.
+
+        Configurations that don't pass the validation will be ignored and not sent to
+        the receiver, but an error will be logged. Errors other than `ValidationError`
+        will not be handled and will be raised.
+
+        Additional arguments can be passed to [`marshmallow.Schema.load`][] using keyword
+        arguments.
 
         ### Waiting for the first configuration
 
@@ -174,6 +231,13 @@ class ConfigManager:
                 changed compared to the last one received.
             key: The key to filter the configuration. If `None`, the full configuration
                 will be received.
+            schema: The type of the configuration. If provided, the configuration
+                will be validated against this type.
+            base_schema: An optional class to be used as a base schema for the
+                configuration class. This allow using custom fields for example. Will be
+                passed to [`marshmallow_dataclass.class_schema`][].
+            **marshmallow_load_kwargs: Additional arguments to be passed to
+                [`marshmallow.Schema.load`][].
 
         Returns:
             The receiver for the configuration.
@@ -182,6 +246,79 @@ class ConfigManager:
             asyncio.TimeoutError: If `wait_for_first` is `True` and the first
                 configuration can't be received in time.
         """
+        # All supporting generic function (using DataclassT) need to be nested
+        # here. For some reasons mypy has trouble if these functions are
+        # global, it consider the DataclassT used by this method and the global
+        # functions to be different, leading to very hard to find typing
+        # errors.
+
+        @overload
+        def _load_config_with_logging(
+            config: Mapping[str, Any],
+            schema: type[DataclassT],
+            *,
+            key: None = None,
+            base_schema: type[Schema] | None = None,
+            **marshmallow_load_kwargs: Any,
+        ) -> DataclassT | _InvalidConfig: ...
+
+        @overload
+        def _load_config_with_logging(
+            config: Mapping[str, Any],
+            schema: type[DataclassT],
+            *,
+            key: str,
+            base_schema: type[Schema] | None = None,
+            **marshmallow_load_kwargs: Any,
+        ) -> DataclassT | None | _InvalidConfig: ...
+
+        def _load_config_with_logging(
+            config: Mapping[str, Any],
+            schema: type[DataclassT],
+            *,
+            key: str | None = None,
+            base_schema: type[Schema] | None = None,
+            **marshmallow_load_kwargs: Any,
+        ) -> DataclassT | None | _InvalidConfig:
+            """Try to load a configuration and log any validation errors."""
+            if key is not None:
+                maybe_config = config.get(key, None)
+                if maybe_config is None:
+                    _logger.debug(
+                        "Configuration key %s not found, sending None: config=%r",
+                        key,
+                        config,
+                    )
+                    return None
+                config = maybe_config
+
+            try:
+                return load_config(
+                    schema, config, base_schema=base_schema, **marshmallow_load_kwargs
+                )
+            except ValidationError as err:
+                key_str = ""
+                if key:
+                    key_str = f" for key '{key}'"
+                _logger.error(
+                    "The configuration%s is invalid, the configuration update will be skipped: %s",
+                    key_str,
+                    err,
+                )
+                return _INVALID_CONFIG
+
+        def _is_valid_or_none(
+            config: DataclassT | _InvalidConfig | None,
+        ) -> TypeGuard[DataclassT | None]:
+            """Return whether the configuration is valid or `None`."""
+            return config is not _INVALID_CONFIG
+
+        def _is_valid(
+            config: DataclassT | _InvalidConfig,
+        ) -> TypeGuard[DataclassT]:
+            """Return whether the configuration is valid and not `None`."""
+            return config is not _INVALID_CONFIG
+
         recv_name = f"{self}_receiver" if key is None else f"{self}_receiver_{key}"
         receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
 
@@ -192,10 +329,40 @@ class ConfigManager:
             async with asyncio.timeout(self.wait_for_first_timeout.total_seconds()):
                 await receiver.ready()
 
-        if key is None:
-            return receiver
-
-        return receiver.map(lambda config: config.get(key))
+        match (key, schema):
+            case (None, None):
+                return receiver
+            case (None, type()):
+                return receiver.map(
+                    lambda config: _load_config_with_logging(
+                        config,
+                        schema,
+                        # we need to pass it explicitly because of the
+                        # variadic keyword arguments, otherwise key
+                        # could be included in marshmallow_load_kwargs
+                        # with a value different than None.
+                        key=None,
+                        base_schema=base_schema,
+                        **marshmallow_load_kwargs,
+                    )
+                ).filter(_is_valid)
+            case (str(), None):
+                return receiver.map(lambda config: config.get(key))
+            case (str(), type()):
+                return receiver.map(
+                    lambda config: _load_config_with_logging(
+                        config,
+                        schema,
+                        key=key,
+                        base_schema=base_schema,
+                        **marshmallow_load_kwargs,
+                    )
+                ).filter(_is_valid_or_none)
+            case unexpected:
+                # We can't use `assert_never` here because `mypy` is
+                # having trouble
+                # narrowing the types of a tuple.
+                assert False, f"Unexpected match: {unexpected}"
 
 
 class _NotEqualWithLogging:
@@ -244,3 +411,11 @@ class _NotEqualWithLogging:
             _logger.debug("Old configuration%s being kept: %r", key_str, old_config)
 
         return has_changed
+
+
+class _InvalidConfig:
+    """A sentinel to represent an invalid configuration."""
+
+
+_INVALID_CONFIG = _InvalidConfig()
+"""A sentinel singleton instance to represent an invalid configuration."""
