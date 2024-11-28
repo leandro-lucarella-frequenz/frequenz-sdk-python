@@ -107,14 +107,11 @@ class ConfigManagingActor(Actor):
         self._force_polling: bool = force_polling
         self._polling_interval: timedelta = polling_interval
 
-    def _read_config(self) -> abc.Mapping[str, Any]:
+    def _read_config(self) -> abc.Mapping[str, Any] | None:
         """Read the contents of the configuration file.
 
         Returns:
             A dictionary containing configuration variables.
-
-        Raises:
-            ValueError: If config file cannot be read.
         """
         error_count = 0
         config: dict[str, Any] = {}
@@ -138,14 +135,18 @@ class ConfigManagingActor(Actor):
                 error_count += 1
 
         if error_count == len(self._config_paths):
-            raise ValueError(f"{self}: Can't read any of the config files")
+            _logger.error(
+                "%s: Can't read any of the config files, ignoring config update.", self
+            )
+            return None
 
         return config
 
     async def send_config(self) -> None:
         """Send the configuration to the output sender."""
         config = self._read_config()
-        await self._output.send(config)
+        if config is not None:
+            await self._output.send(config)
 
     async def _run(self) -> None:
         """Monitor for and send configuration file updates.
