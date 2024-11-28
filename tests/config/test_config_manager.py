@@ -8,9 +8,12 @@ from collections import defaultdict
 from collections.abc import Mapping, MutableMapping
 from dataclasses import dataclass
 from typing import Any
+from unittest.mock import MagicMock
 
 import pytest
 from frequenz.channels import Broadcast
+from frequenz.channels.file_watcher import Event, EventType
+from pytest_mock import MockerFixture
 
 from frequenz.sdk.config import ConfigManagingActor
 from frequenz.sdk.config._config_managing import _recursive_update
@@ -264,6 +267,96 @@ class TestActorConfigManager:
                 "var_off": "on",
                 "dict_str_int": {"a": 1, "b": 2, "c": 4},
             }
+
+    async def test_actor_works_if_not_all_config_files_exist(
+        self, config_file: pathlib.Path
+    ) -> None:
+        """Test ConfigManagingActor works if not all config files exist."""
+        config_channel: Broadcast[Mapping[str, Any]] = Broadcast(
+            name="Config Channel", resend_latest=True
+        )
+        config_receiver = config_channel.new_receiver()
+
+        # This file does not exist
+        config_file2 = config_file.parent / "config2.toml"
+
+        async with ConfigManagingActor(
+            [config_file, config_file2],
+            config_channel.new_sender(),
+            force_polling=False,
+        ):
+            config = await config_receiver.receive()
+            assert config is not None
+            assert config.get("var2") is None
+
+            number = 5
+            config_file.write_text(create_content(number=number))
+
+            config = await config_receiver.receive()
+            assert config is not None
+            assert config.get("var2") == str(number)
+
+            # Create second config file that overrides the value from the first one
+            number = 42
+            config_file2.write_text(create_content(number=number))
+
+            config = await config_receiver.receive()
+            assert config is not None
+            assert config.get("var2") == str(number)
+
+    async def test_actor_does_not_crash_if_file_is_deleted(
+        self, config_file: pathlib.Path, mocker: MockerFixture
+    ) -> None:
+        """Test ConfigManagingActor does not crash if a file is deleted."""
+        config_channel: Broadcast[Mapping[str, Any]] = Broadcast(
+            name="Config Channel", resend_latest=True
+        )
+        config_receiver = config_channel.new_receiver()
+
+        number = 5
+        config_file2 = config_file.parent / "config2.toml"
+        config_file2.write_text(create_content(number=number))
+
+        # Not config file but existing in the same directory
+        any_file = config_file.parent / "any_file.txt"
+        any_file.write_text("content")
+
+        file_watcher_mock = MagicMock()
+        file_watcher_mock.__anext__.side_effect = [
+            Event(EventType.DELETE, any_file),
+            Event(EventType.MODIFY, config_file2),
+            Event(EventType.MODIFY, config_file),
+        ]
+
+        mocker.patch(
+            "frequenz.channels.file_watcher.FileWatcher", return_value=file_watcher_mock
+        )
+
+        async with ConfigManagingActor(
+            [config_file, config_file2],
+            config_channel.new_sender(),
+            force_polling=False,
+        ) as actor:
+            send_config_spy = mocker.spy(actor, "send_config")
+
+            config = await config_receiver.receive()
+            assert config is not None
+            assert config.get("var2") == str(number)
+            send_config_spy.assert_called_once()
+            send_config_spy.reset_mock()
+
+            # Remove file and send DELETE events
+            any_file.unlink()
+            config_file2.unlink()
+            number = 101
+            config_file.write_text(create_content(number=number))
+
+            config = await config_receiver.receive()
+            assert config is not None
+            assert config.get("var2") == str(number)
+            # Config should be updated only once on MODIFY event
+            # DELETE events are ignored
+            send_config_spy.assert_called_once()
 
 
 @dataclass(frozen=True, kw_only=True)

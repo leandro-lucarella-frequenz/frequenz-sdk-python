@@ -74,7 +74,6 @@ class ConfigManagingActor(Actor):
         self,
         config_paths: abc.Sequence[pathlib.Path | str],
         output: Sender[abc.Mapping[str, Any]],
-        event_types: abc.Set[EventType] = frozenset(EventType),
         *,
         name: str | None = None,
         force_polling: bool = True,
@@ -89,7 +88,6 @@ class ConfigManagingActor(Actor):
                 the previous paths. Dict keys will be merged recursively, but other
                 objects (like lists) will be replaced by the value in the last path.
             output: The sender to send the configuration to.
-            event_types: The set of event types to monitor.
             name: The name of the actor. If `None`, `str(id(self))` will
                 be used. This is used mostly for debugging purposes.
             force_polling: Whether to force file polling to check for changes.
@@ -106,18 +104,14 @@ class ConfigManagingActor(Actor):
             for config_path in config_paths
         ]
         self._output: Sender[abc.Mapping[str, Any]] = output
-        self._event_types: abc.Set[EventType] = event_types
         self._force_polling: bool = force_polling
         self._polling_interval: timedelta = polling_interval
 
-    def _read_config(self) -> abc.Mapping[str, Any]:
+    def _read_config(self) -> abc.Mapping[str, Any] | None:
         """Read the contents of the configuration file.
 
         Returns:
             A dictionary containing configuration variables.
-
-        Raises:
-            ValueError: If config file cannot be read.
         """
         error_count = 0
         config: dict[str, Any] = {}
@@ -130,16 +124,29 @@ class ConfigManagingActor(Actor):
             except ValueError as err:
                 _logger.error("%s: Can't read config file, err: %s", self, err)
                 error_count += 1
+            except OSError as err:
+                # It is ok for config file to don't exist.
+                _logger.error(
+                    "%s: Error reading config file %s (%s). Ignoring it.",
+                    self,
+                    err,
+                    config_path,
+                )
+                error_count += 1
 
         if error_count == len(self._config_paths):
-            raise ValueError(f"{self}: Can't read any of the config files")
+            _logger.error(
+                "%s: Can't read any of the config files, ignoring config update.", self
+            )
+            return None
 
         return config
 
     async def send_config(self) -> None:
         """Send the configuration to the output sender."""
         config = self._read_config()
-        await self._output.send(config)
+        if config is not None:
+            await self._output.send(config)
 
     async def _run(self) -> None:
         """Monitor for and send configuration file updates.
@@ -157,17 +164,32 @@ class ConfigManagingActor(Actor):
         # or it is deleted and recreated again.
         file_watcher = FileWatcher(
             paths=list(parent_paths),
-            event_types=self._event_types,
+            event_types={EventType.CREATE, EventType.MODIFY},
             force_polling=self._force_polling,
             polling_interval=self._polling_interval,
         )
 
         try:
             async for event in file_watcher:
+                if not event.path.exists():
+                    _logger.error(
+                        "%s: Received event %s, but the watched path %s doesn't exist.",
+                        self,
+                        event,
+                        event.path,
+                    )
+                    continue
                 # Since we are watching the whole parent directories, we need to make
                 # sure we only react to events related to the configuration files we
                 # are interested in.
-                if not any(event.path.samefile(p) for p in self._config_paths):
+                #
+                # pathlib.Path.samefile raises error if any path doesn't exist so we need to
+                # make sure the paths exists before calling it. This could happen as it is not
+                # required that all config files exist, only one is required but we don't know
+                # which.
+                if not any(
+                    event.path.samefile(p) for p in self._config_paths if p.exists()
+                ):
                     continue
 
                 match event.type:
@@ -186,8 +208,9 @@ class ConfigManagingActor(Actor):
                         )
                         await self.send_config()
                     case EventType.DELETE:
-                        _logger.info(
-                            "%s: The configuration file %s was deleted, ignoring...",
+                        _logger.error(
+                            "%s: Unexpected DELETE event for path %s. Please report this "
+                            "issue to Frequenz.",
                             self,
                             event.path,
                         )
