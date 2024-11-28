@@ -10,7 +10,9 @@
 
 ## New Features
 
-<!-- Here goes the main new features and examples or instructions on how to use them -->
+* Many tasks, senders and receivers now have proper names for easier debugging.
+* The resample log was improved to show more details.
+* The `Sample` class now has a nice `__str__` representation.
 
 ## Bug Fixes
 

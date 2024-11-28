@@ -34,6 +34,14 @@ class Sample(Generic[QuantityT]):
     value: QuantityT | None = None
     """The value of this sample."""
 
+    def __str__(self) -> str:
+        """Return a string representation of the sample."""
+        return f"{type(self).__name__}({self.timestamp}, {self.value})"
+
+    def __repr__(self) -> str:
+        """Return a string representation of the sample."""
+        return f"{type(self).__name__}({self.timestamp=}, {self.value=})"
+
 
 @dataclass(frozen=True)
 class Sample3Phase(Generic[QuantityT]):

@@ -479,7 +479,8 @@ class _DataPipeline:  # pylint: disable=too-many-instance-attributes
                 channel_registry=self._channel_registry,
                 data_sourcing_request_sender=self._data_sourcing_request_sender(),
                 resampling_request_receiver=channel.new_receiver(
-                    limit=_REQUEST_RECV_BUFFER_SIZE
+                    limit=_REQUEST_RECV_BUFFER_SIZE,
+                    name=channel.name + " Receiver",
                 ),
                 config=self._resampler_config,
             )

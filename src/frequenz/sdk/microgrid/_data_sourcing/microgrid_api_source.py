@@ -461,7 +461,8 @@ class MicrogridApiSource:
             self.comp_data_tasks[comp_id].cancel()
 
         self.comp_data_tasks[comp_id] = asyncio.create_task(
-            run_forever(lambda: self._handle_data_stream(comp_id, category))
+            run_forever(lambda: self._handle_data_stream(comp_id, category)),
+            name=f"{type(self).__name__}._update_stream({comp_id=}, {category.name})",
         )
 
     async def add_metric(self, request: ComponentMetricRequest) -> None:

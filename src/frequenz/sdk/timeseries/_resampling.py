@@ -744,13 +744,42 @@ class _ResamplingHelper:
         # resort to some C (or similar) implementation.
         relevant_samples = list(itertools.islice(self._buffer, min_index, max_index))
         if not relevant_samples:
-            _logger.warning("No relevant samples found for: %s", self._name)
+            self._log_no_relevant_samples(minimum_relevant_timestamp, timestamp)
+
         value = (
             conf.resampling_function(relevant_samples, conf, props)
             if relevant_samples
             else None
         )
         return Sample(timestamp, None if value is None else Quantity(value))
+
+    def _log_no_relevant_samples(
+        self, minimum_relevant_timestamp: datetime, timestamp: datetime
+    ) -> None:
+        """Log that no relevant samples were found.
+
+        Args:
+            minimum_relevant_timestamp: Minimum timestamp that was requested
+            timestamp: Timestamp that was requested
+        """
+        if not _logger.isEnabledFor(logging.WARNING):
+            return
+
+        if self._buffer:
+            buffer_info = (
+                f"{self._buffer[0].timestamp} - "
+                f"{self._buffer[-1].timestamp} ({len(self._buffer)} samples)"
+            )
+        else:
+            buffer_info = "Empty"
+
+        _logger.warning(
+            "No relevant samples found for: %s\n  Requested: %s - %s\n     Buffer: %s",
+            self._name,
+            minimum_relevant_timestamp,
+            timestamp,
+            buffer_info,
+        )
 
 
 class _StreamingHelper:

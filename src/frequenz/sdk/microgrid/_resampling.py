@@ -179,7 +179,11 @@ class ComponentMetricsResamplingActor(Actor):
             resampling_task.result()
         except ResamplingError as error:
             for source, source_error in error.exceptions.items():
-                _logger.error("Error resampling source %s, removing source...", source)
+                _logger.error(
+                    "Error resampling source %s, removing source",
+                    source,
+                    exc_info=source_error,
+                )
                 removed = self._resampler.remove_timeseries(source)
                 if not removed:
                     _logger.error(
