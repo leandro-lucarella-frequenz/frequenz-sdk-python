@@ -2,16 +2,16 @@
 
 ## Summary
 
-This is a minor release with just a few bug fixes but also one breaking change in the `ConfigManagingActor`.
+<!-- Here goes a general summary of what this release is about -->
 
 ## Upgrading
 
-- The `ConfigManagingActor` now only reacts to `CREATE` and `MODIFY` events. `DELETE` is not supported anymore and are ignored.
-- Remove the `event_types` argument from the `ConfigManagingActor` constructor.
+<!-- Here goes notes on how to upgrade from previous versions, including deprecations and what they should be replaced with -->
+
+## New Features
+
+<!-- Here goes the main new features and examples or instructions on how to use them -->
 
 ## Bug Fixes
 
-- Fix bugs with `ConfigManagingActor`:
-  - Raising unhandled exceptions when any file in config directory was deleted.
-  - Raising unhandled exception if not all config files exist.
-  - Eliminate recursive actor crashes when all config files were missing.
+<!-- Here goes notable bug fixes that are worth a special mention or explanation -->
