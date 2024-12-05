@@ -13,8 +13,7 @@ import marshmallow.validate
 from frequenz.channels import Receiver
 from marshmallow_dataclass import dataclass
 
-from frequenz.sdk.actor import Actor
-
+from ..actor import Actor
 from ._util import load_config
 
 _logger = logging.getLogger(__name__)
