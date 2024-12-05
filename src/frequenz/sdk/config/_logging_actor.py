@@ -24,6 +24,7 @@ LogLevel = Annotated[
         validate=marshmallow.validate.OneOf(choices=logging.getLevelNamesMapping())
     ),
 ]
+"""A marshmallow field for validating log levels."""
 
 
 @dataclass
