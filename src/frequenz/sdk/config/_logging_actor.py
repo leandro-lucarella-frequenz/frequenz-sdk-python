@@ -5,13 +5,12 @@
 
 import logging
 from collections.abc import Mapping
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import Annotated, Any
 
 import marshmallow
 import marshmallow.validate
 from frequenz.channels import Receiver
-from marshmallow_dataclass import dataclass
 
 from ..actor import Actor
 from ._util import load_config
