@@ -13,7 +13,9 @@
 
 ## New Features
 
-<!-- Here goes the main new features and examples or instructions on how to use them -->
+- `LoggingConfigUpdatingActor`
+
+    * Added a new `name` argument to the constructor to be able to override the actor's name.
 
 ## Bug Fixes
 

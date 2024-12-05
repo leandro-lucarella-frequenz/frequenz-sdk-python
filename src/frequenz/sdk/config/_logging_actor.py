@@ -137,6 +137,7 @@ class LoggingConfigUpdatingActor(Actor):
         config_recv: Receiver[Mapping[str, Any]],
         log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         log_datefmt: str = "%Y-%m-%dT%H:%M:%S%z",
+        name: str | None = None,
     ):
         """Initialize this instance.
 
@@ -144,6 +145,8 @@ class LoggingConfigUpdatingActor(Actor):
             config_recv: The receiver to listen for configuration changes.
             log_format: Use the specified format string in logs.
             log_datefmt: Use the specified date/time format in logs.
+            name: The name of this actor. If `None`, `str(id(self))` will be used. This
+                is used mostly for debugging purposes.
 
         Note:
             The `log_format` and `log_datefmt` parameters are used in a call to
@@ -151,7 +154,7 @@ class LoggingConfigUpdatingActor(Actor):
             in the application (through a previous `basicConfig()` call), then the format
             settings specified here will be ignored.
         """
-        super().__init__()
+        super().__init__(name=name)
         self._config_recv = config_recv
 
         # Setup default configuration.
