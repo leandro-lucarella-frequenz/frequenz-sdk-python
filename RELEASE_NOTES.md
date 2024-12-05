@@ -6,7 +6,10 @@
 
 ## Upgrading
 
-- The `LoggingConfigUpdater` was renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
+- `LoggingConfigUpdater`
+
+    * Renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
+    * Make all arguments to the constructor keyword-only.
 
 ## New Features
 

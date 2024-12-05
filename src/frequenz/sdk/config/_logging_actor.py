@@ -133,6 +133,7 @@ class LoggingConfigUpdatingActor(Actor):
 
     def __init__(
         self,
+        *,
         config_recv: Receiver[Mapping[str, Any]],
         log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         log_datefmt: str = "%Y-%m-%dT%H:%M:%S%z",
