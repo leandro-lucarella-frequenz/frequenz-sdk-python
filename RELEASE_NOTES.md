@@ -6,17 +6,19 @@
 
 ## Upgrading
 
-- `LoggingConfigUpdater`
+- `frequenz.sdk.config`
 
-    * Renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
-    * Make all arguments to the constructor keyword-only.
+    * `LoggingConfigUpdater`
 
-- `LoggingConfig`
+        + Renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
+        + Make all arguments to the constructor keyword-only.
 
-    * The `load()` method was removed. Please use `frequenz.sdk.config.load_config()` instead.
-    * The class is now a standard `dataclass` instead of a `marshmallow_dataclass`.
+    * `LoggingConfig`
 
-- `LoggerConfig` is not a standard `dataclass` instead of a `marshmallow_dataclass`.
+        + The `load()` method was removed. Please use `frequenz.sdk.config.load_config()` instead.
+        + The class is now a standard `dataclass` instead of a `marshmallow_dataclass`.
+
+    * `LoggerConfig` is not a standard `dataclass` instead of a `marshmallow_dataclass`.
 
 ## New Features
 
