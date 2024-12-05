@@ -154,13 +154,14 @@ class LoggingConfigUpdatingActor(Actor):
             in the application (through a previous `basicConfig()` call), then the format
             settings specified here will be ignored.
         """
-        super().__init__(name=name)
         self._config_recv = config_recv
 
         # Setup default configuration.
         # This ensures logging is configured even if actor fails to start or
         # if the configuration cannot be loaded.
         self._current_config: LoggingConfig = LoggingConfig()
+
+        super().__init__(name=name)
 
         logging.basicConfig(
             format=log_format,
