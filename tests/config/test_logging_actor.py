@@ -13,7 +13,12 @@ from frequenz.channels import Broadcast
 from marshmallow import ValidationError
 from pytest_mock import MockerFixture
 
-from frequenz.sdk.config import LoggerConfig, LoggingConfig, LoggingConfigUpdatingActor
+from frequenz.sdk.config import (
+    LoggerConfig,
+    LoggingConfig,
+    LoggingConfigUpdatingActor,
+    load_config,
+)
 
 
 def test_logging_config() -> None:
@@ -33,19 +38,19 @@ def test_logging_config() -> None:
         },
     )
 
-    assert LoggingConfig.load(config_raw) == config
+    assert load_config(LoggingConfig, config_raw) == config
 
     config_raw = {}
     config = LoggingConfig()
-    assert LoggingConfig.load(config_raw) == config
+    assert load_config(LoggingConfig, config_raw) == config
 
     config_raw = {"root_logger": {"level": "UNKNOWN"}}
     with pytest.raises(ValidationError):
-        LoggingConfig.load(config_raw)
+        load_config(LoggingConfig, config_raw)
 
     config_raw = {"unknown": {"frequenz.sdk.actor": {"level": "DEBUG"}}}
     with pytest.raises(ValidationError):
-        LoggingConfig.load(config_raw)
+        load_config(LoggingConfig, config_raw)
 
 
 @pytest.fixture

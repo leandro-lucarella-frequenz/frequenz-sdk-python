@@ -6,15 +6,16 @@
 import logging
 from collections.abc import Mapping
 from dataclasses import field
-from typing import Annotated, Any, Self, cast
+from typing import Annotated, Any
 
 import marshmallow
 import marshmallow.validate
 from frequenz.channels import Receiver
-from marshmallow import RAISE
-from marshmallow_dataclass import class_schema, dataclass
+from marshmallow_dataclass import dataclass
 
 from frequenz.sdk.actor import Actor
+
+from ._util import load_config
 
 _logger = logging.getLogger(__name__)
 
@@ -68,22 +69,6 @@ class LoggingConfig:
         },
     )
     """The list of loggers configurations."""
-
-    @classmethod
-    def load(cls, configs: Mapping[str, Any]) -> Self:  # noqa: DOC502
-        """Load and validate configs from a dictionary.
-
-        Args:
-            configs: The configuration to validate.
-
-        Returns:
-            The configuration if they are valid.
-
-        Raises:
-            ValidationError: if the configuration are invalid.
-        """
-        schema = class_schema(cls)()
-        return cast(Self, schema.load(configs, unknown=RAISE))
 
 
 class LoggingConfigUpdatingActor(Actor):
@@ -174,7 +159,7 @@ class LoggingConfigUpdatingActor(Actor):
         """Listen for configuration changes and update logging."""
         async for message in self._config_recv:
             try:
-                new_config = LoggingConfig.load(message)
+                new_config = load_config(LoggingConfig, message)
             except marshmallow.ValidationError:
                 _logger.exception(
                     "Invalid logging configuration received. Skipping config update"

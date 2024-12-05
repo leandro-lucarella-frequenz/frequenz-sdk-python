@@ -11,6 +11,8 @@
     * Renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
     * Make all arguments to the constructor keyword-only.
 
+- The `LoggingConfig.load` method was removed. Please use `frequenz.sdk.config.load_config()` instead.
+
 ## New Features
 
 - `LoggingConfigUpdatingActor`
