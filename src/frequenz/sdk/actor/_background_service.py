@@ -69,15 +69,20 @@ class BackgroundService(abc.ABC):
         ```
     """
 
-    def __init__(self, *, name: str | None = None) -> None:
+    def __init__(self, *, name: str | None = None, **kwargs: Any) -> None:
         """Initialize this BackgroundService.
 
         Args:
             name: The name of this background service. If `None`, `str(id(self))` will
                 be used. This is used mostly for debugging purposes.
+            **kwargs: Additional keyword arguments to be passed to the parent class
+                constructor. This is only provided to allow this class to be used as
+                a mixin alonside other classes that require additional keyword
+                arguments.
         """
         self._name: str = str(id(self)) if name is None else name
         self._tasks: set[asyncio.Task[Any]] = set()
+        super().__init__(**kwargs)
 
     @abc.abstractmethod
     def start(self) -> None:
