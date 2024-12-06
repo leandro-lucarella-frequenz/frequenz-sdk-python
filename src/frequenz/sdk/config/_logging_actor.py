@@ -36,7 +36,6 @@ class LoggerConfig:
             "metadata": {
                 "description": "Log level for the logger. Uses standard logging levels."
             },
-            "required": False,
         },
     )
     """The log level for the logger."""
@@ -52,7 +51,6 @@ class LoggingConfig:
             "metadata": {
                 "description": "Default default configuration for all loggers.",
             },
-            "required": False,
         },
     )
     """The default log level."""
@@ -63,7 +61,6 @@ class LoggingConfig:
             "metadata": {
                 "description": "Configuration for a logger (the key is the logger name)."
             },
-            "required": False,
         },
     )
     """The list of loggers configurations."""
