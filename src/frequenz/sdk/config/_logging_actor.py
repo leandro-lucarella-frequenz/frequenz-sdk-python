@@ -135,16 +135,16 @@ class LoggingConfigUpdatingActor(Actor):
         self,
         *,
         config_recv: Receiver[Mapping[str, Any]],
-        log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         log_datefmt: str = "%Y-%m-%dT%H:%M:%S%z",
+        log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         name: str | None = None,
     ):
         """Initialize this instance.
 
         Args:
             config_recv: The receiver to listen for configuration changes.
-            log_format: Use the specified format string in logs.
             log_datefmt: Use the specified date/time format in logs.
+            log_format: Use the specified format string in logs.
             name: The name of this actor. If `None`, `str(id(self))` will be used. This
                 is used mostly for debugging purposes.
 
