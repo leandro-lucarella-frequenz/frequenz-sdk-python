@@ -8,7 +8,7 @@ import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
-from typing import Any, Final, TypeGuard, assert_type, overload
+from typing import Any, Final, Literal, TypeGuard, assert_type, cast, overload
 
 from frequenz.channels import Broadcast, Receiver
 from frequenz.channels.experimental import WithPrevious
@@ -106,6 +106,7 @@ class ConfigManager:
         *,
         wait_for_first: bool = True,
         skip_unchanged: bool = True,
+        skip_none: Literal[False] = False,
     ) -> Receiver[Mapping[str, Any]]: ...
 
     @overload
@@ -114,6 +115,7 @@ class ConfigManager:
         *,
         wait_for_first: bool = True,
         skip_unchanged: bool = True,
+        skip_none: Literal[False] = False,
         # We need to specify the key here because we have kwargs, so if it is not
         # present is not considered None as the only possible value, as any value can be
         # accepted as part of the kwargs.
@@ -129,8 +131,19 @@ class ConfigManager:
         *,
         wait_for_first: bool = True,
         skip_unchanged: bool = True,
+        skip_none: Literal[False] = False,
         key: str | Sequence[str],
     ) -> Receiver[Mapping[str, Any] | None]: ...
+
+    @overload
+    async def new_receiver(
+        self,
+        *,
+        wait_for_first: bool = True,
+        skip_unchanged: bool = True,
+        skip_none: Literal[True] = True,
+        key: str | Sequence[str],
+    ) -> Receiver[Mapping[str, Any]]: ...
 
     @overload
     async def new_receiver(  # pylint: disable=too-many-arguments
@@ -138,18 +151,34 @@ class ConfigManager:
         *,
         wait_for_first: bool = True,
         skip_unchanged: bool = True,
+        skip_none: Literal[False] = False,
         key: str | Sequence[str],
         schema: type[DataclassT],
         base_schema: type[Schema] | None,
         **marshmallow_load_kwargs: Any,
     ) -> Receiver[DataclassT | None]: ...
 
+    @overload
+    async def new_receiver(  # pylint: disable=too-many-arguments
+        self,
+        *,
+        wait_for_first: bool = True,
+        skip_unchanged: bool = True,
+        skip_none: Literal[True] = True,
+        key: str | Sequence[str],
+        schema: type[DataclassT],
+        base_schema: type[Schema] | None,
+        **marshmallow_load_kwargs: Any,
+    ) -> Receiver[DataclassT]: ...
+
     # The noqa DOC502 is needed because we raise TimeoutError indirectly.
-    async def new_receiver(  # pylint: disable=too-many-arguments # noqa: DOC502
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    async def new_receiver(  # noqa: DOC502
         self,
         *,
         wait_for_first: bool = False,
         skip_unchanged: bool = True,
+        skip_none: bool = True,
         # This is tricky, because a str is also a Sequence[str], if we would use only
         # Sequence[str], then a regular string would also be accepted and taken as
         # a sequence, like "key" -> ["k", "e", "y"]. We should never remove the str from
@@ -180,6 +209,13 @@ class ConfigManager:
         compared to the last one received will be ignored and not sent to the receiver.
         The comparison is done using the *raw* `dict` to determine if the configuration
         has changed.
+
+        If `skip_none` is set to `True`, then a configuration that is `None` will be
+        ignored and not sent to the receiver. This is useful for cases where the the
+        receiver can't react to `None` configurations, either because it is handled
+        externally or because it should just keep the previous configuration.
+        This can only be used when `key` is not `None` as when `key` is `None`, the
+        configuration can never be `None`.
 
         ### Filtering
 
@@ -238,6 +274,8 @@ class ConfigManager:
                 [`consume()`][frequenz.channels.Receiver.consume] on the receiver.
             skip_unchanged: Whether to skip sending the configuration if it hasn't
                 changed compared to the last one received.
+            skip_none: Whether to skip sending the configuration if it is `None`. Only
+                valid when `key` is not `None`.
             key: The key to filter the configuration. If `None`, the full configuration
                 will be received.
             schema: The type of the configuration. If provided, the configuration
@@ -322,11 +360,21 @@ class ConfigManager:
             """Return whether the configuration is valid or `None`."""
             return config is not _INVALID_CONFIG
 
-        def _is_valid(
-            config: DataclassT | _InvalidConfig,
+        def _is_valid_and_not_none(
+            config: DataclassT | _InvalidConfig | None,
         ) -> TypeGuard[DataclassT]:
             """Return whether the configuration is valid and not `None`."""
             return config is not _INVALID_CONFIG
+
+        def _is_dataclass(config: DataclassT | None) -> TypeGuard[DataclassT]:
+            """Return whether the configuration is a dataclass."""
+            return config is not None
+
+        def _is_mapping(
+            config: Mapping[str, Any] | None
+        ) -> TypeGuard[Mapping[str, Any]]:
+            """Return whether the configuration is a mapping."""
+            return config is not None
 
         recv_name = f"{self}_receiver" if key is None else f"{self}_receiver_{key}"
         receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
@@ -355,11 +403,21 @@ class ConfigManager:
                         base_schema=base_schema,
                         **marshmallow_load_kwargs,
                     )
-                ).filter(_is_valid)
+                ).filter(_is_valid_and_not_none)
                 assert_type(recv_dataclass, Receiver[DataclassT])
                 return recv_dataclass
             case (str(), None):
                 recv_map_or_none = receiver.map(lambda config: _get_key(config, key))
+                assert_type(recv_map_or_none, Receiver[Mapping[str, Any] | None])
+                if skip_none:
+                    # For some reason mypy is having trouble narrowing the type here,
+                    # so we need to cast it (pyright narrowes it correctly).
+                    recv_map = cast(
+                        Receiver[Mapping[str, Any]],
+                        recv_map_or_none.filter(_is_mapping),
+                    )
+                    assert_type(recv_map, Receiver[Mapping[str, Any]])
+                    return recv_map
                 assert_type(recv_map_or_none, Receiver[Mapping[str, Any] | None])
                 return recv_map_or_none
             case (str(), type()):
@@ -373,6 +431,10 @@ class ConfigManager:
                     )
                 ).filter(_is_valid_or_none)
                 assert_type(recv_dataclass_or_none, Receiver[DataclassT | None])
+                if skip_none:
+                    recv_dataclass = recv_dataclass_or_none.filter(_is_dataclass)
+                    assert_type(recv_dataclass, Receiver[DataclassT])
+                    return recv_dataclass
                 return recv_dataclass_or_none
             case unexpected:
                 # We can't use `assert_never` here because `mypy` is
