@@ -8,7 +8,7 @@ import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
-from typing import Any, Final, TypeGuard, overload
+from typing import Any, Final, TypeGuard, assert_type, overload
 
 from frequenz.channels import Broadcast, Receiver
 from frequenz.channels.experimental import WithPrevious
@@ -340,9 +340,10 @@ class ConfigManager:
 
         match (key, schema):
             case (None, None):
+                assert_type(receiver, Receiver[Mapping[str, Any]])
                 return receiver
             case (None, type()):
-                return receiver.map(
+                recv_dataclass = receiver.map(
                     lambda config: _load_config_with_logging(
                         config,
                         schema,
@@ -355,10 +356,14 @@ class ConfigManager:
                         **marshmallow_load_kwargs,
                     )
                 ).filter(_is_valid)
+                assert_type(recv_dataclass, Receiver[DataclassT])
+                return recv_dataclass
             case (str(), None):
-                return receiver.map(lambda config: _get_key(config, key))
+                recv_map_or_none = receiver.map(lambda config: _get_key(config, key))
+                assert_type(recv_map_or_none, Receiver[Mapping[str, Any] | None])
+                return recv_map_or_none
             case (str(), type()):
-                return receiver.map(
+                recv_dataclass_or_none = receiver.map(
                     lambda config: _load_config_with_logging(
                         config,
                         schema,
@@ -367,6 +372,8 @@ class ConfigManager:
                         **marshmallow_load_kwargs,
                     )
                 ).filter(_is_valid_or_none)
+                assert_type(recv_dataclass_or_none, Receiver[DataclassT | None])
+                return recv_dataclass_or_none
             case unexpected:
                 # We can't use `assert_never` here because `mypy` is
                 # having trouble
