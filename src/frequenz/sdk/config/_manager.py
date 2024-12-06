@@ -16,6 +16,7 @@ from marshmallow import Schema, ValidationError
 from typing_extensions import override
 
 from ..actor._background_service import BackgroundService
+from ._base_schema import BaseConfigSchema
 from ._managing_actor import ConfigManagingActor
 from ._util import DataclassT, load_config
 
@@ -139,7 +140,7 @@ class ConfigManager(BackgroundService):
         /,
         *,
         skip_unchanged: bool = True,
-        base_schema: type[Schema] | None = None,
+        base_schema: type[Schema] | None = BaseConfigSchema,
         marshmallow_load_kwargs: dict[str, Any] | None = None,
     ) -> Receiver[DataclassT | Exception | None]:
         """Create a new receiver for receiving the configuration for a particular key.
@@ -387,7 +388,7 @@ def _load_config(
     config_class: type[DataclassT],
     *,
     key: str | Sequence[str],
-    base_schema: type[Schema] | None = None,
+    base_schema: type[Schema] | None = BaseConfigSchema,
     marshmallow_load_kwargs: dict[str, Any] | None = None,
 ) -> DataclassT | InvalidValueForKeyError | ValidationError | None:
     """Try to load a configuration and log any validation errors."""
