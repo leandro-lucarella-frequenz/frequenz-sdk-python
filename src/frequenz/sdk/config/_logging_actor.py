@@ -3,17 +3,18 @@
 
 """Read and update logging severity from config."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Annotated, Any
+from typing import Annotated, Sequence
 
 import marshmallow
 import marshmallow.validate
-from frequenz.channels import Receiver
 
 from ..actor import Actor
-from ._util import load_config
+from ._manager import ConfigManager
+from ._reconfigurable import Reconfigurable
 
 _logger = logging.getLogger(__name__)
 
@@ -66,7 +67,7 @@ class LoggingConfig:
     """The list of loggers configurations."""
 
 
-class LoggingConfigUpdatingActor(Actor):
+class LoggingConfigUpdatingActor(Actor, Reconfigurable[LoggingConfig]):
     """Actor that listens for logging configuration changes and sets them.
 
     Example:
@@ -84,26 +85,12 @@ class LoggingConfigUpdatingActor(Actor):
 
         ```python
         import asyncio
-        from collections.abc import Mapping
-        from typing import Any
 
-        from frequenz.channels import Broadcast
-        from frequenz.sdk.config import LoggingConfigUpdatingActor, ConfigManagingActor
+        from frequenz.sdk.config import LoggingConfigUpdatingActor
         from frequenz.sdk.actor import run as run_actors
 
         async def run() -> None:
-            config_channel = Broadcast[Mapping[str, Any]](name="config", resend_latest=True)
-            actors = [
-                ConfigManagingActor(
-                    config_paths=["config.toml"], output=config_channel.new_sender()
-                ),
-                LoggingConfigUpdatingActor(
-                    config_recv=config_channel.new_receiver(limit=1)).map(
-                        lambda app_config: app_config.get("logging", {}
-                    )
-                ),
-            ]
-            await run_actors(*actors)
+            await run_actors(LoggingConfigUpdatingActor())
 
         asyncio.run(run())
         ```
@@ -112,10 +99,12 @@ class LoggingConfigUpdatingActor(Actor):
         will be updated as well.
     """
 
+    # pylint: disable-next=too-many-arguments
     def __init__(
         self,
         *,
-        config_recv: Receiver[Mapping[str, Any]],
+        config_key: str | Sequence[str] = "logging",
+        config_manager: ConfigManager | None = None,
         log_datefmt: str = "%Y-%m-%dT%H:%M:%S%z",
         log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         name: str | None = None,
@@ -123,7 +112,11 @@ class LoggingConfigUpdatingActor(Actor):
         """Initialize this instance.
 
         Args:
-            config_recv: The receiver to listen for configuration changes.
+            config_key: The key to use to retrieve the configuration from the
+                configuration manager.  If `None`, the whole configuration will be used.
+            config_manager: The configuration manager to use.  If `None`, the [global
+                configuration manager][frequenz.sdk.config.get_config_manager] will be
+                used.
             log_datefmt: Use the specified date/time format in logs.
             log_format: Use the specified format string in logs.
             name: The name of this actor. If `None`, `str(id(self))` will be used. This
@@ -135,15 +128,18 @@ class LoggingConfigUpdatingActor(Actor):
             in the application (through a previous `basicConfig()` call), then the format
             settings specified here will be ignored.
         """
-        self._config_recv = config_recv
+        self._current_config: LoggingConfig = LoggingConfig()
+
+        super().__init__(
+            name=name,
+            config_key=config_key,
+            config_manager=config_manager,
+            config_schema=LoggingConfig,
+        )
 
         # Setup default configuration.
         # This ensures logging is configured even if actor fails to start or
         # if the configuration cannot be loaded.
-        self._current_config: LoggingConfig = LoggingConfig()
-
-        super().__init__(name=name)
-
         logging.basicConfig(
             format=log_format,
             datefmt=log_datefmt,
@@ -152,17 +148,11 @@ class LoggingConfigUpdatingActor(Actor):
 
     async def _run(self) -> None:
         """Listen for configuration changes and update logging."""
-        async for message in self._config_recv:
-            try:
-                new_config = load_config(LoggingConfig, message)
-            except marshmallow.ValidationError:
-                _logger.exception(
-                    "Invalid logging configuration received. Skipping config update"
-                )
-                continue
-
-            if new_config != self._current_config:
-                self._update_logging(new_config)
+        config_receiver = await self.initialize_config(skip_none=False)
+        async for new_config in config_receiver:
+            # When we receive None, we want to reset the logging configuration to the
+            # default
+            self._update_logging(new_config or LoggingConfig())
 
     def _update_logging(self, config: LoggingConfig) -> None:
         """Configure the logging level."""

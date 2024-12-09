@@ -12,6 +12,7 @@
 
         + Renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
         + Make all arguments to the constructor keyword-only.
+        + If the configuration is removed, the actor will now load back the default configuration.
 
     * `LoggingConfig`
 
