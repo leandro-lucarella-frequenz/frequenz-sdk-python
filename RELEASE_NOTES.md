@@ -17,8 +17,14 @@
 
         + The `load()` method was removed. Please use `frequenz.sdk.config.load_config()` instead.
         + The class is now a standard `dataclass` instead of a `marshmallow_dataclass`.
+        + The class is now immutable.
+        + The constructor now accepts only keyword arguments.
 
-    * `LoggerConfig` is now a standard `dataclass` instead of a `marshmallow_dataclass`.
+    * `LoggerConfig`
+
+        + The class is now a standard `dataclass` instead of a `marshmallow_dataclass`.
+        + The class is now immutable.
+        + The constructor now accepts only keyword arguments.
 
 ## New Features
 

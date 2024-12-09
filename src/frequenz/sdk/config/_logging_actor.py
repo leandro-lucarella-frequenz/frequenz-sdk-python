@@ -26,7 +26,7 @@ LogLevel = Annotated[
 """A marshmallow field for validating log levels."""
 
 
-@dataclass
+@dataclass(frozen=True, kw_only=True)
 class LoggerConfig:
     """A configuration for a logger."""
 
@@ -41,7 +41,7 @@ class LoggerConfig:
     """The log level for the logger."""
 
 
-@dataclass
+@dataclass(frozen=True, kw_only=True)
 class LoggingConfig:
     """A configuration for the logging system."""
 
