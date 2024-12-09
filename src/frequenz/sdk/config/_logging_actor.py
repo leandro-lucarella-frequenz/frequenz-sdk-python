@@ -5,16 +5,15 @@
 
 import logging
 from collections.abc import Mapping
-from dataclasses import field
-from typing import Annotated, Any, Self, cast
+from dataclasses import dataclass, field
+from typing import Annotated, Any
 
 import marshmallow
 import marshmallow.validate
 from frequenz.channels import Receiver
-from marshmallow import RAISE
-from marshmallow_dataclass import class_schema, dataclass
 
-from frequenz.sdk.actor import Actor
+from ..actor import Actor
+from ._util import load_config
 
 _logger = logging.getLogger(__name__)
 
@@ -24,6 +23,7 @@ LogLevel = Annotated[
         validate=marshmallow.validate.OneOf(choices=logging.getLevelNamesMapping())
     ),
 ]
+"""A marshmallow field for validating log levels."""
 
 
 @dataclass
@@ -36,7 +36,6 @@ class LoggerConfig:
             "metadata": {
                 "description": "Log level for the logger. Uses standard logging levels."
             },
-            "required": False,
         },
     )
     """The log level for the logger."""
@@ -52,7 +51,6 @@ class LoggingConfig:
             "metadata": {
                 "description": "Default default configuration for all loggers.",
             },
-            "required": False,
         },
     )
     """The default log level."""
@@ -63,26 +61,9 @@ class LoggingConfig:
             "metadata": {
                 "description": "Configuration for a logger (the key is the logger name)."
             },
-            "required": False,
         },
     )
     """The list of loggers configurations."""
-
-    @classmethod
-    def load(cls, configs: Mapping[str, Any]) -> Self:  # noqa: DOC502
-        """Load and validate configs from a dictionary.
-
-        Args:
-            configs: The configuration to validate.
-
-        Returns:
-            The configuration if they are valid.
-
-        Raises:
-            ValidationError: if the configuration are invalid.
-        """
-        schema = class_schema(cls)()
-        return cast(Self, schema.load(configs, unknown=RAISE))
 
 
 class LoggingConfigUpdatingActor(Actor):
@@ -133,16 +114,20 @@ class LoggingConfigUpdatingActor(Actor):
 
     def __init__(
         self,
+        *,
         config_recv: Receiver[Mapping[str, Any]],
-        log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         log_datefmt: str = "%Y-%m-%dT%H:%M:%S%z",
+        log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
+        name: str | None = None,
     ):
         """Initialize this instance.
 
         Args:
             config_recv: The receiver to listen for configuration changes.
-            log_format: Use the specified format string in logs.
             log_datefmt: Use the specified date/time format in logs.
+            log_format: Use the specified format string in logs.
+            name: The name of this actor. If `None`, `str(id(self))` will be used. This
+                is used mostly for debugging purposes.
 
         Note:
             The `log_format` and `log_datefmt` parameters are used in a call to
@@ -150,13 +135,14 @@ class LoggingConfigUpdatingActor(Actor):
             in the application (through a previous `basicConfig()` call), then the format
             settings specified here will be ignored.
         """
-        super().__init__()
         self._config_recv = config_recv
 
         # Setup default configuration.
         # This ensures logging is configured even if actor fails to start or
         # if the configuration cannot be loaded.
         self._current_config: LoggingConfig = LoggingConfig()
+
+        super().__init__(name=name)
 
         logging.basicConfig(
             format=log_format,
@@ -168,7 +154,7 @@ class LoggingConfigUpdatingActor(Actor):
         """Listen for configuration changes and update logging."""
         async for message in self._config_recv:
             try:
-                new_config = LoggingConfig.load(message)
+                new_config = load_config(LoggingConfig, message)
             except marshmallow.ValidationError:
                 _logger.exception(
                     "Invalid logging configuration received. Skipping config update"

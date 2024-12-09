@@ -9,8 +9,8 @@ from ._util import load_config
 
 __all__ = [
     "ConfigManagingActor",
-    "LoggingConfig",
     "LoggerConfig",
+    "LoggingConfig",
     "LoggingConfigUpdatingActor",
     "load_config",
 ]
