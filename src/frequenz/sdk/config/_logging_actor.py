@@ -4,16 +4,14 @@
 """Read and update logging severity from config."""
 
 import logging
-from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Annotated, Any
+from typing import Annotated, Sequence, assert_never
 
 import marshmallow
 import marshmallow.validate
-from frequenz.channels import Receiver
 
 from ..actor import Actor
-from ._util import load_config
+from ._manager import ConfigManager
 
 _logger = logging.getLogger(__name__)
 
@@ -84,26 +82,13 @@ class LoggingConfigUpdatingActor(Actor):
 
         ```python
         import asyncio
-        from collections.abc import Mapping
-        from typing import Any
 
-        from frequenz.channels import Broadcast
-        from frequenz.sdk.config import LoggingConfigUpdatingActor, ConfigManagingActor
+        from frequenz.sdk.config import LoggingConfigUpdatingActor
         from frequenz.sdk.actor import run as run_actors
 
         async def run() -> None:
-            config_channel = Broadcast[Mapping[str, Any]](name="config", resend_latest=True)
-            actors = [
-                ConfigManagingActor(
-                    config_paths=["config.toml"], output=config_channel.new_sender()
-                ),
-                LoggingConfigUpdatingActor(
-                    config_recv=config_channel.new_receiver(limit=1)).map(
-                        lambda app_config: app_config.get("logging", {}
-                    )
-                ),
-            ]
-            await run_actors(*actors)
+            config_manager: ConfigManager = ...
+            await run_actors(LoggingConfigUpdatingActor(config_manager))
 
         asyncio.run(run())
         ```
@@ -112,10 +97,13 @@ class LoggingConfigUpdatingActor(Actor):
         will be updated as well.
     """
 
+    # pylint: disable-next=too-many-arguments
     def __init__(
         self,
+        config_manager: ConfigManager,
+        /,
         *,
-        config_recv: Receiver[Mapping[str, Any]],
+        config_key: str | Sequence[str] = "logging",
         log_datefmt: str = "%Y-%m-%dT%H:%M:%S%z",
         log_format: str = "%(asctime)s %(levelname)-8s %(name)s:%(lineno)s: %(message)s",
         name: str | None = None,
@@ -123,7 +111,9 @@ class LoggingConfigUpdatingActor(Actor):
         """Initialize this instance.
 
         Args:
-            config_recv: The receiver to listen for configuration changes.
+            config_manager: The configuration manager to use.
+            config_key: The key to use to retrieve the configuration from the
+                configuration manager.  If `None`, the whole configuration will be used.
             log_datefmt: Use the specified date/time format in logs.
             log_format: Use the specified format string in logs.
             name: The name of this actor. If `None`, `str(id(self))` will be used. This
@@ -135,7 +125,9 @@ class LoggingConfigUpdatingActor(Actor):
             in the application (through a previous `basicConfig()` call), then the format
             settings specified here will be ignored.
         """
-        self._config_recv = config_recv
+        self._config_receiver = config_manager.new_receiver(
+            config_key, LoggingConfig, base_schema=None
+        )
 
         # Setup default configuration.
         # This ensures logging is configured even if actor fails to start or
@@ -153,17 +145,19 @@ class LoggingConfigUpdatingActor(Actor):
 
     async def _run(self) -> None:
         """Listen for configuration changes and update logging."""
-        async for message in self._config_recv:
-            try:
-                new_config = load_config(LoggingConfig, message)
-            except marshmallow.ValidationError:
-                _logger.exception(
-                    "Invalid logging configuration received. Skipping config update"
-                )
-                continue
-
-            if new_config != self._current_config:
-                self._update_logging(new_config)
+        async for new_config in self._config_receiver:
+            match new_config:
+                case None:
+                    # When we receive None, we want to reset the logging configuration
+                    # to the default
+                    self._update_logging(LoggingConfig())
+                case LoggingConfig():
+                    self._update_logging(new_config)
+                case Exception():
+                    # We ignore errors and just keep the old configuration
+                    pass
+                case unexpected:
+                    assert_never(unexpected)
 
     def _update_logging(self, config: LoggingConfig) -> None:
         """Configure the logging level."""

@@ -11,7 +11,9 @@
     * `LoggingConfigUpdater`
 
         + Renamed to `LoggingConfigUpdatingActor` to follow the actor naming convention.
-        + Make all arguments to the constructor keyword-only.
+        + The actor must now be constructed using a `ConfigManager` instead of a receiver.
+        + Make all arguments to the constructor keyword-only, except for the `config_manager` argument.
+        + If the configuration is removed, the actor will now load back the default configuration.
 
     * `LoggingConfig`
 
