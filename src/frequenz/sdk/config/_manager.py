@@ -56,6 +56,7 @@ class ConfigManager(BackgroundService):
         /,
         *,
         force_polling: bool = True,
+        logging_config_key: str | Sequence[str] | None = "logging",
         name: str | None = None,
         polling_interval: timedelta = timedelta(seconds=1),
     ) -> None:
@@ -68,6 +69,10 @@ class ConfigManager(BackgroundService):
                 the previous paths. Dict keys will be merged recursively, but other
                 objects (like lists) will be replaced by the value in the last path.
             force_polling: Whether to force file polling to check for changes.
+            logging_config_key: The key to use for the logging configuration. If `None`,
+                logging configuration will not be managed.  If a key is provided, the
+                manager update the logging configuration whenever the configuration
+                changes.
             name: A name to use when creating actors. If `None`, `str(id(self))` will
                 be used. This is used mostly for debugging purposes.
             polling_interval: The interval to poll for changes. Only relevant if
@@ -80,7 +85,7 @@ class ConfigManager(BackgroundService):
         )
         """The broadcast channel for the configuration."""
 
-        self.actor: Final[ConfigManagingActor] = ConfigManagingActor(
+        self.config_actor: Final[ConfigManagingActor] = ConfigManagingActor(
             config_paths,
             self.config_channel.new_sender(),
             name=self.name,
@@ -89,16 +94,31 @@ class ConfigManager(BackgroundService):
         )
         """The actor that manages the configuration."""
 
+        # pylint: disable-next=import-outside-toplevel,cyclic-import
+        from ._logging_actor import LoggingConfigUpdatingActor
+
+        self.logging_actor: Final[LoggingConfigUpdatingActor | None] = (
+            None
+            if logging_config_key is None
+            else LoggingConfigUpdatingActor(
+                self, config_key=logging_config_key, name=self.name
+            )
+        )
+
     @override
     def start(self) -> None:
         """Start this config manager."""
-        self.actor.start()
+        self.config_actor.start()
+        if self.logging_actor:
+            self.logging_actor.start()
 
     @property
     @override
     def is_running(self) -> bool:
         """Whether this config manager is running."""
-        return self.actor.is_running
+        return self.config_actor.is_running or (
+            self.logging_actor is not None and self.logging_actor.is_running
+        )
 
     @override
     def cancel(self, msg: str | None = None) -> None:
@@ -107,11 +127,12 @@ class ConfigManager(BackgroundService):
         Args:
             msg: The message to be passed to the tasks being cancelled.
         """
-        self.actor.cancel(msg)
+        if self.logging_actor:
+            self.logging_actor.cancel(msg)
+        self.config_actor.cancel(msg)
 
-    # We need the noqa because the `BaseExceptionGroup` is raised indirectly.
     @override
-    async def wait(self) -> None:  # noqa: DOC502
+    async def wait(self) -> None:
         """Wait this config manager to finish.
 
         Wait until all tasks and actors are finished.
@@ -121,12 +142,34 @@ class ConfigManager(BackgroundService):
                 exception (`CancelError` is not considered an error and not returned in
                 the exception group).
         """
-        await self.actor
+        exceptions: list[BaseException] = []
+        if self.logging_actor:
+            try:
+                await self.logging_actor
+            except BaseExceptionGroup as err:  # pylint: disable=try-except-raise
+                exceptions.append(err)
+
+        try:
+            await self.config_actor
+        except BaseExceptionGroup as err:  # pylint: disable=try-except-raise
+            exceptions.append(err)
+
+        if exceptions:
+            raise BaseExceptionGroup(f"Error while stopping {self!r}", exceptions)
 
     @override
     def __repr__(self) -> str:
         """Return a string representation of this config manager."""
-        return f"config_channel={self.config_channel!r}, " f"actor={self.actor!r}>"
+        logging_actor = (
+            f"logging_actor={self.logging_actor!r}, " if self.logging_actor else ""
+        )
+        return (
+            f"<{self.__class__.__name__}: "
+            f"name={self.name!r}, "
+            f"config_channel={self.config_channel!r}, "
+            + logging_actor
+            + f"config_actor={self.config_actor!r}>"
+        )
 
     def new_receiver(  # pylint: disable=too-many-arguments
         self,
