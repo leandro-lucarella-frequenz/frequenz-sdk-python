@@ -34,6 +34,7 @@ class ConfigManager:
         *,
         auto_start: bool = True,
         force_polling: bool = True,
+        logging_config_key: str | Sequence[str] | None = "logging",
         name: str | None = None,
         polling_interval: timedelta = timedelta(seconds=5),
         wait_for_first_timeout: timedelta = timedelta(seconds=5),
@@ -49,6 +50,10 @@ class ConfigManager:
             auto_start: Whether to start the actor automatically. If `False`, the actor
                 will need to be started manually by calling `start()` on the actor.
             force_polling: Whether to force file polling to check for changes.
+            logging_config_key: The key to use for the logging configuration. If `None`,
+                logging configuration will not be managed.  If a key is provided, the
+                manager update the logging configuration whenever the configuration
+                changes.
             name: A name to use when creating actors. If `None`, `str(id(self))` will
                 be used. This is used mostly for debugging purposes.
             polling_interval: The interval to poll for changes. Only relevant if
@@ -66,7 +71,7 @@ class ConfigManager:
         )
         """The broadcast channel for the configuration."""
 
-        self.actor: Final[ConfigManagingActor] = ConfigManagingActor(
+        self.config_actor: Final[ConfigManagingActor] = ConfigManagingActor(
             config_paths,
             self.config_channel.new_sender(),
             name=str(self),
@@ -83,8 +88,17 @@ class ConfigManager:
         will be used to wait for the first configuration to be received.
         """
 
+        # pylint: disable-next=import-outside-toplevel,cyclic-import
+        from ._logging_actor import LoggingConfigUpdatingActor
+
+        self.logging_actor: Final[LoggingConfigUpdatingActor | None] = (
+            None if logging_config_key is None else LoggingConfigUpdatingActor()
+        )
+
         if auto_start:
-            self.actor.start()
+            self.config_actor.start()
+            if self.logging_actor:
+                self.logging_actor.start()
 
     def __repr__(self) -> str:
         """Return a string representation of this config manager."""
@@ -93,7 +107,8 @@ class ConfigManager:
             f"name={self.name!r}, "
             f"wait_for_first_timeout={self.wait_for_first_timeout!r}, "
             f"config_channel={self.config_channel!r}, "
-            f"actor={self.actor!r}>"
+            f"logging_actor={self.logging_actor!r}, "
+            f"config_actor={self.config_actor!r}>"
         )
 
     def __str__(self) -> str:

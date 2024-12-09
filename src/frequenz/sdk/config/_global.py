@@ -28,6 +28,7 @@ def initialize_config_manager(  # pylint: disable=too-many-arguments
     /,
     *,
     force_polling: bool = True,
+    logging_config_key: str | Sequence[str] | None = "logging",
     name: str = "global",
     polling_interval: timedelta = timedelta(seconds=5),
     wait_for_first_timeout: timedelta = timedelta(seconds=5),
@@ -37,6 +38,10 @@ def initialize_config_manager(  # pylint: disable=too-many-arguments
     Args:
         config_paths: Paths to the TOML configuration files.
         force_polling: Whether to force file polling to check for changes.
+        logging_config_key: The key to use for the logging configuration. If `None`,
+            logging configuration will not be managed.  If a key is provided, the
+            manager update the logging configuration whenever the configuration
+            changes.
         name: The name of the config manager.
         polling_interval: The interval to poll for changes. Only relevant if
             polling is enabled.
@@ -53,10 +58,11 @@ def initialize_config_manager(  # pylint: disable=too-many-arguments
     """
     _logger.info(
         "Initializing config manager %s for %s with force_polling=%s, "
-        "polling_interval=%s, wait_for_first_timeout=%s",
+        "logging_config_key=%s, polling_interval=%s, wait_for_first_timeout=%s",
         name,
         config_paths,
         force_polling,
+        logging_config_key,
         polling_interval,
         wait_for_first_timeout,
     )
@@ -69,6 +75,7 @@ def initialize_config_manager(  # pylint: disable=too-many-arguments
         config_paths,
         name=name,
         force_polling=force_polling,
+        logging_config_key=logging_config_key,
         polling_interval=polling_interval,
         wait_for_first_timeout=wait_for_first_timeout,
         auto_start=True,
@@ -108,14 +115,19 @@ async def shutdown_config_manager(
         raise RuntimeError("Config not initialized")
 
     if timeout is None:
-        _CONFIG_MANAGER.actor.cancel(msg)
+        _CONFIG_MANAGER.config_actor.cancel(msg)
+        if _CONFIG_MANAGER.logging_actor:
+            _CONFIG_MANAGER.logging_actor.cancel(msg)
         _logger.info(
             "Config manager cancelled, stopping might continue in the background."
         )
     else:
+        to_stop = [_CONFIG_MANAGER.config_actor.stop(msg)]
+        if _CONFIG_MANAGER.logging_actor:
+            to_stop.append(_CONFIG_MANAGER.logging_actor.stop(msg))
         try:
             async with asyncio.timeout(timeout.total_seconds()):
-                await _CONFIG_MANAGER.actor.stop(msg)
+                await asyncio.gather(*to_stop)
                 _logger.info("Config manager stopped.")
         except asyncio.TimeoutError:
             _logger.warning(
