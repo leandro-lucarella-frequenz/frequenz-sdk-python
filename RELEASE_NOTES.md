@@ -18,7 +18,7 @@
         + The `load()` method was removed. Please use `frequenz.sdk.config.load_config()` instead.
         + The class is now a standard `dataclass` instead of a `marshmallow_dataclass`.
 
-    * `LoggerConfig` is not a standard `dataclass` instead of a `marshmallow_dataclass`.
+    * `LoggerConfig` is now a standard `dataclass` instead of a `marshmallow_dataclass`.
 
 ## New Features
 
