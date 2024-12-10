@@ -3,7 +3,6 @@
 
 """Management of configuration."""
 
-import asyncio
 import logging
 import pathlib
 from collections.abc import Mapping, Sequence
@@ -37,7 +36,6 @@ class ConfigManager:
         logging_config_key: str | Sequence[str] | None = "logging",
         name: str | None = None,
         polling_interval: timedelta = timedelta(seconds=5),
-        wait_for_first_timeout: timedelta = timedelta(seconds=5),
     ) -> None:
         """Initialize this config manager.
 
@@ -58,10 +56,6 @@ class ConfigManager:
                 be used. This is used mostly for debugging purposes.
             polling_interval: The interval to poll for changes. Only relevant if
                 polling is enabled.
-            wait_for_first_timeout: The timeout to use when waiting for the first
-                configuration in
-                [`new_receiver`][frequenz.sdk.config.ConfigManager.new_receiver] if
-                `wait_for_first` is `True`.
         """
         self.name: Final[str] = str(id(self)) if name is None else name
         """The name of this config manager."""
@@ -80,14 +74,6 @@ class ConfigManager:
         )
         """The actor that manages the configuration."""
 
-        self.wait_for_first_timeout: timedelta = wait_for_first_timeout
-        """The timeout to use when waiting for the first configuration.
-
-        When passing `wait_for_first` as `True` to
-        [`new_receiver`][frequenz.sdk.config.ConfigManager.new_receiver], this timeout
-        will be used to wait for the first configuration to be received.
-        """
-
         # pylint: disable-next=import-outside-toplevel,cyclic-import
         from ._logging_actor import LoggingConfigUpdatingActor
 
@@ -105,7 +91,6 @@ class ConfigManager:
         return (
             f"<{self.__class__.__name__}: "
             f"name={self.name!r}, "
-            f"wait_for_first_timeout={self.wait_for_first_timeout!r}, "
             f"config_channel={self.config_channel!r}, "
             f"logging_actor={self.logging_actor!r}, "
             f"config_actor={self.config_actor!r}>"
@@ -116,19 +101,17 @@ class ConfigManager:
         return f"{type(self).__name__}[{self.name}]"
 
     @overload
-    async def new_receiver(
+    def new_receiver(
         self,
         *,
-        wait_for_first: bool = True,
         skip_unchanged: bool = True,
         skip_none: Literal[False] = False,
     ) -> Receiver[Mapping[str, Any]]: ...
 
     @overload
-    async def new_receiver(  # pylint: disable=too-many-arguments
+    def new_receiver(  # pylint: disable=too-many-arguments
         self,
         *,
-        wait_for_first: bool = True,
         skip_unchanged: bool = True,
         skip_none: Literal[False] = False,
         # We need to specify the key here because we have kwargs, so if it is not
@@ -141,30 +124,27 @@ class ConfigManager:
     ) -> Receiver[DataclassT]: ...
 
     @overload
-    async def new_receiver(
+    def new_receiver(
         self,
         *,
-        wait_for_first: bool = True,
         skip_unchanged: bool = True,
         skip_none: Literal[False] = False,
         key: str | Sequence[str],
     ) -> Receiver[Mapping[str, Any] | None]: ...
 
     @overload
-    async def new_receiver(
+    def new_receiver(
         self,
         *,
-        wait_for_first: bool = True,
         skip_unchanged: bool = True,
         skip_none: Literal[True] = True,
         key: str | Sequence[str],
     ) -> Receiver[Mapping[str, Any]]: ...
 
     @overload
-    async def new_receiver(  # pylint: disable=too-many-arguments
+    def new_receiver(  # pylint: disable=too-many-arguments
         self,
         *,
-        wait_for_first: bool = True,
         skip_unchanged: bool = True,
         skip_none: Literal[False] = False,
         key: str | Sequence[str],
@@ -174,10 +154,9 @@ class ConfigManager:
     ) -> Receiver[DataclassT | None]: ...
 
     @overload
-    async def new_receiver(  # pylint: disable=too-many-arguments
+    def new_receiver(  # pylint: disable=too-many-arguments
         self,
         *,
-        wait_for_first: bool = True,
         skip_unchanged: bool = True,
         skip_none: Literal[True] = True,
         key: str | Sequence[str],
@@ -188,10 +167,9 @@ class ConfigManager:
 
     # The noqa DOC502 is needed because we raise TimeoutError indirectly.
     # pylint: disable-next=too-many-arguments,too-many-locals
-    async def new_receiver(  # noqa: DOC502
+    def new_receiver(  # noqa: DOC502
         self,
         *,
-        wait_for_first: bool = False,
         skip_unchanged: bool = True,
         skip_none: bool = True,
         # This is tricky, because a str is also a Sequence[str], if we would use only
@@ -264,29 +242,12 @@ class ConfigManager:
         Additional arguments can be passed to [`marshmallow.Schema.load`][] using keyword
         arguments.
 
-        ### Waiting for the first configuration
-
-        If `wait_for_first` is `True`, the receiver will wait for the first
-        configuration to be received before returning the receiver. If the
-        configuration can't be received in time, a timeout error will be raised.
-
-        If the configuration is received successfully, the first configuration can be
-        simply retrieved by calling [`consume()`][frequenz.channels.Receiver.consume] on
-        the receiver without blocking.
-
         Example:
             ```python
             # TODO: Add Example
             ```
 
         Args:
-            wait_for_first: Whether to wait for the first configuration to be received
-                before returning the receiver. If the configuration can't be received
-                for
-                [`wait_for_first_timeout`][frequenz.sdk.config.ConfigManager.wait_for_first_timeout]
-                time, a timeout error will be raised. If receiving was successful, the
-                first configuration can be simply retrieved by calling
-                [`consume()`][frequenz.channels.Receiver.consume] on the receiver.
             skip_unchanged: Whether to skip sending the configuration if it hasn't
                 changed compared to the last one received.
             skip_none: Whether to skip sending the configuration if it is `None`. Only
@@ -303,10 +264,6 @@ class ConfigManager:
 
         Returns:
             The receiver for the configuration.
-
-        Raises:
-            asyncio.TimeoutError: If `wait_for_first` is `True` and the first
-                configuration can't be received in time.
         """
         # All supporting generic function (using DataclassT) need to be nested
         # here. For some reasons mypy has trouble if these functions are
@@ -396,10 +353,6 @@ class ConfigManager:
 
         if skip_unchanged:
             receiver = receiver.filter(WithPrevious(_NotEqualWithLogging(key)))
-
-        if wait_for_first:
-            async with asyncio.timeout(self.wait_for_first_timeout.total_seconds()):
-                await receiver.ready()
 
         match (key, schema):
             case (None, None):
