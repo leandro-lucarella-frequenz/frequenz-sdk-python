@@ -166,10 +166,6 @@ class ConfigManager:
         This method has a lot of features and functionalities to make it easier to
         receive configurations.
 
-        Note:
-            If there is a burst of configuration updates, the receiver will only
-            receive the last configuration, older configurations will be ignored.
-
         ### Schema validation
 
         The raw configuration received as a `Mapping` will be validated and loaded to
@@ -190,6 +186,9 @@ class ConfigManager:
         the `marshmallow_load_kwargs` keyword arguments.
 
         ### Skipping superfluous updates
+
+        If there is a burst of configuration updates, the receiver will only receive the
+        last configuration, older configurations will be ignored.
 
         If `skip_unchanged` is set to `True`, then a configuration that didn't change
         compared to the last one received will be ignored and not sent to the receiver.
