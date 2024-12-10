@@ -9,6 +9,7 @@ from collections.abc import Mapping, Sequence
 from datetime import timedelta
 from typing import Any, Final
 
+import marshmallow
 from frequenz.channels import Broadcast, Receiver
 from frequenz.channels.experimental import WithPrevious
 from marshmallow import Schema, ValidationError
@@ -177,6 +178,14 @@ class ConfigManager(BackgroundService):
         Additional arguments can be passed to [`marshmallow.Schema.load`][] using
         the `marshmallow_load_kwargs` keyword arguments.
 
+        If unspecified, the `marshmallow_load_kwargs` will have the `unknown` key set to
+        [`marshmallow.EXCLUDE`][] (instead of the normal [`marshmallow.RAISE`][]
+        default).
+
+        But when [`marshmallow.EXCLUDE`][] is used, a warning will still be logged if
+        there are extra fields in the configuration that are excluded. This is useful,
+        for example, to catch typos in the configuration file.
+
         ### Skipping superfluous updates
 
         If there is a burst of configuration updates, the receiver will only receive the
@@ -220,7 +229,22 @@ class ConfigManager(BackgroundService):
 
         Returns:
             The receiver for the configuration.
+
+        Raises:
+            ValueError: If the `unknown` option in `marshmallow_load_kwargs` is set to
+                [`marshmallow.INCLUDE`][].
         """
+        marshmallow_load_kwargs = (
+            {} if marshmallow_load_kwargs is None else marshmallow_load_kwargs.copy()
+        )
+
+        if "unknown" not in marshmallow_load_kwargs:
+            marshmallow_load_kwargs["unknown"] = marshmallow.EXCLUDE
+        elif marshmallow_load_kwargs["unknown"] == marshmallow.INCLUDE:
+            raise ValueError(
+                "The 'unknown' option can't be 'INCLUDE' when loading to a dataclass"
+            )
+
         receiver = self.config_channel.new_receiver(name=f"{self}:{key}", limit=1).map(
             lambda config: _load_config_with_logging_and_errors(
                 config,
@@ -286,9 +310,10 @@ def _load_config_with_logging_and_errors(
             _logger.debug("Configuration key %r not found, sending None", key)
             return None
 
-        loaded_config = load_config(
-            config_class,
+        loaded_config = _load_config(
             sub_config,
+            config_class,
+            key=key,
             base_schema=base_schema,
             marshmallow_load_kwargs=marshmallow_load_kwargs,
         )
@@ -355,3 +380,45 @@ def _get_key(
                 )
         value = new_value
     return value
+
+
+def _load_config(
+    config: Mapping[str, Any],
+    config_class: type[DataclassT],
+    *,
+    key: str | Sequence[str],
+    base_schema: type[Schema] | None = None,
+    marshmallow_load_kwargs: dict[str, Any] | None = None,
+) -> DataclassT | InvalidValueForKeyError | ValidationError | None:
+    """Try to load a configuration and log any validation errors."""
+    loaded_config = load_config(
+        config_class,
+        config,
+        base_schema=base_schema,
+        marshmallow_load_kwargs=marshmallow_load_kwargs,
+    )
+
+    marshmallow_load_kwargs = (
+        {} if marshmallow_load_kwargs is None else marshmallow_load_kwargs.copy()
+    )
+
+    unknown = marshmallow_load_kwargs.get("unknown")
+    if unknown == marshmallow.EXCLUDE:
+        # When excluding unknown fields we still want to notify the user, as
+        # this could mean there is a typo in the configuration and some value is
+        # not being loaded as desired.
+        marshmallow_load_kwargs["unknown"] = marshmallow.RAISE
+        try:
+            load_config(
+                config_class,
+                config,
+                base_schema=base_schema,
+                marshmallow_load_kwargs=marshmallow_load_kwargs,
+            )
+        except ValidationError as err:
+            _logger.warning(
+                "The configuration for key %r has extra fields that will be ignored: %s",
+                key,
+                err,
+            )
+    return loaded_config
