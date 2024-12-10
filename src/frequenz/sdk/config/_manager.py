@@ -185,6 +185,10 @@ class ConfigManager:
         Additional arguments can be passed to [`marshmallow.Schema.load`][] using
         the `marshmallow_load_kwargs` keyword arguments.
 
+        If unspecified, the `marshmallow_load_kwargs` will have the `unknown` key set to
+        [`marshmallow.EXCLUDE`][] (instead of the normal [`marshmallow.RAISE`][]
+        default).
+
         ### Skipping superfluous updates
 
         If there is a burst of configuration updates, the receiver will only receive the
@@ -316,6 +320,9 @@ class ConfigManager:
         def _is_dataclass(config: DataclassT | None) -> TypeGuard[DataclassT]:
             """Return whether the configuration is a dataclass."""
             return config is not None
+
+        if "unknown" not in marshmallow_load_kwargs:
+            marshmallow_load_kwargs["unknown"] = marshmallow.EXCLUDE
 
         recv_name = f"{self}_receiver" if key is None else f"{self}_receiver_{key}"
         receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
