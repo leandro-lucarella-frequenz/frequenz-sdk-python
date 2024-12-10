@@ -117,9 +117,15 @@ class ConfigManagingActor(Actor):
         config: dict[str, Any] = {}
 
         for config_path in self._config_paths:
+            _logger.info("%s: Reading configuration file %s...", self, config_path)
             try:
                 with config_path.open("rb") as toml_file:
                     data = tomllib.load(toml_file)
+                    _logger.info(
+                        "%s: Configuration file %r read successfully.",
+                        self,
+                        str(config_path),
+                    )
                     config = _recursive_update(config, data)
             except ValueError as err:
                 _logger.error("%s: Can't read config file, err: %s", self, err)
@@ -127,10 +133,10 @@ class ConfigManagingActor(Actor):
             except OSError as err:
                 # It is ok for config file to don't exist.
                 _logger.error(
-                    "%s: Error reading config file %s (%s). Ignoring it.",
+                    "%s: Error reading config file %r (%s). Ignoring it.",
                     self,
+                    str(config_path),
                     err,
-                    config_path,
                 )
                 error_count += 1
 
@@ -140,6 +146,12 @@ class ConfigManagingActor(Actor):
             )
             return None
 
+        _logger.info(
+            "%s: Read %s/%s configuration files successfully.",
+            self,
+            len(self._config_paths) - error_count,
+            len(self._config_paths),
+        )
         return config
 
     async def send_config(self) -> None:
