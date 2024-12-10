@@ -7,8 +7,9 @@ import logging
 import pathlib
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
-from typing import Any, Final, Literal, TypeGuard, assert_type, cast, overload
+from typing import Any, Final, Literal, TypeGuard, assert_type, overload
 
+import marshmallow
 from frequenz.channels import Broadcast, Receiver
 from frequenz.channels.experimental import WithPrevious
 from marshmallow import Schema, ValidationError
@@ -101,16 +102,10 @@ class ConfigManager:
         return f"{type(self).__name__}[{self.name}]"
 
     @overload
-    def new_receiver(
-        self,
-        *,
-        skip_unchanged: bool = True,
-        skip_none: Literal[False] = False,
-    ) -> Receiver[Mapping[str, Any]]: ...
-
-    @overload
     def new_receiver(  # pylint: disable=too-many-arguments
         self,
+        config_class: type[DataclassT],
+        /,
         *,
         skip_unchanged: bool = True,
         skip_none: Literal[False] = False,
@@ -118,37 +113,19 @@ class ConfigManager:
         # present is not considered None as the only possible value, as any value can be
         # accepted as part of the kwargs.
         key: None = None,
-        schema: type[DataclassT],
         base_schema: type[Schema] | None = None,
         **marshmallow_load_kwargs: Any,
     ) -> Receiver[DataclassT]: ...
 
     @overload
-    def new_receiver(
-        self,
-        *,
-        skip_unchanged: bool = True,
-        skip_none: Literal[False] = False,
-        key: str | Sequence[str],
-    ) -> Receiver[Mapping[str, Any] | None]: ...
-
-    @overload
-    def new_receiver(
-        self,
-        *,
-        skip_unchanged: bool = True,
-        skip_none: Literal[True] = True,
-        key: str | Sequence[str],
-    ) -> Receiver[Mapping[str, Any]]: ...
-
-    @overload
     def new_receiver(  # pylint: disable=too-many-arguments
         self,
+        config_class: type[DataclassT],
+        /,
         *,
         skip_unchanged: bool = True,
         skip_none: Literal[False] = False,
         key: str | Sequence[str],
-        schema: type[DataclassT],
         base_schema: type[Schema] | None,
         **marshmallow_load_kwargs: Any,
     ) -> Receiver[DataclassT | None]: ...
@@ -156,11 +133,12 @@ class ConfigManager:
     @overload
     def new_receiver(  # pylint: disable=too-many-arguments
         self,
+        config_class: type[DataclassT],
+        /,
         *,
         skip_unchanged: bool = True,
         skip_none: Literal[True] = True,
         key: str | Sequence[str],
-        schema: type[DataclassT],
         base_schema: type[Schema] | None,
         **marshmallow_load_kwargs: Any,
     ) -> Receiver[DataclassT]: ...
@@ -169,6 +147,8 @@ class ConfigManager:
     # pylint: disable-next=too-many-arguments,too-many-locals
     def new_receiver(  # noqa: DOC502
         self,
+        config_class: type[DataclassT],
+        /,
         *,
         skip_unchanged: bool = True,
         skip_none: bool = True,
@@ -178,15 +158,9 @@ class ConfigManager:
         # the allowed types without changing Sequence[str] to something more specific,
         # like list[str] or tuple[str].
         key: str | Sequence[str] | None = None,
-        schema: type[DataclassT] | None = None,
         base_schema: type[Schema] | None = None,
         **marshmallow_load_kwargs: Any,
-    ) -> (
-        Receiver[Mapping[str, Any]]
-        | Receiver[Mapping[str, Any] | None]
-        | Receiver[DataclassT]
-        | Receiver[DataclassT | None]
-    ):
+    ) -> Receiver[DataclassT] | Receiver[DataclassT | None]:
         """Create a new receiver for the configuration.
 
         This method has a lot of features and functionalities to make it easier to
@@ -195,6 +169,25 @@ class ConfigManager:
         Note:
             If there is a burst of configuration updates, the receiver will only
             receive the last configuration, older configurations will be ignored.
+
+        ### Schema validation
+
+        The raw configuration received as a `Mapping` will be validated and loaded to
+        as a `config_class`. The `config_class` class is expected to be
+        a [`dataclasses.dataclass`][], which is used to create
+        a [`marshmallow.Schema`][] via the [`marshmallow_dataclass.class_schema`][]
+        function.
+
+        This means you can customize the schema derived from the configuration
+        dataclass using [`marshmallow_dataclass`][] to specify extra validation and
+        options via field metadata.
+
+        Configurations that don't pass the validation will be ignored and not sent to
+        the receiver, but an error will be logged. Errors other than `ValidationError`
+        will not be handled and will be raised.
+
+        Additional arguments can be passed to [`marshmallow.Schema.load`][] using
+        the `marshmallow_load_kwargs` keyword arguments.
 
         ### Skipping superfluous updates
 
@@ -222,40 +215,20 @@ class ConfigManager:
         receiver will receive the configuration under the nested key. For example
         `["key", "subkey"]` will get only `config["key"]["subkey"]`.
 
-        ### Schema validation
-
-        The configuration is received as a dictionary unless a `schema` is provided. In
-        this case, the configuration will be validated against the schema and received
-        as an instance of the configuration class.
-
-        The configuration `schema` class is expected to be
-        a [`dataclasses.dataclass`][], which is used to create
-        a [`marshmallow.Schema`][] schema to validate the configuration dictionary.
-
-        To customize the schema derived from the configuration dataclass, you can
-        use [`marshmallow_dataclass.dataclass`][] to specify extra metadata.
-
-        Configurations that don't pass the validation will be ignored and not sent to
-        the receiver, but an error will be logged. Errors other than `ValidationError`
-        will not be handled and will be raised.
-
-        Additional arguments can be passed to [`marshmallow.Schema.load`][] using keyword
-        arguments.
-
         Example:
             ```python
             # TODO: Add Example
             ```
 
         Args:
+            config_class: The type of the configuration. If provided, the configuration
+                will be validated against this type.
             skip_unchanged: Whether to skip sending the configuration if it hasn't
                 changed compared to the last one received.
             skip_none: Whether to skip sending the configuration if it is `None`. Only
                 valid when `key` is not `None`.
             key: The key to filter the configuration. If `None`, the full configuration
                 will be received.
-            schema: The type of the configuration. If provided, the configuration
-                will be validated against this type.
             base_schema: An optional class to be used as a base schema for the
                 configuration class. This allow using custom fields for example. Will be
                 passed to [`marshmallow_dataclass.class_schema`][].
@@ -274,7 +247,7 @@ class ConfigManager:
         @overload
         def _load_config_with_logging(
             config: Mapping[str, Any],
-            schema: type[DataclassT],
+            config_class: type[DataclassT],
             *,
             key: None = None,
             base_schema: type[Schema] | None = None,
@@ -284,7 +257,7 @@ class ConfigManager:
         @overload
         def _load_config_with_logging(
             config: Mapping[str, Any],
-            schema: type[DataclassT],
+            config_class: type[DataclassT],
             *,
             key: str | Sequence[str],
             base_schema: type[Schema] | None = None,
@@ -293,7 +266,7 @@ class ConfigManager:
 
         def _load_config_with_logging(
             config: Mapping[str, Any],
-            schema: type[DataclassT],
+            config_class: type[DataclassT],
             *,
             key: str | Sequence[str] | None = None,
             base_schema: type[Schema] | None = None,
@@ -313,7 +286,10 @@ class ConfigManager:
 
             try:
                 return load_config(
-                    schema, config, base_schema=base_schema, **marshmallow_load_kwargs
+                    config_class,
+                    config,
+                    base_schema=base_schema,
+                    **marshmallow_load_kwargs,
                 )
             except ValidationError as err:
                 key_str = ""
@@ -342,27 +318,18 @@ class ConfigManager:
             """Return whether the configuration is a dataclass."""
             return config is not None
 
-        def _is_mapping(
-            config: Mapping[str, Any] | None
-        ) -> TypeGuard[Mapping[str, Any]]:
-            """Return whether the configuration is a mapping."""
-            return config is not None
-
         recv_name = f"{self}_receiver" if key is None else f"{self}_receiver_{key}"
         receiver = self.config_channel.new_receiver(name=recv_name, limit=1)
 
         if skip_unchanged:
             receiver = receiver.filter(WithPrevious(_NotEqualWithLogging(key)))
 
-        match (key, schema):
-            case (None, None):
-                assert_type(receiver, Receiver[Mapping[str, Any]])
-                return receiver
-            case (None, type()):
+        match key:
+            case None:
                 recv_dataclass = receiver.map(
                     lambda config: _load_config_with_logging(
                         config,
-                        schema,
+                        config_class,
                         # we need to pass it explicitly because of the
                         # variadic keyword arguments, otherwise key
                         # could be included in marshmallow_load_kwargs
@@ -374,25 +341,11 @@ class ConfigManager:
                 ).filter(_is_valid_and_not_none)
                 assert_type(recv_dataclass, Receiver[DataclassT])
                 return recv_dataclass
-            case (str(), None):
-                recv_map_or_none = receiver.map(lambda config: _get_key(config, key))
-                assert_type(recv_map_or_none, Receiver[Mapping[str, Any] | None])
-                if skip_none:
-                    # For some reason mypy is having trouble narrowing the type here,
-                    # so we need to cast it (pyright narrowes it correctly).
-                    recv_map = cast(
-                        Receiver[Mapping[str, Any]],
-                        recv_map_or_none.filter(_is_mapping),
-                    )
-                    assert_type(recv_map, Receiver[Mapping[str, Any]])
-                    return recv_map
-                assert_type(recv_map_or_none, Receiver[Mapping[str, Any] | None])
-                return recv_map_or_none
-            case (str(), type()):
+            case str():
                 recv_dataclass_or_none = receiver.map(
                     lambda config: _load_config_with_logging(
                         config,
-                        schema,
+                        config_class,
                         key=key,
                         base_schema=base_schema,
                         **marshmallow_load_kwargs,
