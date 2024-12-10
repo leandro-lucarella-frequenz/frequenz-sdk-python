@@ -11,7 +11,6 @@ from ._global import (
 from ._logging_actor import LoggerConfig, LoggingConfig, LoggingConfigUpdatingActor
 from ._manager import ConfigManager
 from ._managing_actor import ConfigManagingActor
-from ._reconfigurable import Reconfigurable
 from ._util import load_config
 
 __all__ = [
@@ -20,7 +19,6 @@ __all__ = [
     "LoggerConfig",
     "LoggingConfig",
     "LoggingConfigUpdatingActor",
-    "Reconfigurable",
     "get_config_manager",
     "initialize_config_manager",
     "load_config",
