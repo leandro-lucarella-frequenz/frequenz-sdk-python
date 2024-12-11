@@ -36,8 +36,9 @@ class BackgroundService(abc.ABC):
         information, please refer to the [Python `asyncio`
         documentation](https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task).
 
-    Example:
+    Example: Simple background service example
         ```python
+        from typing_extensions import override
         import datetime
         import asyncio
 
@@ -46,6 +47,7 @@ class BackgroundService(abc.ABC):
                 super().__init__(name=name)
                 self._resolution_s = resolution_s
 
+            @override
             def start(self) -> None:
                 self._tasks.add(asyncio.create_task(self._tick()))
 
@@ -66,6 +68,45 @@ class BackgroundService(abc.ABC):
             await clock.stop()
 
         asyncio.run(main())
+        ```
+
+    Example: Background service example using custom stopping logic
+        If you need to implement custom stopping logic, you can override the
+        [`cancel()`][frequenz.sdk.actor.BackgroundService.cancel] and
+        [`wait()`][frequenz.sdk.actor.BackgroundService.wait] methods, and the
+        [`is_running`][frequenz.sdk.actor.BackgroundService.is_running] property.
+
+        For example, if you are using an external library that uses tasks internally and
+        you don't have access to them.
+
+        ```python
+        from typing_extensions import override
+        import asyncio
+
+        class SomeService(BackgroundService):
+            def __init__(self, somelib, *, name: str | None = None) -> None:
+                self.somelib = somelib
+                super().__init__(name=name)
+
+            @override
+            def start(self) -> None:
+                self.somelib.start()
+
+            @property
+            @override
+            def is_running(self) -> bool:
+                return self.somelib.is_running()
+
+            @override
+            def cancel(self, msg: str | None = None) -> None:
+                self.somelib.cancel()
+
+            @override
+            async def wait(self) -> None:
+                try:
+                    await self.somelib.wait()
+                except BaseExceptionGroup as exc:
+                    raise BaseExceptionGroup("Error while stopping SomeService", [exc]) from exc
         ```
     """
 
@@ -144,8 +185,6 @@ class BackgroundService(abc.ABC):
             BaseExceptionGroup: If any of the tasks spawned by this service raised an
                 exception.
         """
-        if not self._tasks:
-            return
         self.cancel(msg)
         try:
             await self.wait()
