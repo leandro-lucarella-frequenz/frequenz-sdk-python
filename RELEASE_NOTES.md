@@ -26,6 +26,8 @@
         + The class is now immutable.
         + The constructor now accepts only keyword arguments.
 
+    * `load_config()`: the `base_schema` argument is now keyword-only.
+
 ## New Features
 
 - `LoggingConfigUpdatingActor`

@@ -32,6 +32,7 @@ def load_config(
     cls: type[DataclassT],
     config: Mapping[str, Any],
     /,
+    *,
     base_schema: type[Schema] | None = None,
     **marshmallow_load_kwargs: Any,
 ) -> DataclassT:
