@@ -34,7 +34,7 @@ def load_config(
     /,
     *,
     base_schema: type[Schema] | None = None,
-    **marshmallow_load_kwargs: Any,
+    marshmallow_load_kwargs: dict[str, Any] | None = None,
 ) -> DataclassT:
     """Load a configuration from a dictionary into an instance of a configuration class.
 
@@ -63,13 +63,15 @@ def load_config(
         base_schema: An optional class to be used as a base schema for the configuration
             class. This allow using custom fields for example. Will be passed to
             [`marshmallow_dataclass.class_schema`][].
-        **marshmallow_load_kwargs: Additional arguments to be passed to
+        marshmallow_load_kwargs: Additional arguments to be passed to
             [`marshmallow.Schema.load`][].
 
     Returns:
         The loaded configuration as an instance of the configuration class.
     """
-    instance = class_schema(cls, base_schema)().load(config, **marshmallow_load_kwargs)
+    instance = class_schema(cls, base_schema)().load(
+        config, **(marshmallow_load_kwargs or {})
+    )
     # We need to cast because `.load()` comes from marshmallow and doesn't know which
     # type is returned.
     return cast(DataclassT, instance)

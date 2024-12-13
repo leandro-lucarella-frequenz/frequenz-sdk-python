@@ -26,7 +26,10 @@
         + The class is now immutable.
         + The constructor now accepts only keyword arguments.
 
-    * `load_config()`: the `base_schema` argument is now keyword-only.
+    * `load_config()`:
+
+         + The `base_schema` argument is now keyword-only.
+         + The arguments forwarded to `marshmallow.Schema.load()` now must be passed explicitly via the `marshmallow_load_kwargs` argument, as a `dict`, to improve the type-checking.
 
 ## New Features
 
