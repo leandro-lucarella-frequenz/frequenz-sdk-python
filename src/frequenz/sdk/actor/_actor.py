@@ -99,7 +99,7 @@ class Actor(BackgroundService, abc.ABC):
                 limit_str = f"({n_restarts}/{limit_str})"
                 if self._restart_limit is None or n_restarts < self._restart_limit:
                     n_restarts += 1
-                    _logger.info("Actor %s: Restarting %s...", self._name, limit_str)
+                    _logger.info("Actor %s: Restarting %s...", self, limit_str)
                     continue
                 _logger.info(
                     "Actor %s: Maximum restarts attempted %s, bailing out...",

@@ -245,7 +245,7 @@ async def test_restart_on_unhandled_exception(
                 ),
                 (
                     *ACTOR_INFO,
-                    f"Actor test: Restarting ({i}/{restart_limit})...",
+                    f"Actor RaiseExceptionActor[test]: Restarting ({i}/{restart_limit})...",
                 ),
                 (
                     *ACTOR_INFO,
