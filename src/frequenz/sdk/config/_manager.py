@@ -3,14 +3,16 @@
 
 """Management of configuration."""
 
+import asyncio
 import logging
 import pathlib
 from collections.abc import Mapping, Sequence
+from dataclasses import is_dataclass
 from datetime import timedelta
-from typing import Any, Final
+from typing import Any, Final, Literal, TypeGuard, overload
 
 import marshmallow
-from frequenz.channels import Broadcast, Receiver
+from frequenz.channels import Broadcast, Receiver, ReceiverStoppedError
 from frequenz.channels.experimental import WithPrevious
 from marshmallow import Schema, ValidationError
 from typing_extensions import override
@@ -311,6 +313,99 @@ class ConfigManager(BackgroundService):
             )
 
         return receiver
+
+
+@overload
+async def wait_for_first(
+    receiver: Receiver[DataclassT | Exception | None],
+    /,
+    *,
+    receiver_name: str | None = None,
+    allow_none: Literal[False] = False,
+    timeout: timedelta = timedelta(minutes=1),
+) -> DataclassT: ...
+
+
+@overload
+async def wait_for_first(
+    receiver: Receiver[DataclassT | Exception | None],
+    /,
+    *,
+    receiver_name: str | None = None,
+    allow_none: Literal[True] = True,
+    timeout: timedelta = timedelta(minutes=1),
+) -> DataclassT | None: ...
+
+
+async def wait_for_first(
+    receiver: Receiver[DataclassT | Exception | None],
+    /,
+    *,
+    receiver_name: str | None = None,
+    allow_none: bool = False,
+    timeout: timedelta = timedelta(minutes=1),
+) -> DataclassT | None:
+    """Receive the first configuration.
+
+    Args:
+        receiver: The receiver to receive the first configuration from.
+        receiver_name: The name of the receiver, used for logging. If `None`, the
+            string representation of the receiver will be used.
+        allow_none: Whether consider a `None` value as a valid configuration.
+        timeout: The timeout in seconds to wait for the first configuration.
+
+    Returns:
+        The first configuration received.
+
+    Raises:
+        asyncio.TimeoutError: If the first configuration is not received within the
+            timeout.
+        ReceiverStoppedError: If the receiver is stopped before the first configuration
+            is received.
+    """
+    if receiver_name is None:
+        receiver_name = str(receiver)
+
+    # We need this type guard because we can't use a TypeVar for isinstance checks or
+    # match cases.
+    def is_config_class(value: DataclassT | Exception | None) -> TypeGuard[DataclassT]:
+        return is_dataclass(value) if value is not None else False
+
+    _logger.info(
+        "%s: Waiting %s seconds for the first configuration to arrive...",
+        receiver_name,
+        timeout.total_seconds(),
+    )
+    try:
+        async with asyncio.timeout(timeout.total_seconds()):
+            async for config in receiver:
+                match config:
+                    case None:
+                        if allow_none:
+                            return None
+                        _logger.error(
+                            "%s: Received empty configuration, waiting again for "
+                            "a first configuration to be set.",
+                            receiver_name,
+                        )
+                    case Exception() as error:
+                        _logger.error(
+                            "%s: Error while receiving the first configuration, "
+                            "will keep waiting for an update: %s.",
+                            receiver_name,
+                            error,
+                        )
+                    case config if is_config_class(config):
+                        _logger.info("%s: Received first configuration.", receiver_name)
+                        return config
+                    case unexpected:
+                        assert (
+                            False
+                        ), f"{receiver_name}: Unexpected value received: {unexpected!r}."
+    except asyncio.TimeoutError:
+        _logger.error("%s: No configuration received in time.", receiver_name)
+        raise
+    raise ReceiverStoppedError(receiver)
 
 
 def _not_equal_with_logging(
