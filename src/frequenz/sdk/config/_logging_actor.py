@@ -46,7 +46,7 @@ class LoggingConfig:
     """A configuration for the logging system."""
 
     root_logger: LoggerConfig = field(
-        default_factory=LoggerConfig,
+        default_factory=lambda: LoggerConfig(level="INFO"),
         metadata={
             "metadata": {
                 "description": "Default default configuration for all loggers.",
@@ -147,6 +147,7 @@ class LoggingConfigUpdatingActor(Actor):
         logging.basicConfig(
             format=log_format,
             datefmt=log_datefmt,
+            level=logging.INFO,
         )
         self._update_logging(self._current_config)
 
@@ -173,18 +174,18 @@ class LoggingConfigUpdatingActor(Actor):
             logging.getLogger(logger_id).setLevel(logging.NOTSET)
 
         self._current_config = config
-        _logger.debug(
+        _logger.info(
             "Setting root logger level to '%s'", self._current_config.root_logger.level
         )
         logging.getLogger().setLevel(self._current_config.root_logger.level)
 
         # For each logger in the new config, set the log level
         for logger_id, logger_config in self._current_config.loggers.items():
-            _logger.debug(
+            _logger.info(
                 "Setting log level for logger '%s' to '%s'",
                 logger_id,
                 logger_config.level,
             )
             logging.getLogger(logger_id).setLevel(logger_config.level)
 
-        _logger.info("Logging config changed to: %s", self._current_config)
+        _logger.info("Logging config update completed.")

@@ -100,7 +100,9 @@ def test_load_config_type_hints(mocker: MockerFixture) -> None:
     config: dict[str, Any] = {}
 
     # We add the type hint to test that the return type (hint) is correct
-    _: SimpleConfig = load_config(SimpleConfig, config, marshmallow_arg=1)
+    _: SimpleConfig = load_config(
+        SimpleConfig, config, marshmallow_load_kwargs={"marshmallow_arg": 1}
+    )
     mock_class_schema.return_value.load.assert_called_once_with(
         config, marshmallow_arg=1
     )

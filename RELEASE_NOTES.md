@@ -26,6 +26,11 @@
         + The class is now immutable.
         + The constructor now accepts only keyword arguments.
 
+    * `load_config()`:
+
+         + The `base_schema` argument is now keyword-only.
+         + The arguments forwarded to `marshmallow.Schema.load()` now must be passed explicitly via the `marshmallow_load_kwargs` argument, as a `dict`, to improve the type-checking.
+
 ## New Features
 
 - `LoggingConfigUpdatingActor`
@@ -34,4 +39,4 @@
 
 ## Bug Fixes
 
-<!-- Here goes notable bug fixes that are worth a special mention or explanation -->
+- Fix a bug in `BackgroundService` where it won't try to `self.cancel()` and `await self.wait()` if there are no internal tasks. This prevented to properly implement custom stop logic without having to redefine the `stop()` method too.
