@@ -11,7 +11,7 @@ import marshmallow
 import marshmallow.validate
 
 from ..actor import Actor
-from ._manager import ConfigManager
+from ._manager import ConfigManager, wait_for_first
 
 _logger = logging.getLogger(__name__)
 
@@ -141,23 +141,45 @@ class LoggingConfigUpdatingActor(Actor):
             datefmt=log_datefmt,
             level=logging.INFO,
         )
-        self._update_logging(self._current_config)
+        _logger.info("Applying initial default logging configuration...")
+        self._reconfigure(self._current_config)
 
     async def _run(self) -> None:
         """Listen for configuration changes and update logging."""
-        async for new_config in self._config_receiver:
-            match new_config:
-                case None:
-                    # When we receive None, we want to reset the logging configuration
-                    # to the default
-                    self._update_logging(LoggingConfig())
-                case LoggingConfig():
-                    self._update_logging(new_config)
-                case Exception():
-                    # We ignore errors and just keep the old configuration
-                    pass
-                case unexpected:
-                    assert_never(unexpected)
+        self._reconfigure(
+            await wait_for_first(
+                self._config_receiver, receiver_name=str(self), allow_none=True
+            )
+        )
+        async for config_update in self._config_receiver:
+            self._reconfigure(config_update)
+
+    def _reconfigure(self, config_update: LoggingConfig | Exception | None) -> None:
+        """Update the logging configuration.
+
+        Args:
+            config_update: The new configuration, or an exception if there was an error
+                parsing the configuration, or `None` if the configuration was unset.
+        """
+        match config_update:
+            case LoggingConfig():
+                _logger.info(
+                    "New configuration received, updating logging configuration."
+                )
+                self._update_logging(config_update)
+            case None:
+                _logger.info(
+                    "Configuration was unset, resetting to the default "
+                    "logging configuration."
+                )
+                self._update_logging(LoggingConfig())
+            case Exception():
+                _logger.info(
+                    "New configuration has errors, keeping the old logging "
+                    "configuration."
+                )
+            case unexpected:
+                assert_never(unexpected)
 
     def _update_logging(self, config: LoggingConfig) -> None:
         """Configure the logging level."""
