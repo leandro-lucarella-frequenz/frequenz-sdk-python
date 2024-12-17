@@ -117,24 +117,26 @@ class ConfigManagingActor(Actor):
         config: dict[str, Any] = {}
 
         for config_path in self._config_paths:
-            _logger.info("%s: Reading configuration file %s...", self, config_path)
+            _logger.info(
+                "[%s] Reading configuration file %r...", self.name, str(config_path)
+            )
             try:
                 with config_path.open("rb") as toml_file:
                     data = tomllib.load(toml_file)
                     _logger.info(
-                        "%s: Configuration file %r read successfully.",
-                        self,
+                        "[%s] Configuration file %r read successfully.",
+                        self.name,
                         str(config_path),
                     )
                     config = _recursive_update(config, data)
             except ValueError as err:
-                _logger.error("%s: Can't read config file, err: %s", self, err)
+                _logger.error("[%s] Can't read config file, err: %s", self.name, err)
                 error_count += 1
             except OSError as err:
                 # It is ok for config file to don't exist.
                 _logger.error(
-                    "%s: Error reading config file %r (%s). Ignoring it.",
-                    self,
+                    "[%s] Error reading config file %r (%s). Ignoring it.",
+                    self.name,
                     str(config_path),
                     err,
                 )
@@ -142,13 +144,13 @@ class ConfigManagingActor(Actor):
 
         if error_count == len(self._config_paths):
             _logger.error(
-                "%s: Can't read any of the config files, ignoring config update.", self
+                "[%s] Can't read any of the config files, ignoring config update.", self
             )
             return None
 
         _logger.info(
-            "%s: Read %s/%s configuration files successfully.",
-            self,
+            "[%s] Read %s/%s configuration files successfully.",
+            self.name,
             len(self._config_paths) - error_count,
             len(self._config_paths),
         )
@@ -185,8 +187,8 @@ class ConfigManagingActor(Actor):
             async for event in file_watcher:
                 if not event.path.exists():
                     _logger.error(
-                        "%s: Received event %s, but the watched path %s doesn't exist.",
-                        self,
+                        "[%s] Received event %s, but the watched path %s doesn't exist.",
+                        self.name,
                         event,
                         event.path,
                     )
@@ -207,23 +209,23 @@ class ConfigManagingActor(Actor):
                 match event.type:
                     case EventType.CREATE:
                         _logger.info(
-                            "%s: The configuration file %s was created, sending new config...",
-                            self,
+                            "[%s] The configuration file %s was created, sending new config...",
+                            self.name,
                             event.path,
                         )
                         await self.send_config()
                     case EventType.MODIFY:
                         _logger.info(
-                            "%s: The configuration file %s was modified, sending update...",
-                            self,
+                            "[%s] The configuration file %s was modified, sending update...",
+                            self.name,
                             event.path,
                         )
                         await self.send_config()
                     case EventType.DELETE:
                         _logger.error(
-                            "%s: Unexpected DELETE event for path %s. Please report this "
+                            "[%s] Unexpected DELETE event for path %s. Please report this "
                             "issue to Frequenz.",
-                            self,
+                            self.name,
                             event.path,
                         )
                     case _:
