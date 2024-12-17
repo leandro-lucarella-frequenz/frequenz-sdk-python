@@ -46,7 +46,7 @@ class LoggingConfig:
     """A configuration for the logging system."""
 
     root_logger: LoggerConfig = field(
-        default_factory=LoggerConfig,
+        default_factory=lambda: LoggerConfig(level="INFO"),
         metadata={
             "metadata": {
                 "description": "Default default configuration for all loggers.",
@@ -147,6 +147,7 @@ class LoggingConfigUpdatingActor(Actor):
         logging.basicConfig(
             format=log_format,
             datefmt=log_datefmt,
+            level=logging.INFO,
         )
         self._update_logging(self._current_config)
 
