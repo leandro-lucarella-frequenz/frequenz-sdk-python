@@ -54,7 +54,7 @@ class ConfigManager(BackgroundService):
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
-        config_paths: Sequence[pathlib.Path],
+        config_paths: str | pathlib.Path | Sequence[pathlib.Path | str],
         /,
         *,
         force_polling: bool = True,

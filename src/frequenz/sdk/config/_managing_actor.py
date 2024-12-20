@@ -72,7 +72,7 @@ class ConfigManagingActor(Actor):
     # pylint: disable-next=too-many-arguments
     def __init__(
         self,
-        config_paths: abc.Sequence[pathlib.Path | str],
+        config_paths: str | pathlib.Path | abc.Sequence[pathlib.Path | str],
         output: Sender[abc.Mapping[str, Any]],
         *,
         name: str | None = None,
@@ -93,16 +93,29 @@ class ConfigManagingActor(Actor):
             force_polling: Whether to force file polling to check for changes.
             polling_interval: The interval to poll for changes. Only relevant if
                 polling is enabled.
+
+        Raises:
+            ValueError: If no configuration path is provided.
         """
         super().__init__(name=name)
-        self._config_paths: list[pathlib.Path] = [
-            (
-                config_path
-                if isinstance(config_path, pathlib.Path)
-                else pathlib.Path(config_path)
-            )
-            for config_path in config_paths
-        ]
+        match config_paths:
+            case str():
+                self._config_paths = [pathlib.Path(config_paths)]
+            case pathlib.Path():
+                self._config_paths = [config_paths]
+            case abc.Sequence() as seq if len(seq) == 0:
+                raise ValueError("At least one config path is required.")
+            case abc.Sequence():
+                self._config_paths = [
+                    (
+                        config_path
+                        if isinstance(config_path, pathlib.Path)
+                        else pathlib.Path(config_path)
+                    )
+                    for config_path in config_paths
+                ]
+            case unexpected:
+                assert_never(unexpected)
         self._output: Sender[abc.Mapping[str, Any]] = output
         self._force_polling: bool = force_polling
         self._polling_interval: timedelta = polling_interval
