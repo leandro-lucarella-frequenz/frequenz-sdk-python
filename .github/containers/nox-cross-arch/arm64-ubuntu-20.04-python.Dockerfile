@@ -19,7 +19,7 @@ RUN apt-get update -y && \
         curl \
         git \
         python${PYTHON_VERSION} \
-        python${PYTHON_VERSION}-distutils && \
+        python${PYTHON_VERSION}-venv && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
