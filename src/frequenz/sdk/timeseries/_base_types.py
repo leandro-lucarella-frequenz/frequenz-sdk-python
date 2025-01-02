@@ -165,7 +165,13 @@ _T = TypeVar("_T", bound=Comparable | None)
 
 @dataclass(frozen=True)
 class Bounds(Generic[_T]):
-    """Lower and upper bound values."""
+    """Lower and upper bound values.
+
+    Depending on the genertic type `_T`, the lower and upper bounds can be `None`, in
+    which case it means that there is no lower or upper bound, respectively.
+
+    When checking if an item is within the bounds, the item must always be not `None`.
+    """
 
     lower: _T
     """Lower bound."""
@@ -178,11 +184,12 @@ class Bounds(Generic[_T]):
         Check if the value is within the range of the container.
 
         Args:
-            item: The value to check.
+            item: The value to check. Can't be `None` even if `_T` can be `None`.
 
         Returns:
             bool: True if value is within the range, otherwise False.
         """
+        assert item is not None, "Can't check if `None` is within the bounds."
         if self.lower is None and self.upper is None:
             return True
         if self.lower is None:
