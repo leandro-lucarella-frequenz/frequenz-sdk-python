@@ -72,7 +72,7 @@ class ConfigManagingActor(Actor):
     # pylint: disable-next=too-many-arguments
     def __init__(
         self,
-        config_paths: abc.Sequence[pathlib.Path | str],
+        config_paths: str | pathlib.Path | abc.Sequence[pathlib.Path | str],
         output: Sender[abc.Mapping[str, Any]],
         *,
         name: str | None = None,
@@ -93,16 +93,29 @@ class ConfigManagingActor(Actor):
             force_polling: Whether to force file polling to check for changes.
             polling_interval: The interval to poll for changes. Only relevant if
                 polling is enabled.
+
+        Raises:
+            ValueError: If no configuration path is provided.
         """
         super().__init__(name=name)
-        self._config_paths: list[pathlib.Path] = [
-            (
-                config_path
-                if isinstance(config_path, pathlib.Path)
-                else pathlib.Path(config_path)
-            )
-            for config_path in config_paths
-        ]
+        match config_paths:
+            case str():
+                self._config_paths = [pathlib.Path(config_paths)]
+            case pathlib.Path():
+                self._config_paths = [config_paths]
+            case abc.Sequence() as seq if len(seq) == 0:
+                raise ValueError("At least one config path is required.")
+            case abc.Sequence():
+                self._config_paths = [
+                    (
+                        config_path
+                        if isinstance(config_path, pathlib.Path)
+                        else pathlib.Path(config_path)
+                    )
+                    for config_path in config_paths
+                ]
+            case unexpected:
+                assert_never(unexpected)
         self._output: Sender[abc.Mapping[str, Any]] = output
         self._force_polling: bool = force_polling
         self._polling_interval: timedelta = polling_interval
@@ -117,24 +130,26 @@ class ConfigManagingActor(Actor):
         config: dict[str, Any] = {}
 
         for config_path in self._config_paths:
-            _logger.info("%s: Reading configuration file %s...", self, config_path)
+            _logger.info(
+                "[%s] Reading configuration file %r...", self.name, str(config_path)
+            )
             try:
                 with config_path.open("rb") as toml_file:
                     data = tomllib.load(toml_file)
                     _logger.info(
-                        "%s: Configuration file %r read successfully.",
-                        self,
+                        "[%s] Configuration file %r read successfully.",
+                        self.name,
                         str(config_path),
                     )
                     config = _recursive_update(config, data)
             except ValueError as err:
-                _logger.error("%s: Can't read config file, err: %s", self, err)
+                _logger.error("[%s] Can't read config file, err: %s", self.name, err)
                 error_count += 1
             except OSError as err:
                 # It is ok for config file to don't exist.
                 _logger.error(
-                    "%s: Error reading config file %r (%s). Ignoring it.",
-                    self,
+                    "[%s] Error reading config file %r (%s). Ignoring it.",
+                    self.name,
                     str(config_path),
                     err,
                 )
@@ -142,13 +157,13 @@ class ConfigManagingActor(Actor):
 
         if error_count == len(self._config_paths):
             _logger.error(
-                "%s: Can't read any of the config files, ignoring config update.", self
+                "[%s] Can't read any of the config files, ignoring config update.", self
             )
             return None
 
         _logger.info(
-            "%s: Read %s/%s configuration files successfully.",
-            self,
+            "[%s] Read %s/%s configuration files successfully.",
+            self.name,
             len(self._config_paths) - error_count,
             len(self._config_paths),
         )
@@ -185,8 +200,8 @@ class ConfigManagingActor(Actor):
             async for event in file_watcher:
                 if not event.path.exists():
                     _logger.error(
-                        "%s: Received event %s, but the watched path %s doesn't exist.",
-                        self,
+                        "[%s] Received event %s, but the watched path %s doesn't exist.",
+                        self.name,
                         event,
                         event.path,
                     )
@@ -207,23 +222,23 @@ class ConfigManagingActor(Actor):
                 match event.type:
                     case EventType.CREATE:
                         _logger.info(
-                            "%s: The configuration file %s was created, sending new config...",
-                            self,
+                            "[%s] The configuration file %s was created, sending new config...",
+                            self.name,
                             event.path,
                         )
                         await self.send_config()
                     case EventType.MODIFY:
                         _logger.info(
-                            "%s: The configuration file %s was modified, sending update...",
-                            self,
+                            "[%s] The configuration file %s was modified, sending update...",
+                            self.name,
                             event.path,
                         )
                         await self.send_config()
                     case EventType.DELETE:
                         _logger.error(
-                            "%s: Unexpected DELETE event for path %s. Please report this "
+                            "[%s] Unexpected DELETE event for path %s. Please report this "
                             "issue to Frequenz.",
-                            self,
+                            self.name,
                             event.path,
                         )
                     case _:
