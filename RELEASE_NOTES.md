@@ -30,7 +30,7 @@ This release includes a new `ConfigManager` class to simplify managing the confi
 
     * `load_config()`:
 
-         + The `base_schema` argument is now keyword-only.
+         + The `base_schema` argument is now keyword-only and defaults to `BaseConfigSchema`.
          + The arguments forwarded to `marshmallow.Schema.load()` now must be passed explicitly via the `marshmallow_load_kwargs` argument, as a `dict`, to improve the type-checking.
 
     * `ConfigManagingActor`: Raise a `ValueError` if the `config_files` argument an empty sequence.

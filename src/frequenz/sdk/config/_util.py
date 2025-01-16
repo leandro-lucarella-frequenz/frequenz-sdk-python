@@ -9,6 +9,8 @@ from typing import Any, ClassVar, Protocol, TypeVar, cast
 from marshmallow import Schema
 from marshmallow_dataclass import class_schema
 
+from ._base_schema import BaseConfigSchema
+
 
 # This is a hack that relies on identifying dataclasses by looking into an undocumented
 # property of dataclasses[1], so it might break in the future. Nevertheless, it seems to
@@ -33,7 +35,7 @@ def load_config(
     config: Mapping[str, Any],
     /,
     *,
-    base_schema: type[Schema] | None = None,
+    base_schema: type[Schema] | None = BaseConfigSchema,
     marshmallow_load_kwargs: dict[str, Any] | None = None,
 ) -> DataclassT:
     """Load a configuration from a dictionary into an instance of a configuration class.
