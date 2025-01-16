@@ -6,6 +6,7 @@
 from collections.abc import Mapping
 from typing import Any, ClassVar, Protocol, TypeVar, cast
 
+import marshmallow
 from marshmallow import Schema
 from marshmallow_dataclass import class_schema
 
@@ -77,3 +78,24 @@ def load_config(
     # We need to cast because `.load()` comes from marshmallow and doesn't know which
     # type is returned.
     return cast(DataclassT, instance)
+
+
+def _validate_load_kwargs(marshmallow_load_kwargs: dict[str, Any] | None) -> None:
+    """Validate the marshmallow load kwargs.
+
+    This function validates the `unknown` option of the marshmallow load kwargs to
+    prevent loading unknown fields when loading to a dataclass.
+
+    Args:
+        marshmallow_load_kwargs: The dictionary to get the marshmallow load kwargs from.
+
+    Raises:
+        ValueError: If the `unknown` option is set to [`marshmallow.INCLUDE`][].
+    """
+    if (
+        marshmallow_load_kwargs
+        and marshmallow_load_kwargs.get("unknown") == marshmallow.INCLUDE
+    ):
+        raise ValueError(
+            "The 'unknown' option can't be 'INCLUDE' when loading to a dataclass"
+        )

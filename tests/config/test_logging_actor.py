@@ -48,8 +48,7 @@ def test_logging_config() -> None:
         load_config(LoggingConfig, config_raw)
 
     config_raw = {"unknown": {"frequenz.sdk.actor": {"level": "DEBUG"}}}
-    with pytest.raises(ValidationError):
-        load_config(LoggingConfig, config_raw)
+    assert load_config(LoggingConfig, config_raw) == config
 
 
 @pytest.fixture

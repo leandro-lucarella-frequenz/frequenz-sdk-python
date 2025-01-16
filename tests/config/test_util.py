@@ -79,15 +79,15 @@ def test_load_config_with_base_schema(
         class Meta:
             """Meta options for the schema."""
 
-            unknown = marshmallow.EXCLUDE
+            unknown = marshmallow.RAISE
 
     config: dict[str, Any] = {"name": "test", "value": 42, "extra": "extra"}
 
-    loaded_config = load_config(config_class, config, base_schema=_MyBaseSchema)
+    loaded_config = load_config(config_class, config)
     assert loaded_config == config_class(name="test", value=42)
 
     with pytest.raises(marshmallow.ValidationError):
-        _ = load_config(config_class, config)
+        _ = load_config(config_class, config, base_schema=_MyBaseSchema)
 
 
 def test_load_config_type_hints(mocker: MockerFixture) -> None:
