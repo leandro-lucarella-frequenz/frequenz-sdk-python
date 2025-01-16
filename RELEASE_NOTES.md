@@ -32,6 +32,7 @@ This release includes a new `ConfigManager` class to simplify managing the confi
 
          + The `base_schema` argument is now keyword-only and defaults to `BaseConfigSchema` (and because of this, it uses `unknown=EXCLUDE` by default).
          + The arguments forwarded to `marshmallow.Schema.load()` now must be passed explicitly via the `marshmallow_load_kwargs` argument, as a `dict`, to improve the type-checking.
+         + Will now raise a `ValueError` if `unknown` is set to `INCLUDE` in `marshmallow_load_kwargs`.
 
     * `ConfigManagingActor`: Raise a `ValueError` if the `config_files` argument an empty sequence.
 

@@ -72,6 +72,8 @@ def load_config(
     Returns:
         The loaded configuration as an instance of the configuration class.
     """
+    _validate_load_kwargs(marshmallow_load_kwargs)
+
     instance = class_schema(cls, base_schema)().load(
         config, **(marshmallow_load_kwargs or {})
     )
