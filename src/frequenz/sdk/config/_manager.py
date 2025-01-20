@@ -20,7 +20,7 @@ from typing_extensions import override
 from ..actor._background_service import BackgroundService
 from ._base_schema import BaseConfigSchema
 from ._managing_actor import ConfigManagingActor
-from ._util import DataclassT, load_config
+from ._util import DataclassT, _validate_load_kwargs, load_config
 
 _logger = logging.getLogger(__name__)
 
@@ -224,21 +224,8 @@ class ConfigManager(BackgroundService):
 
         Returns:
             The receiver for the configuration.
-
-        Raises:
-            ValueError: If the `unknown` option in `marshmallow_load_kwargs` is set to
-                [`marshmallow.INCLUDE`][].
         """
-        marshmallow_load_kwargs = (
-            {} if marshmallow_load_kwargs is None else marshmallow_load_kwargs.copy()
-        )
-
-        if "unknown" not in marshmallow_load_kwargs:
-            marshmallow_load_kwargs["unknown"] = marshmallow.EXCLUDE
-        elif marshmallow_load_kwargs["unknown"] == marshmallow.INCLUDE:
-            raise ValueError(
-                "The 'unknown' option can't be 'INCLUDE' when loading to a dataclass"
-            )
+        _validate_load_kwargs(marshmallow_load_kwargs)
 
         receiver = self.config_channel.new_receiver(name=f"{self}:{key}", limit=1).map(
             lambda config: _load_config_with_logging_and_errors(
@@ -493,23 +480,22 @@ def _load_config(
         {} if marshmallow_load_kwargs is None else marshmallow_load_kwargs.copy()
     )
 
-    unknown = marshmallow_load_kwargs.get("unknown")
-    if unknown == marshmallow.EXCLUDE:
-        # When excluding unknown fields we still want to notify the user, as
-        # this could mean there is a typo in the configuration and some value is
-        # not being loaded as desired.
-        marshmallow_load_kwargs["unknown"] = marshmallow.RAISE
-        try:
-            load_config(
-                config_class,
-                config,
-                base_schema=base_schema,
-                marshmallow_load_kwargs=marshmallow_load_kwargs,
-            )
-        except ValidationError as err:
-            _logger.warning(
-                "The configuration for key %r has extra fields that will be ignored: %s",
-                key,
-                err,
-            )
+    # When excluding unknown fields we still want to notify the user, as
+    # this could mean there is a typo in the configuration and some value is
+    # not being loaded as desired.
+    marshmallow_load_kwargs["unknown"] = marshmallow.RAISE
+    try:
+        load_config(
+            config_class,
+            config,
+            base_schema=base_schema,
+            marshmallow_load_kwargs=marshmallow_load_kwargs,
+        )
+    except ValidationError as err:
+        _logger.warning(
+            "The configuration for key %r has extra fields that will be ignored: %s",
+            key,
+            err,
+        )
+
     return loaded_config

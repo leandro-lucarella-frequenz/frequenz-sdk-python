@@ -93,7 +93,8 @@ options via field metadata.
 
 Customization can also be done via a `base_schema`. By default
 [`BaseConfigSchema`][frequenz.sdk.config.BaseConfigSchema] is used to provide support
-for some extra commonly used fields (like [quantities][frequenz.quantities]).
+for some extra commonly used fields (like [quantities][frequenz.quantities]) and to
+exclude unknown fields by default.
 
 ```python
 import marshmallow.validate
@@ -109,11 +110,7 @@ class Config:
 Additional arguments can be passed to [`marshmallow.Schema.load`][] using
 the `marshmallow_load_kwargs` keyword arguments.
 
-If unspecified, the `marshmallow_load_kwargs` will have the `unknown` key set to
-[`marshmallow.EXCLUDE`][] (instead of the normal [`marshmallow.RAISE`][]
-default).
-
-But when [`marshmallow.EXCLUDE`][] is used, a warning will be logged if there are extra
+When [`marshmallow.EXCLUDE`][] is used, a warning will be logged if there are extra
 fields in the configuration that are excluded. This is useful, for example, to catch
 typos in the configuration file.
 
